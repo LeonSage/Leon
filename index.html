@@ -1,166 +1,47 @@
+<!DOCTYPE>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<title>forPage</title>
+	<title>前端开发</title>
+	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8">
 	<style type="text/css">
-		body,div,ul,li,img,p,a{margin: 0px;padding: 0px;}
-		a{
-			text-decoration: none;
-			color: white;
-		}
+		body,div,iframe,ul,li{margin: 0px;padding: 0px;}
 		ul{list-style: none;}
-		div{
-			border:0px solid #CCC;
-		}
-		#left{
-			width: 16%;
-			height: 100%;
-			float: left;
-		}
-		#right{
-			width: 84%;
-			height: 100%;
-			float: left;
-		}
-		#currentTransaction{
-			height: 20%;
-			background-color: #6CCFB9;
-			color: white;
-			padding-top: 30px;
-			text-align: center;
-			font-size: 18px;
-		}
-		#currentTransaction p:first-child{
-			line-height: 20px;
-			font-size: 20px;
-			margin-bottom: 60px;
-		}
-		#manageMessage{
-			height: 85px;
-			background-color: #19BA9A;
-			color: white;
-		}
-		#manageBar{
-			height: 40px;
-			border-bottom: 1px solid gray;
-			border-left: 1px solid gray;			
-			line-height: 40px;
-			font-size: 15px;
-		}
-		#manageBar ul li{
-			float: left;
-			margin-left: 15%;			
-		}
-		#manageBar li:last-child{
-			font-size: 13px;
-		}
-		#manageBar label{
-			background-color: black;
-			margin-left: 5px;
-			padding: 5px;
-		}
-		#shop{
-			height: 45px;
-			border-left: 1px solid gray;
-			font-size: 18px;
-			background-color: #6CCFB9;
-		}
-		#shop img{
-			margin-top: 8px;
-			height: 28px;
-			width: 28px;			
-		}
-		#shopInfo img{			
-			width: 80px;
-		}
-		#shop p{
-			display: inline;
-		}
-		#shopInfo{
-			float: left;
-			width: 300px;
-			margin-left: 40px;
-		}
-		#shopKeeperInfo{
-			margin-right:40px;
-			width: 350px;
-			float: right;
-		}
-		#navbar{
-			height: 70%;
-			background-color: #A6EADD;
-			color: #097A68;
-			padding-top: 50px;
-		}
-		#navbar ul{			
-			margin-left: 70px;
-		}
-		#navbar ul li{
-			margin-top: 10px;
-			font-weight: ;
-			font-size: 15px;
-		}
-		#content{
-			height: 65%;
-		}
+		li{float: left;}
+		header{width: 100%;height: 10%;position: fixed;background-color: black;color: white;}
+		header ul{margin-top: 1%;}
+		header li{padding: 5px;margin-left: 10px;border-radius: 5px;}
+		#content{width: 100%;height: 100%;}
+		#index{width: 10%;height: 90%;background-color: #CCC;position: absolute;top: 10%;}
+		#info{width: 90%;min-height: 90%;position: absolute;left: 10%;top: 10%;border: 0px;height: 90%;background-image: url();}
 	</style>
 </head>
 <body>
-	<div>test edition</div>
-	<div id="left">
-		<div id="currentTransaction">
-			<p>汇巨优逛后台管理系统</p>
-			<p><img src="__ROOT__/images/common/gear.png">管理中心</p>
-		</div>
-		<div id="navbar">
-			<ul>
-				<li>首页</li>
-				<li>商城信息管理</li>
-				<li>商铺管理</li>
-				<li>活动管理</li>
-				<li>广告管理2</li>
-				<li>分类列表</li>
-				<li>品牌列表</li>
-			</ul>
-		</div>
+	<header>
+		<ul id="nav">
+			<li onclick="parent.document.getElementById('info').src='./html.html'">HTML</li>
+			<li onclick="parent.document.getElementById('info').src='./js.html'">Javascript</li>
+		</ul>
+	</header>
+	<div id="content">
+		<div id="index"></div>
+		<iframe src="./html.html" id="info" name="info"></iframe>
 	</div>
-	<div id="right">
-		<div id="manageMessage">
-			<div id="manageBar">
-				<ul>
-					<li>管理中心</li>
-					<li>信息中心</li>
-					<li>数据管理</li>
-					<li><img src="__ROOT__/images/common/user.png">admin<a href="__APP__/Index/logout"><label><img src="__ROOT__/images/common/exit.png">退出</label></a></li>
-				</ul>
-			</div>
-			<div id="shop">
-				<div id="shopInfo">
-					<img src="__ROOT__/images/common/shop.png">
-					<p>商城名字：茵曼</p>
-				</div>
-				<div id="shopKeeperInfo">
-					<img src="__ROOT__/images/common/shopKeeper.png">
-					<p>联系人：王金虎</p>
-					<p>电话：15913136080</p>
-				</div>
-			</div>
-		</div>
-		
-		<div id="content">
-			
-		</div>
-	</div>
-	
 </body>
-<script src="__ROOT__/Public/js/lib/jquery-2.1.4.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-	$(document).ready(function(){		
-		$('#btn').click(function(){
-			$('#content').load('__ROOT__/Application/Admin/View/Index/top.html');
-		});
-	});
+	window.onload=function(){
+		var count;		
+		var oHeaderLi=document.getElementById('nav').getElementsByTagName('li');
+		for(count=0;count<oHeaderLi.length;count++){
+			oHeaderLi[count].onmouseover=function(){
+				for(count=0;count<oHeaderLi.length;count++){
+					oHeaderLi[count].style.backgroundColor="#000";
+				}
+				this.style.backgroundColor="red";
+			}
+			oHeaderLi[count].onmouseoclick=function(){
+				this.style.backgroundColor="red";
+			}
+		}
+	}
 </script>
 </html>
-
-

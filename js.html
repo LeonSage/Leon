@@ -1,0 +1,90 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title>Equal Height</title>
+	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<style type="text/css">
+		body,div,iframe,ul,li{margin: 0px;padding: 0px;}
+		.item{width: 90%;margin: 20px auto;border:2px dotted #CCC;}
+		em{color: red;font-size: 20px;font-weight: bold;}
+		p,pre{font-size: 15px;font-weight: bold;}
+		p{text-indent: 2em;}
+	</style>
+</head>
+<body>
+	<div class="item">
+		<em>对象的copy</em>
+		<p>就是把对象的属性遍历一遍，赋给一个新的对象。</p>
+		<pre>
+		var deepCopy= function(source) { 
+			var result={};
+			for (var key in source) {
+	      		result[key] = typeof source[key]===’object’? deepCoyp(source[key]): source[key];
+	   		} 
+	   		return result; 
+		}
+		</pre>
+	</div>
+	<div class="item">
+		<em>数组的copy(深拷贝/浅拷贝）</em>
+		<pre>
+		数组直接相等操作实际上只是备份，修改会影响到原数组。
+		而实际的copy需要用到arrayObject.slice（start，【end】）
+		slice 方法一直复制到 end 所指定的元素，但是不包括该元素。
+		如果 start 为负，将它作为 length + start处理，此处 length 为数组的长度。
+		如果 end 为负，就将它作为 length + end 处理，此处 length 为数组的长度。
+		如果省略 end ，那么 slice 方法将一直复制到 arrayObj 的结尾。如果 end 出现在 start 之前，不复制任何元素到新数组中。
+		</pre>
+	</div>
+	<div class="item">
+		<em>用DOM操作动态添加元素</em>
+		<p>主要用到document.createElement('obj')和oDiv.appendChild('obj')两个方法来完成</p>
+	</div>
+	<div class="item">
+		<em>图片加载</em>
+		<p>页面开始形成dom根据dom与css形成渲染树，这个过程结束后才会加载图片。</p>
+	</div>
+	<div class="item">
+		<em>td顺序颠倒</em>
+		<p>使用DOM获取td列表，不断将其添加到tr末尾。</p>
+	</div>
+	<div class="item">
+		<em>实现hashTable</em>
+		<p>var hashTable=function(){this.data={};};</p>
+		<p>然后依次实现它的add（）、remove（）、contains（）、【length】方法和属性，就完成了哈希表的实现。</p>
+	</div>
+	<div class="item">
+		<em>使用Ajax解析XML</em>
+		<pre>
+			var xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");   
+        	xmlHttp.open("GET", "AJAX", true); 
+        	xmlHttp.onreadystatechange=function() {   
+                 if (xmlHttp.readyState==4 && xmlHttp.status==200) {   
+                    //ajax的XML传输的解析。获取解析的数据   
+                     var xml = xmlHttp.responseXML;                       
+                     //解析标签<stusn>   
+                     //var root1=root.getElementsByTagName("stusn");   
+                     //解析<stusn>的第一个标签的nation属性   
+                     //var name = root1[0].getAttribute("nation");   
+                     var div1 = document.getElementById("ccc");   
+                     var stus = xml.getElementsByTagName("stu");   
+                     for(var i = 0 ; i < stus.length ; i++){   
+                         var dl = document.createElement("dl");   
+                         var dt = document.createElement("dt");   
+                         var dd = document.createElement("dd");   
+                         div1.insertBefore(dl,div1.firstChild);   
+                         dl.appendChild(dt);   
+                         dl.appendChild(dd);   
+                         dt.innerHTML = "姓名:" + stus[i].getElementsByTagName("name")[0].firstChild.data;   
+                         dd.innerHTML = "年龄:" + stus[i].getElementsByTagName("age")[0].firstChild.data;   
+                     }   
+                 }   
+      		xmlHttp.send(); 
+		</pre>
+	</div>
+	<div class="item">
+		<em>td顺序颠倒</em>
+		<p>使用DOM获取td列表，不断将其添加到tr末尾。</p>
+	</div>
+</body>
+</html>
