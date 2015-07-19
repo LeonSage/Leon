@@ -1,0 +1,66 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title>website-optimization</title>
+	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<style type="text/css">
+		body,div,iframe,ul,li{margin: 0px;padding: 0px;}
+		li{list-style-position: inside;font-size: 14px;font-weight: bold;line-height: 20px;}
+		.item{width: 90%;margin: 20px auto;border:2px dotted #CCC;}
+		em{color: white;font-size: 20px;font-weight: bold;background-color: rgb(43,102,149);display: block;padding: 5px;border-radius: 5px;}
+		p,xmp{text-indent: 2em;font-size: 15px;font-weight: bold;}
+	</style>
+</head>
+<body>
+	<div class="item">
+		<em>SEO（搜索引擎优化）</em>
+		<p>分类：站内和站外；作用：获取流量，提高网站排名。优化手段：从网站构建、内容建设方案、用户传播角度进行合理规划。</p>
+		<p>
+			<ul>
+				<li>网页中大量采用图片或者Flash等富媒体（Rich Media）形式，没有可以检索的文本信息，而SEO最基本的就是文章SEO和图片SEO；</li>
+				<li>网页没有标题，或者标题中没有包含有效的关键词；网页正文中有效关键词比较少（最好自然而重点分布，不需要特别的堆砌关键词）；</li>
+			</ul>
+		</p>
+		<p>
+			<h4>站外：SEO如何产生高质量的反向链接。</h4>
+			<ul>
+				<li>高质量的内容 产生高质量的外部链接最好的方法就是书写高质量的内容，你的文章能够让读者产生阅读的欲望而对文章进行转载</li>
+				<li>合作伙伴、链接交换 与合作伙伴互相推荐链接。与行业网站、相关性网站进行链接</li>
+				<li>分类目录:将网站提交到DMOZ目录、Yahoo目录和ODP目录一些专业目录网站</li>
+				<li>社会化书签:将网站加入百度搜藏、雅虎收藏、Google书签、QQ书签等社会化书签</li>
+				<li>发布博客创建链接:目前获取外部链接最有效的方式之一就是通过发布博客文章</li>
+			</ul>
+		</p>
+		<p>
+			<h4>站内：SEO三大策略（影响关键字排名）。</h4>
+			<ul>
+				<li>高质量外链：通过各种方式，让更多的网站链接到你的网站，这样会有更高的排名。</li>
+				<li>原创文章：搜索引擎喜欢独特的内容，我们每天写一篇文章，增加到你的网站。保持你的网站是新鲜的内容。</li>
+				<li>内部链接结构：网站结构清晰，易于导航的内容，站内关键字互链。</li>
+			</ul>
+		</p>
+	</div>
+	<div class="item">
+		<em>h1与title的差别</em>
+		<p>从网站角度看，title网站标题能直接告诉搜索引擎和用户这个页面是关于什么主题和内容的网站。从文章的角度上看，用户进到内容页里，想看到的当然就是文章的内容，H1文章标题则是最重要的、最应该突出的。一篇文章只能有一个标题，一个页面最好采用一个H1;多个H1会造成的搜索引擎不知道这个页面哪个标题内容最重要，导致淡化这个页面标题和关键词，起不到突出主题的效果。从网站角度而言，title则重于网站信息标题;从文章角度而言，H1则概括的是文章主题。</p>
+		<p>H1与title权重的高低比较，TITLE无疑是页面中权重最高的，其次是H1标签。一个好网站是:H1与title并存，既突出H1文章主题，又突出网站主题和关键字。达到双重优化网站的效果。</p>
+	</div>
+	<div class="item">
+		<em>页面渲染</em>
+		<p>浏览器从代码中从上到下依次解释并执行，由服务器接收到的HTML形成DOM，由样式被加载和解析形成CSSOM，两者形成渲染树，浏览器通过流方法形成元素布局，然后渲染在页面上。当出现任何的DOM树改变时，reflow回流（例如折叠索引，下层自动填充），重新渲染。当样式改变时，执行repaint（重新绘制元素渲染）。repaint速度明显快于reflow。</p>
+		<h4>渲染优化</h4>
+		<p>style放在head内，js放在body结束位置。简化CSS选择器，使嵌套层数最小，最右选择。尽可能减少DOM操作，缓存起来一次渲染。改变多种样式时，使用class。只给固定位置的元素添加动画。加载的图片给定长度和高度进行占位。</p>
+	</div>
+	<div class="item">
+		<em>图片动态加载</em>
+		<pre><xmp>
+	获取当前页面滚动的位置，使用window.pageYOffset值，并获取想要加载图片的位置，使用document.body.scrollTop值。
+	给图片添加xsrc值为真正的路径，src设为空，当需要加载时，src=obj.getAttribute('xsrc')就可以动态加载图片了。
+		</xmp></pre>
+	</div>
+	<div class="item">
+		<em>SEO（search enginee optimization)搜索引擎优化</em>
+		<p>语义化标签</p>
+	</div>
+</body>
+</html>
