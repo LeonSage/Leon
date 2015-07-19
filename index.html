@@ -69,11 +69,7 @@
 				try{
 					oFrame.getElementsByTagName('em')[count].scrollIntoView();
 				}catch(error){
-					try{
-						alert(oFrame.getElementsByTagName('em')[0].innerText++"Fault.");
-					}catch(error){
-						alert("oFrame can't read.");
-					}
+					alert("oFrame.getElementsByTagName('em')[0].innerText+Fault.");
 				}
 				
 			}
