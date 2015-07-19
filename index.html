@@ -29,7 +29,8 @@
 </body>
 <script type="text/javascript">
 	window.onload=function(){
-		var count;		
+		var count;
+		//导航栏背景色控制		
 		var oHeaderLi=document.getElementById('nav').getElementsByTagName('li');
 		for(count=0;count<oHeaderLi.length;count++){
 			oHeaderLi[count].onmouseover=function(){
@@ -42,6 +43,12 @@
 				this.style.backgroundColor="red";
 			}
 		}
+		//索引条目的生成
+		var oIndex=document.getElementById('index');
+		var oFrame=document.getElementById('info');
+		//document.title=
+		//oIndex.innerHTML=document.frames["info"].body.innerHTML;
+		oIndex.innerHTML=oFrame.contentWindow.getElementsByTagName('em')[0];
 	}
 </script>
 </html>
