@@ -13,7 +13,7 @@
 		#content{width: 100%;height: 100%;}
 		#index{width: 10%;height: 90%;background-color: #CCC;position: absolute;top: 10%;}
 		#index ul{margin: ;}
-		#index li{font-size: 20px;font-weight: bold;color: red;padding: 5px;border-radius: 5px;}
+		#index li{font-size: 20px;font-weight: bold;padding: 3px;border-radius: 5px;margin: 5px;}
 		#info{width: 90%;min-height: 90%;position: absolute;left: 10%;top: 10%;border: 0px;height: 90%;background-image: url();}
 	</style>
 </head>
@@ -50,12 +50,12 @@
 		for(count=0;count<oHeaderLi.length;count++){
 			oHeaderLi[count].onmouseover=function(){
 				for(count=0;count<oHeaderLi.length;count++){
-					oHeaderLi[count].style.backgroundColor="#000";
+					oHeaderLi[count].style.backgroundColor="#CCC";
 				}
-				this.style.backgroundColor="red";
+				this.style.backgroundColor="pink";
 			}
 			oHeaderLi[count].onmouseoclick=function(){
-				this.style.backgroundColor="red";
+				this.style.backgroundColor="pink";
 			}
 		}
 		//索引条目的生成
@@ -68,10 +68,10 @@
 			oLi.onclick=function(){
 				try{
 					oFrame.getElementsByTagName('em')[count].scrollIntoView();
-				}catch(){
+				}catch(error){
 					try{
 						alert(oFrame.getElementsByTagName('em')[0].innerText++"Fault.");
-					}catch(){
+					}catch(error){
 						alert("oFrame can't read.");
 					}
 				}
