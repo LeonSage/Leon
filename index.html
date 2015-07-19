@@ -12,6 +12,8 @@
 		header li{padding: 5px;margin-left: 10px;border-radius: 5px;}
 		#content{width: 100%;height: 100%;}
 		#index{width: 10%;height: 90%;background-color: #CCC;position: absolute;top: 10%;}
+		#index ul{margin: ;}
+		#index li{font-size: 20px;font-weight: bold;color: red;padding: 5px;border-radius: 5px;}
 		#info{width: 90%;min-height: 90%;position: absolute;left: 10%;top: 10%;border: 0px;height: 90%;background-image: url();}
 	</style>
 </head>
@@ -43,6 +45,19 @@
 				this.style.backgroundColor="red";
 			}
 		}
+		//索引树活跃状态控制
+		var oHeaderLi=document.getElementById('index').getElementsByTagName('li');
+		for(count=0;count<oHeaderLi.length;count++){
+			oHeaderLi[count].onmouseover=function(){
+				for(count=0;count<oHeaderLi.length;count++){
+					oHeaderLi[count].style.backgroundColor="#000";
+				}
+				this.style.backgroundColor="red";
+			}
+			oHeaderLi[count].onmouseoclick=function(){
+				this.style.backgroundColor="red";
+			}
+		}
 		//索引条目的生成
 		var oIndex=document.getElementById('index');
 		var oFrame=document.getElementById('info').contentWindow.document;
@@ -50,6 +65,9 @@
 		for(count=0;count<oFrame.getElementsByTagName('em').length;count++){
 			var oLi=document.createElement('li');
 			oLi.innerText=oFrame.getElementsByTagName('em')[count].innerText;
+			oLi.onclick=function(){
+				oFrame.getElementsByTagName('em')[count].parentNode.scrollIntoView();
+			}
 			oUl.appendChild(oLi);
 		}
 		oIndex.appendChild(oUl);
