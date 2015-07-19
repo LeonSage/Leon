@@ -66,7 +66,16 @@
 			var oLi=document.createElement('li');
 			oLi.innerText=oFrame.getElementsByTagName('em')[count].innerText;
 			oLi.onclick=function(){
-				oFrame.getElementsByTagName('em')[count].parentNode.scrollIntoView();
+				try{
+					oFrame.getElementsByTagName('em')[count].scrollIntoView();
+				}catch(){
+					try{
+						alert(oFrame.getElementsByTagName('em')[0].innerText++"Fault.");
+					}catch(){
+						alert("oFrame can't read.");
+					}
+				}
+				
 			}
 			oUl.appendChild(oLi);
 		}
