@@ -45,10 +45,15 @@
 		}
 		//索引条目的生成
 		var oIndex=document.getElementById('index');
-		var oFrame=document.getElementById('info');
-		//document.title=
-		//oIndex.innerHTML=document.frames["info"].body.innerHTML;
-		oIndex.innerHTML=oFrame.contentWindow.document.getElementsByTagName('em')[0].innerText;
+		var oFrame=document.getElementById('info').contentWindow.document;
+		var oUl=document.createElement('ul');
+		for(count=0;count<oFrame.getElementsByTagName('em').length;count++){
+			var oLi=document.createElement('li');
+			oLi.innerText=oFrame.getElementsByTagName('em')[count].innerText;
+			oUl.appendChild(oLi);
+		}
+		oIndex.appendChild(oUl);
+		
 	}
 </script>
 </html>
