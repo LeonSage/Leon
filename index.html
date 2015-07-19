@@ -32,6 +32,15 @@
 <script type="text/javascript">
 	window.onload=function(){
 		var count;
+/*		var objIndexOf=function(obj){
+			for(count=0;count<obj.parentNode.length;count++){
+				if(item.innerText==obj.innerText){
+					alert(count);
+				}
+			}
+		}
+
+		objIndexOf()*/
 		//导航栏背景色控制		
 		var oHeaderLi=document.getElementById('nav').getElementsByTagName('li');
 		for(count=0;count<oHeaderLi.length;count++){
@@ -46,33 +55,35 @@
 			}
 		}
 		//索引树活跃状态控制
-		var oHeaderLi=document.getElementById('index').getElementsByTagName('li');
-		for(count=0;count<oHeaderLi.length;count++){
-			oHeaderLi[count].onmouseover=function(){
-				for(count=0;count<oHeaderLi.length;count++){
-					oHeaderLi[count].style.backgroundColor="#CCC";
+		var oIndexLi=document.getElementById('index').getElementsByTagName('li');
+		for(count=0;count<oIndexLi.length;count++){
+			oIndexLi[count].onmouseover=function(){
+				for(count=0;count<oIndexLi.length;count++){
+					oIndexLi[count].style.backgroundColor="#CCC";
 				}
 				this.style.backgroundColor="pink";
 			}
-			oHeaderLi[count].onmouseoclick=function(){
+			oIndexLi[count].onmouseoclick=function(){
 				this.style.backgroundColor="pink";
 			}
 		}
 		//索引条目的生成
 		var oIndex=document.getElementById('index');
 		var oFrame=document.getElementById('info').contentWindow.document;
+		var oEm=oFrame.getElementsByTagName('em')[3];
+		objIndexOf(oEm);
 		var oUl=document.createElement('ul');
 		for(count=0;count<oFrame.getElementsByTagName('em').length;count++){
 			var oLi=document.createElement('li');
 			oLi.innerText=oFrame.getElementsByTagName('em')[count].innerText;
-			oLi.onclick=function(){
+			/*oLi.onclick=function(){
 				try{
 					oFrame.getElementsByTagName('em')[count].scrollIntoView();
 				}catch(error){
-					alert("oFrame.getElementsByTagName('em')[0].innerText+Fault.");
+					alert(error.message);
 				}
 				
-			}
+			}*/
 			oUl.appendChild(oLi);
 		}
 		oIndex.appendChild(oUl);
