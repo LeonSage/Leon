@@ -16,10 +16,6 @@
 		<p>style样式表分为外部样式表，内页样式表和行间样式，优先级依次升高。样式表可以加载在任何位置，有时写在body内和相应HTML写在一起，是为了保证开发效率，方便后期的更改，减轻公共样式表加载的负担。</p>
 	</div>
 	<div class="item">
-		<em>float兼容性问题</em>
-		<p>未写</p>
-	</div>
-	<div class="item">
 		<em>常用功能标签</em>
 		<p><xmp><pre>标签用于原样式输出。</xmp></p>
 		<p><xmp><xmp>标签用于输出标签。</xmp></p>
@@ -43,18 +39,59 @@
 		<p>title表示鼠标放置时显示的内容，alt显示的是图片缺失时显示的内容，alt对SEO非常友好，所以应当为所有的图片添加alt。</p>
 	</div>
 	<div class="item">
+		<em>CSS选择器的实现</em>
+		<pre><xmp>
+	#a b.c .d + e:first-child > f[data = "hello world!"]
+	//首先在选择器元素钱加空格，再对[]内的数据操作，去掉=两边的空格，去掉""，将字符串中的空格替换为不常用的临时字符串
+	#a b.c .d +e :first-child >f [data=hello0xdh20156world!]
+	//使用格式化后的数据取节点函数('CSS选择符'，上一次结果)
+	取节点函数('#a',上一次操作的结果)
+	//将CSS选择器解释为具体的DOM树操作
+	#a应当解析成：document.getElementById('a')
+		</xmp></pre>
+	</div>
+	<div class="item">
+		<em>CSS继承</em>
+		<p>CSS的继承是自然而然的，例如字体，但有些属性是不能被继承的，比如Padding，border。多种样式混合使用时，使用权重来确定最终样式。
+		统计ID数，统计class数，统计标签数，并依次写出一个三位数作为权重。在行间样式权重为100。如果想要设置某个属性重要，在分号之前写上！important，权重为1000。</p>
+	</div>
+	<div class="item">
+		<em>CSS选择器优先级</em>
+		<p>1.id选择器（#myid）2.类选择器（.myclassname）3.标签选择器（div,h1,p）4.相邻选择器（h1+p）5.子选择器（ul < li）6.后代选择器（li a）7.通配符选择器（*）8.属性选择器（a[rel="external"]）9.伪类选择器（a:hover,li:nth-child）</p>
+	</div>
+	<div class="item">
+		<em>CSS盒子模型</em>
+		<p>每个盒子都有内容，填充，边框，边界。四个属性又分为上下左右，其中也有颜色，大小。</p>
+	</div>
+	<div class="item">
+		<em>增加链接的可点击面积</em>
+		<p>链接一般被设计inline（内嵌元素），使得可点击区域过小，可以把链接改为block，这样就能自动填充它的父级元素，如果想要填充高度的话，可以设置height或者line-height。</p>
+	</div>
+	<div class="item">
+		<em>display & visibility</em>
+		<p>display:inline||block||inline-block||list-item||none... visibility:visible||hidden。其中visibility用来控制元素是否可见，虽然被隐藏，但仍占据原来的位置，不能接收事件。而display实际上是设置了元素的浮动特性，当设置为none的时候相当于被移走。</p>
+	</div>
+	<div class="item">
+		<em>table布局和Div布局</em>
+		<p>Div布局使内容和形式分离，页面加载速度更快。修改网站时代价更小。保持视觉一致性。SEO。</p>
+	</div>
+	<div class="item">
+		<em>增加链接的可点击面积</em>
+		<p>链接一般被设计inline（内嵌元素），使得可点击区域过小，可以把链接改为block，这样就能自动填充它的父级元素，如果想要填充高度的话，可以设置height或者line-height。</p>
+	</div>
+	<div class="item">
+		<em>增加链接的可点击面积</em>
+		<p>链接一般被设计inline（内嵌元素），使得可点击区域过小，可以把链接改为block，这样就能自动填充它的父级元素，如果想要填充高度的话，可以设置height或者line-height。</p>
+	</div>
+	<div class="item">
+		<em>零碎知识点</em>
+		<pre>
+	background:url('urlString') no-repeat 10px 15px;
+		</pre>
+	</div>
+	<div class="item">
 		<em>未完</em>
 		<pre>
-6、请简述一下CSS中的样式继承和CSS的选择器
-7、请简述一个各个选择器之间的优先级
-8、在同等优先级的情况下如何选择样式
-9、盒子模型，请简述一下盒子模型
-10、如何使一个DIV的背景图像距这个DIV的顶部10像素，左边15像素，且不重复
-11、如何增加某一个链接的可点击面积，而下划线仍然与链接一样长？
-12、一个元素的上边框为红色，其他边框黑色，里面文字的颜色是蓝色
-13、打开（隐藏）、关闭（显示）一个对象。Style的display以及visibility的参数是什么？
-14、用css和div实现3列或2列的页面布局，并说明与table布局相比有哪些优缺点
-15、定宽网页两列内容布局，试写出你所知道的几种布局代码	
 		</pre>
 	</div>
 	

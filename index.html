@@ -9,7 +9,9 @@
 		li{float: left;}
 		header{width: 100%;height: 10%;position: fixed;background-color: black;color: white;}
 		header ul{margin-top: 1%;}
-		header li{padding: 5px;margin-left: 10px;border-radius: 5px;}
+		header li{padding: 5px;margin-left: 10px;border-radius: 5px;cursor: pointer;}
+		header .hoverStyle{background: red;}
+		header .active{background-color: red;}
 		#content{width: 100%;height: 100%;}
 		#index{width: 10%;height: 90%;background-color: #CCC;position: absolute;top: 10%;}
 		#index li{font-size: 15px;font-weight: bold;margin: 5px;}
@@ -19,8 +21,8 @@
 <body>
 	<header>
 		<ul id="nav">
-			<li onclick="parent.document.getElementById('info').src='./html.html'">HTML</li>
-			<li onclick="parent.document.getElementById('info').src='./css.html'">CSS</li>
+			<li onclick="parent.document.getElementById('info').src='./html.html'" class="active">HTML</li>
+			<li onclick="parent.document.getElementById('info').src='./css.html'" >CSS</li>
 			<li onclick="parent.document.getElementById('info').src='./js.html'">Javascript</li>
 			<li onclick="parent.document.getElementById('info').src='./optimization.html'">网站优化</li>
 
@@ -33,7 +35,7 @@
 </body>
 <script type="text/javascript">
 	window.onload=function(){
-		var count;
+		var count,i;
 /*		var objIndexOf=function(obj){
 			for(count=0;count<obj.parentNode.length;count++){
 				if(item.innerText==obj.innerText){
@@ -47,14 +49,23 @@
 		var oHeaderLi=document.getElementById('nav').getElementsByTagName('li');
 		for(count=0;count<oHeaderLi.length;count++){
 			oHeaderLi[count].onmouseover=function(){
-				for(count=0;count<oHeaderLi.length;count++){
-					oHeaderLi[count].style.backgroundColor="#000";
-				}
-				this.style.backgroundColor="red";
+				if(this.className=="active"){
+					return true;
+				}else{
+					this.className="hoverStyle";
+				}				
 			}
-			oHeaderLi[count].onmouseoclick=function(){
-				this.style.backgroundColor="red";
+			oHeaderLi[count].onmouseout=function(){
+				if(this.className=="hoverStyle"){
+					this.className="";
+				}				
 			}
+			var that=oHeaderLi[0];
+			oHeaderLi[count].addEventListener("click",function(){
+				that.className="";
+				that=this;
+				this.className="active";
+			},false);
 		}
 		//索引树活跃状态控制
 		var oIndexLi=document.getElementById('index').getElementsByTagName('li');
