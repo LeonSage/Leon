@@ -1,8 +1,9 @@
 <!DOCTYPE>
 <html>
 <head>
-	<title>前端开发</title>
-	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>前端开发 </title>
+	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="shotcut icon" type="image/x-icon" href="./images/icon.ico">
 	<style type="text/css">
 		body,div,iframe,ul,li{margin: 0px;padding: 0px;}
 		ul{list-style: none;}
@@ -13,19 +14,26 @@
 		header .hoverStyle{background: red;}
 		header .active{background-color: red;}
 		#content{width: 100%;height: 100%;}
-		#index{width: 10%;height: 90%;background-color: #CCC;position: absolute;top: 10%;}
+		#index{width: 10%;height:90%;background-color: #CCC;position: absolute;top: 10%;overflow: auto;}
 		#index li{font-size: 15px;font-weight: bold;margin: 5px;}
 		#info{width: 90%;min-height: 90%;position: absolute;left: 10%;top: 10%;border: 0px;height: 90%;background-image: url();}
 	</style>
 </head>
+<script type="text/javascript">
+	var HtmlTagname=["header","footer"],count;
+	for(count=0;count<HtmlTagname.length;count++){
+		document.createElement(HtmlTagname[count]);
+	}
+</script>
 <body>
 	<header>
 		<ul id="nav">
 			<li onclick="parent.document.getElementById('info').src='./html.html'" class="active">HTML</li>
 			<li onclick="parent.document.getElementById('info').src='./css.html'" >CSS</li>
 			<li onclick="parent.document.getElementById('info').src='./js.html'">Javascript</li>
+			<li onclick="parent.document.getElementById('info').src='./AJAX.html'">AJAX</li>
+			<li onclick="parent.document.getElementById('info').src='./jQuery.html'">jQuery</li>
 			<li onclick="parent.document.getElementById('info').src='./optimization.html'">网站优化</li>
-
 		</ul>
 	</header>
 	<div id="content">
@@ -34,38 +42,43 @@
 	</div>
 </body>
 <script type="text/javascript">
+	
 	window.onload=function(){
 		var count,i;
-/*		var objIndexOf=function(obj){
-			for(count=0;count<obj.parentNode.length;count++){
-				if(item.innerText==obj.innerText){
-					alert(count);
+		var EventUtil={
+			addHandler:function(element,type,handler){
+				if(element.addEventListener){
+					element.addEventListener(type,handler,false);
+				}else{
+					element.attachEvent("on"+type,handler);
 				}
 			}
 		}
-
-		objIndexOf()*/
-		//导航栏背景色控制		
+		//导航栏背景色控制,DOM事件添加		
 		var oHeaderLi=document.getElementById('nav').getElementsByTagName('li');
 		for(count=0;count<oHeaderLi.length;count++){
-			oHeaderLi[count].onmouseover=function(){
-				if(this.className=="active"){
+			EventUtil.addHandler(oHeaderLi[count],"mouseover",function(event){
+				if(event.srcElement.className=="active"){
 					return true;
 				}else{
-					this.className="hoverStyle";
-				}				
-			}
-			oHeaderLi[count].onmouseout=function(){
-				if(this.className=="hoverStyle"){
-					this.className="";
-				}				
-			}
+					event.srcElement.className="hoverStyle";
+				}		
+			});
+			EventUtil.addHandler(oHeaderLi[count],"mouseout",function(event){
+				if(event.srcElement.className=="hoverStyle"){
+					event.srcElement.className="";
+				}
+			});
 			var that=oHeaderLi[0];
-			oHeaderLi[count].addEventListener("click",function(){
+			var handler=function(event){
 				that.className="";
-				that=this;
-				this.className="active";
-			},false);
+				that=event.srcElement;
+				event.srcElement.className="active";
+				setTimeout(function(){
+					flushIndexTree();
+				},100);
+			}
+			EventUtil.addHandler(oHeaderLi[count],"click",handler);
 		}
 		//索引树活跃状态控制
 		var oIndexLi=document.getElementById('index').getElementsByTagName('li');
@@ -81,25 +94,28 @@
 			}
 		}
 		//索引条目的生成
-		var oIndex=document.getElementById('index');
-		var oFrame=document.getElementById('info').contentWindow.document;
-		var oEm=oFrame.getElementsByTagName('em')[3];
-		var oUl=document.createElement('ul');
-		for(count=0;count<oFrame.getElementsByTagName('em').length;count++){
-			var oLi=document.createElement('li');
-			oLi.innerText=oFrame.getElementsByTagName('em')[count].innerText;
-			/*oLi.onclick=function(){
-				try{
-					oFrame.getElementsByTagName('em')[count].scrollIntoView();
-				}catch(error){
-					alert(error.message);
-				}
-				
-			}*/
-			oUl.appendChild(oLi);
+		var flushIndexTree=function(){
+			var oIndex=document.getElementById('index');
+			oIndex.innerHTML="";
+			var oFrame=document.getElementById('info').contentWindow.document;			
+			var oUl=document.createElement('ul');
+			for(count=0;count<oFrame.getElementsByTagName('em').length;count++){
+				var oLi=document.createElement('li');
+				oLi.innerText=oFrame.getElementsByTagName('em')[count].innerText;
+				//使点击索引时对象出现在视口中
+				/*oLi.onclick=function(){
+					try{
+						oFrame.getElementsByTagName('em')[count].scrollIntoView();
+					}catch(error){
+						alert(error.message);
+					}
+					
+				}*/
+				oUl.appendChild(oLi);
+			}
+			oIndex.appendChild(oUl);
 		}
-		oIndex.appendChild(oUl);
-		
+		flushIndexTree();		
 	}
 </script>
 </html>

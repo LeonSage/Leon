@@ -28,12 +28,12 @@
 	<div class="item">
 		<em>数组的copy(深拷贝/浅拷贝）</em>
 		<pre>
-		数组直接相等操作实际上只是备份，修改会影响到原数组。
-		而实际的copy需要用到arrayObject.slice（start，【end】）
-		slice 方法一直复制到 end 所指定的元素，但是不包括该元素。
-		如果 start 为负，将它作为 length + start处理，此处 length 为数组的长度。
-		如果 end 为负，就将它作为 length + end 处理，此处 length 为数组的长度。
-		如果省略 end ，那么 slice 方法将一直复制到 arrayObj 的结尾。如果 end 出现在 start 之前，不复制任何元素到新数组中。
+	数组直接相等操作实际上只是备份，修改会影响到原数组。
+	而实际的copy需要用到arrayObject.slice（start，【end】）
+	slice 方法一直复制到 end 所指定的元素，但是不包括该元素。
+	如果 start 为负，将它作为 length + start处理，此处 length 为数组的长度。
+	如果 end 为负，就将它作为 length + end 处理，此处 length 为数组的长度。
+	如果省略 end ，那么 slice 方法将一直复制到 arrayObj 的结尾。如果 end 出现在 start 之前，不复制任何元素到新数组中。
 		</pre>
 	</div>
 	<div class="item">
@@ -95,7 +95,8 @@
 		<pre>
 	闭包指有权访问另一个函数作用域中的变量的函数。
 	当函数被调用时会创建一个执行环境和相应的作用域链[[scope]]，作用域链本质上是一个指向变量对象的指针列表，活动对象有层次性。
-	闭包会使另一个函数的活动对象添加到它的作用域链中，当外部函数返回后，其执行环境的作用域链被销毁，但其活动对象依然被保存在内存中。
+	闭包会使另一个函数的活动对象添加到它的作用域链中，当外部函数返回后，其执行环境的作用域链被销毁，
+	但其活动对象依然被保存在内存中。
 	直到匿名函数被销毁，闭包包含的对象才会被销毁，即将其设置为null。
 	闭包的好处是可以延长作用域链，访问本应该被释放的资源。
 	由于闭包会携带包含他的函数的作用域，因此会占用更多的内存，慎重使用闭包。
@@ -138,6 +139,42 @@ return {get: getName, set: setName};
 	然而，由于null对于this来说没有任何意义，因此会隐式转换为全局对象。”
 
 	在DOM树上添加事件，如果是元素对象（如onclick）则this指向window；如果是DOM树添加或者事件添加则为正确this指向。
+	在IE中，添加事件的匿名函数会将this绑定到window，所以使用时应当传入event事件，调用event.srcElement获取事件目标。
+		</pre>
+	</div>
+	<div class="item">
+		<em>IE8及以下不支持HTML5元素的js解决方法</em>
+		<p>在body文件上添加script文件，使用document.createElement('header')方法即可使IE支持HTML5元素。</p>
+	</div>
+	<div class="item">
+		<em>函数绑定</em>
+		<pre>
+	在js与DOM操作时经常用到函数绑定，绑定到事件触发程序上，通常与回调函数和事件处理程序一起使用，以便保留执行环境。
+	1、通过闭包完成执行环境的调用
+		onclick=function(){
+                handler.handlerFun();
+        }
+    2、可以自定义bind（）函数将函数绑定到指定环境中运行
+    	function bind(fn,context){
+            return function(){
+                return fn.apply(context,arguments);
+            };
+        }
+        此处arguments是内部匿名函数的。
+		</pre>
+	</div>
+	<div class="item">
+		<em>未完</em>
+		<pre>
+14、简述Ajax的异步机制。Ajax有哪些好处和弊端？	
+		</pre>
+	</div>
+	<div class="item">
+		<em>未完</em>
+		<pre>
+12、对JS中函数绑定的理解？函数绑定可以使用哪两个函数？
+13、jQuery的特点？
+14、简述Ajax的异步机制。Ajax有哪些好处和弊端？		
 		</pre>
 	</div>
 	<div class="item">
