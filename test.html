@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>前端开发 </title>
+	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="shotcut icon" type="image/x-icon" href="./images/icon.ico">
+	<style type="text/css">
+		body,div,iframe,ul,li{margin: 0px;padding: 0px;}
+		ul{list-style: none;}
+		li{float: left;}
+		
+		/* 这个地方的height改成像素可以显示北京，改为20%则不行。 */
+		nav{width: 100%;min-height: 55px;background: black;color:green;font-family: 'Microsoft YaHei';}
+		.subnav{background-color: lightblue;}
+		.subnav li{float: none;}
+		.active{background-color: red;}
+		.hoverStyle{background-color: red;}
+		#content{width: 100%;height: 30px;background-color: gray;}
+	</style>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li>HTML
+				<ul class="subnav">
+					<li>meta标签的使用</li>
+					<li>meta标签的使用</li>
+					<li>meta标签的使用</li>
+				</ul>
+			</li>
+			<li>CSS
+				<ul class="subnav">					
+					<li>meta标签的使用</li>
+					<li>meta标签的使用</li>
+					<li>meta标签的使用</li>
+				</ul>
+			</li>
+			<li>Javascript
+				<ul class="subnav">
+					<li>meta标签的使用</li>
+					<li>meta标签的使用</li>
+					<li>meta标签的使用</li>
+				</ul>
+			</li>
+			<li>AJAX</li>
+			<li>jQuery</li>
+			<li>Bootstarp</li>
+			<li>网站优化</li>
+		</ul>
+	</nav>
+	<div id="content">adadaf</div>
+	<script src="js/lib/jquery-1.10.2.min.js"></script>
+	<script>
+		var count,i;
+		var EventUtil={
+			addHandler:function(element,type,handler){
+				if(element.addEventListener){
+					element.addEventListener(type,handler,false);
+				}else{
+					element.attachEvent("on"+type,handler);
+				}
+			}
+		}
+		//导航栏背景色控制,DOM事件添加		
+		var oHeaderLi=$('nav>ul>li');
+		for(count=0;count<oHeaderLi.length;count++){
+			EventUtil.addHandler(oHeaderLi[count],"mouseover",function(event){
+				$(this).find('.subnav').show();
+				if(event.srcElement.className=="active"){
+					return true;
+				}else{
+					event.srcElement.className="hoverStyle";
+				}		
+			});
+			EventUtil.addHandler(oHeaderLi[count],"mouseout",function(event){
+				$(this).find('.subnav').hide();
+				if(event.srcElement.className=="hoverStyle"){
+					event.srcElement.className="";
+				}
+			});
+			var that=oHeaderLi[0];
+			var handler=function(event){
+				that.className="";
+				that=event.srcElement;
+				event.srcElement.className="active";
+			}
+			EventUtil.addHandler(oHeaderLi[count],"click",handler);
+		}
+	</script>
+</body>
+</html>

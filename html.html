@@ -8,27 +8,37 @@
 		.item{width: 90%;margin: 20px auto;border:2px dotted #CCC;}
 		em{color: white;font-size: 20px;font-weight: bold;background-color: rgb(43,102,149);display: block;padding: 5px;border-radius: 5px;}
 		p,xmp{text-indent: 2em;font-size: 15px;font-weight: bold;}
+		article{display: none;}
 	</style>
 </head>
 <body>
 	<div class="item">
 		<em>inline-block</em>
-		<p>在CSS中通过display:inline-block对一个对象指定inline-block属性，可以将对象呈递为内联对象，但是对象的内容作为块对象呈递。</p>
-		<p>块级对象元素会单独占一行，各自新起一行，并且可以设置width,height属性；而内联对象元素前后不会产生换行，一系列inline元素都在一行内显示，直到该行排满，对inline元素设置width,height属性无效。
-我们有个时候既希望元素具有宽度高度特性，又具有同行特性，这个时候我们可以使用inline-block。</p>
+		<article>
+			<p>在CSS中通过display:inline-block对一个对象指定inline-block属性，可以将对象呈递为内联对象，但是对象的内容作为块对象呈递。</p>
+			<p>块级对象元素会单独占一行，各自新起一行，并且可以设置width,height属性；而内联对象元素前后不会产生换行，一系列inline元素都在一行内显示，直到该行排满，对inline元素设置width,height属性无效。
+	我们有个时候既希望元素具有宽度高度特性，又具有同行特性，这个时候我们可以使用inline-block。</p>
+		</article>		
 	</div>
 	<div class="item">
 		<em>float兼容性问题</em>
-		<p>未写</p>
+		<article>
+			<p>未写</p>
+		</article>
+		
 	</div>
 	<div class="item">
 		<em>常用功能标签</em>
-		<p><xmp><pre>标签用于原样式输出。</xmp></p>
-		<p><xmp><xmp>标签用于输出标签。</xmp></p>
+		<article>
+			<p><xmp><pre>标签用于原样式输出。</xmp></p>
+			<p><xmp><xmp>标签用于输出标签。</xmp></p>
+		</article>
+		
 	</div>
 	<div class="item">
 		<em>语意化标签</em>
-		<pre><xmp>
+		<article>
+			<pre><xmp>
 	默认样式是浏览器设定的一些标签的表现形式，而语义化的目的就是直观的看到标签和属性的用途，有结构意义。
 	比如<span><div>无意义。
 	比如<h1>就是用来标题，它的样式就是加粗和较大字号；而<strong><em>用来区分其他文字，表强调作用，
@@ -38,15 +48,24 @@
 	语义化的好处最主要的就是对浏览器友好，结构更好，容易被搜索引擎抓取（SEO的优化），方便推广。
 	即时不定义CSS样式表，你的文档也是有意义的。
 	还可以从数据和文档中分离出意义，结构清晰，方便开发者的维护。
-		</xmp></pre>
+			</xmp></pre>
+		</article>
+		
 	</div>
 	<div class="item">
 		<em>SEO（search enginee optimization)搜索引擎优化</em>
-		<p>语义化标签</p>
+		<article>
+			<p>语义化标签</p>
+		</article>
+		
 	</div>
 	<div class="item">
 		<em>未完</em>
-		<p></p>
+		<article>
+			<p></p>
+		</article>
+		
 	</div>
+	
 </body>
 </html>

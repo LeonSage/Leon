@@ -8,20 +8,28 @@
 		.item{width: 90%;margin: 20px auto;border:2px dotted #CCC;}
 		em{color: white;font-size: 20px;font-weight: bold;background-color: rgb(43,102,149);display: block;padding: 5px;border-radius: 5px;}
 		p,xmp{text-indent: 2em;font-size: 15px;font-weight: bold;}
+		article{display: none;}
 	</style>
 </head>
 <body>
 	<div class="item">
 		<em>style样式表写在body内和head内</em>
-		<p>style样式表分为外部样式表，内页样式表和行间样式，优先级依次升高。样式表可以加载在任何位置，有时写在body内和相应HTML写在一起，是为了保证开发效率，方便后期的更改，减轻公共样式表加载的负担。</p>
+		<article>
+			<p>style样式表分为外部样式表，内页样式表和行间样式，优先级依次升高。样式表可以加载在任何位置，有时写在body内和相应HTML写在一起，是为了保证开发效率，方便后期的更改，减轻公共样式表加载的负担。</p>
+		</article>
+		
 	</div>
 	<div class="item">
 		<em>常用功能标签</em>
-		<p><xmp><pre>标签用于原样式输出。</xmp></p>
-		<p><xmp><xmp>标签用于输出标签。</xmp></p>
+		<article>
+			<p><xmp><pre>标签用于原样式输出。</xmp></p>
+			<p><xmp><xmp>标签用于输出标签。</xmp></p>
+		</article>
+		
 	</div>
 	<div class="item">
 		<em>语意化标签</em>
+		<article>
 		<pre><xmp>
 	默认样式是浏览器设定的一些标签的表现形式，而语义化的目的就是直观的看到标签和属性的用途，有结构意义。
 	比如<span><div>无意义。
@@ -33,6 +41,8 @@
 	即时不定义CSS样式表，你的文档也是有意义的。
 	还可以从数据和文档中分离出意义，结构清晰，方便开发者的维护。
 		</xmp></pre>
+		</article>
+		
 	</div>
 	<div class="item">
 		<em>img 的title & alt</em>
