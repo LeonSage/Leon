@@ -41,9 +41,9 @@
 		<iframe src="./html.html" id="info" name="info"></iframe>
 	</div>
 </body>
+<script type="text/javascript" src="./jsLib/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
-	
-	window.onload=function(){
+	$(document).ready(function(){
 		var count,i;
 		var EventUtil={
 			addHandler:function(element,type,handler){
@@ -115,7 +115,7 @@
 			}
 			oIndex.appendChild(oUl);
 		}
-		flushIndexTree();		
-	}
+		flushIndexTree();
+	});
 </script>
 </html>
