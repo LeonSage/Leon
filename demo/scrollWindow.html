@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset='utf-8'>
+	<meta author="leon">
+	<meta description="通过bootstrap完成样式布局和图标的生成,通过jQuery来完成按钮的行为,实现了视频墙的展示效果.">
+	<link rel="shortcut icon" type="image/x-icon" href="../images/leon.ico">
+	<title>视频滚动窗口</title>
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		.navbar-brand img{width: 40px;height: auto;margin-top: -10px;}
+		.thumbnail{display:inline-block;width:270px;height:180px;padding:4px;line-height:1.42857143;background-color:#fff;border:1px solid #ddd;border-radius:4px;-webkit-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+		.movieWindow{border: 1px solid gray;margin-top: 4%;}
+		.carousel-inner img{width: 100%;height: 200px;}
+		.imageRow{width:auto;height: 280px;overflow: hidden;}
+		.imageRow li{float: left;height: 280px;margin-left: 18px;}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<nav class="navbar navbar-default navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="#" class="navbar-brand"><img src="../images/leon.png" alt="Brand"></a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="../index.html">首页 <span class="sr-only">(Current)</span></a></li>
+						<li><a href="learn.html">技能学习</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="ture" aria-expanded="false">实例展示<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="scrollWindow.html">视频滚动窗口</a></li>
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Action</a></li>
+							</ul>
+						</li>
+					</ul>
+					<p class="nav navbar-nav navbar-right navbar-text">Leon的生活</p>
+				</div>
+				
+			</div>
+		</nav>
+	</div>
+	
+	<div class="container .col-lg-12 movieWindow">
+		<div class="row">
+			<div class="col-lg-9">
+				<h4 style="display:inline-block;"><strong>动漫视频</strong></h4> 
+				<span class="glyphicon glyphicon-check"></span> 
+				<span class="glyphicon glyphicon-unchecked"></span> 
+				<span class="glyphicon glyphicon-unchecked"></span> 
+				<span class="glyphicon glyphicon-unchecked"></span> 
+				<span class="glyphicon glyphicon-unchecked"></span> 
+				<button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span></button> 
+				<button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>			
+			</div>
+			<div class="col-lg-3 text-right"><a href="###"><h4><small><abbr title="访问更多精彩视频">更多动漫视频</abbr></small></h4></a></div>
+		</div>
+		<div class="row imageRow">
+			<ul class="list-unstyled movieUl">
+				<li>
+					<div class="">
+						<img src="../images/6.jpg" class="thumbnail">
+						<p>死神186出击命令!缉拿霞大路家</p>
+						<p>房东:19850515zd</p>
+					</div>
+				</li>
+				<li>
+					<div class="">
+						<img src="../images/2.jpg" class="thumbnail">
+						<p>死神186出击命令!缉拿霞大路家</p>
+						<p>房东:19850515zd</p>
+					</div>
+				</li>
+				<li>
+					<div class="">
+						<img src="../images/3.jpg" class="thumbnail">
+						<p>死神186出击命令!缉拿霞大路家</p>
+						<p>房东:19850515zd</p>
+					</div>
+				</li>
+				<li>
+					<div class="">
+						<img src="../images/4.jpg" class="thumbnail">
+						<p>死神186出击命令!缉拿霞大路家</p>
+						<p>房东:19850515zd</p>
+					</div>
+				</li>
+				<li>
+					<div class="">
+						<img src="../images/5.jpg" class="thumbnail">
+						<p>死神186出击命令!缉拿霞大路家</p>
+						<p>房东:19850515zd</p>
+					</div>
+				</li>
+				<li>
+					<div class="">
+						<img src="../images/7.jpg" class="thumbnail">
+						<p>死神186出击命令!缉拿霞大路家</p>
+						<p>房东:19850515zd</p>
+					</div>
+				</li>
+				<li>
+					<div class="">
+						<img src="../images/8.jpg" class="thumbnail">
+						<p>死神186出击命令!缉拿霞大路家</p>
+						<p>房东:19850515zd</p>
+					</div>
+				</li>
+				<li>
+					<div class="">
+						<img src="../images/1.jpg" class="thumbnail">
+						<p>死神186出击命令!缉拿霞大路家</p>
+						<p>房东:19850515zd</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+<!--引入bootstrap和后面DOM操作所必须的jQuery库-->
+<script src="../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	//等待DOM树加载完成
+	$(function(){
+		var $oPre=$('.glyphicon-triangle-left').parent();
+		var $oNext=$('.glyphicon-triangle-right').parent();
+		var $check=$('.row span');
+		var checkedCount=0;
+		var $oMovieUl=$('.movieUl');
+		var $oLi=$('.movieUl li');
+		var $liWidth=$oLi.width()+19;
+		//为向右的按钮绑定点击事件
+		$oNext.bind('click',function(){
+			//去处向左按钮的不可用提示
+			$oPre.removeAttr('disabled');
+			//在判断当前列表的偏移值之前清空动画队列并达到末状态(考虑用户快速点击按钮)
+			$oMovieUl.stop(true,true);
+			//当列表达到最右时,添加向右按钮的不可用提示,并阻止行为
+			if(parseInt($oMovieUl.css('margin-left'))<=(-4*$liWidth)){
+				$(this).attr('disabled','disabled');
+				return false;
+			}
+			//向右缓慢移动一个项的距离
+			$oMovieUl.animate({'margin-left':'-='+$liWidth},'slow');
+			//对当前选中和即将选中的项分别移除和添加样式
+			$check.eq(checkedCount).removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+			++checkedCount;
+			$check.eq(checkedCount).removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+		});
+		//为向左的按钮添加点击事件(具体内容参考向右按钮)
+		$oPre.bind('click',function(){
+			$oNext.removeAttr('disabled');
+			$oMovieUl.stop(true,true);		
+			if(parseInt($oMovieUl.css('margin-left'))>=0){
+				$(this).attr('disabled','disabled');
+				return false;
+			}
+			$oMovieUl.animate({'margin-left':'+='+$liWidth},'slow');
+			$check.eq(checkedCount).removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+			--checkedCount;
+			$check.eq(checkedCount).removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+		})
+	})	
+</script>
+</body>
+</html>
