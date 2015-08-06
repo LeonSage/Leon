@@ -27,10 +27,9 @@
 		</pre>
 	</div>
 	<div class="item">
-		<em>inline-block</em>
-		<p>在CSS中通过display:inline-block对一个对象指定inline-block属性，可以将对象呈递为内联对象，但是对象的内容作为块对象呈递。</p>
-		<p>块级对象元素会单独占一行，各自新起一行，并且可以设置width,height属性；而内联对象元素前后不会产生换行，一系列inline元素都在一行内显示，直到该行排满，对inline元素设置width,height属性无效。
-我们有个时候既希望元素具有宽度高度特性，又具有同行特性，这个时候我们可以使用inline-block。</p>
+		<em>jQuery的兼容性</em>
+		<p>在jQuery2.0以后就不再支持IE6/7/8的浏览器,因为其并不支持HTML5元素.</p>
+		<p>但jQuery1.*依然在保持更新,并支持IE8一下的浏览器,因为win7的默认浏览器是IE8,且不支持升级,所以IE8依然会拥有很大的用户群体,所以如果要针对这部分群体用户开发,可以引入jQuery1.*后最新的版本进行兼容性开发.因为IE8不支持HTML5元素,所以需要先用document.createElement('html5Element')进行添加元素控制.</p>
 	</div>
 	<div class="item">
 		<em>float兼容性问题</em>
