@@ -1,5 +1,5 @@
-<!DOCTYPE>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<title>前端开发 </title>
 	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -9,37 +9,40 @@
 		ul{list-style: none;}
 		li{float: left;}
 		header{width: 100%;height: 10%;position: fixed;background-color: black;color: white;}
-		header ul{margin-top: 1%;}
-		header li{padding: 5px;margin-left: 10px;border-radius: 5px;cursor: pointer;}
+		nav>ul{margin-top: 15px;}
+		nav>ul>li{padding: 5px;margin-left: 15px;border-radius: 5px;cursor: pointer;height: 20px;}
 		header .hoverStyle{background: red;}
 		header .active{background-color: red;}
-		#content{width: 100%;height: 100%;}
-		#index{width: 10%;height:90%;background-color: #CCC;position: absolute;top: 10%;overflow: auto;}
+		#index{width: 10%;height:90%;background-color: #CCC;position:fixed;top: 10%;overflow: auto;z-index: 1;}
 		#index li{font-size: 15px;font-weight: bold;margin: 5px;}
-		#info{width: 90%;min-height: 90%;position: absolute;left: 10%;top: 10%;border: 0px;height: 90%;background-image: url();}
+		#info{width: 89%;min-height: 90%;position: fixed;left: 10%;top: 10%;border: 0px;height: 90%;padding-left: 10px;}
 	</style>
 </head>
 <script type="text/javascript">
-	var HtmlTagname=["header","footer"],count;
+	var HtmlTagname=["header","footer",'article','nav'],count;
 	for(count=0;count<HtmlTagname.length;count++){
 		document.createElement(HtmlTagname[count]);
 	}
 </script>
 <body>
 	<header>
-		<ul id="nav">
-			<li onclick="parent.document.getElementById('info').src='./html.html'" class="active">HTML</li>
-			<li onclick="parent.document.getElementById('info').src='./css.html'" >CSS</li>
-			<li onclick="parent.document.getElementById('info').src='./js.html'">Javascript</li>
-			<li onclick="parent.document.getElementById('info').src='./AJAX.html'">AJAX</li>
-			<li onclick="parent.document.getElementById('info').src='./jQuery.html'">jQuery</li>
-			<li onclick="parent.document.getElementById('info').src='./optimization.html'">网站优化</li>
-		</ul>
+		<nav>
+			<ul>
+				<li onclick="parent.document.getElementById('info').src='./html.html';$('#index').attr('src','htmlIndex.html');" class="active">HTML</li>
+				<li onclick="$('#info').attr('src','css.html');$('#index').attr('src','cssIndex.html');" >CSS</li>
+				<li onclick="parent.document.getElementById('info').src='./js.html'">Javascript</li>
+				<li onclick="parent.document.getElementById('info').src='./AJAX.html'">AJAX</li>
+				<li onclick="parent.document.getElementById('info').src='./jQuery.html'">jQuery</li>
+				<li onclick="parent.document.getElementById('info').src='./Bootstrap.html'">Bootstarp</li>
+				<li onclick="parent.document.getElementById('info').src='./optimization.html'">网站优化</li>
+			</ul>
+		</nav>
 	</header>
 	<div id="content">
-		<div id="index"></div>
+		<iframe src="htmlIndex.html" id="index"></iframe>
 		<iframe src="./html.html" id="info" name="info"></iframe>
 	</div>
+	<script src="js/lib/jquery-1.10.2.min.js"></script>
 </body>
 <script type="text/javascript" src="./jsLib/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
@@ -55,7 +58,7 @@
 			}
 		}
 		//导航栏背景色控制,DOM事件添加		
-		var oHeaderLi=document.getElementById('nav').getElementsByTagName('li');
+		var oHeaderLi=$('nav>ul>li');
 		for(count=0;count<oHeaderLi.length;count++){
 			EventUtil.addHandler(oHeaderLi[count],"mouseover",function(event){
 				if(event.srcElement.className=="active"){
@@ -74,9 +77,6 @@
 				that.className="";
 				that=event.srcElement;
 				event.srcElement.className="active";
-				setTimeout(function(){
-					flushIndexTree();
-				},100);
 			}
 			EventUtil.addHandler(oHeaderLi[count],"click",handler);
 		}
@@ -94,7 +94,7 @@
 			}
 		}
 		//索引条目的生成
-		var flushIndexTree=function(){
+		/*/*var flushIndexTree=function(){
 			var oIndex=document.getElementById('index');
 			oIndex.innerHTML="";
 			var oFrame=document.getElementById('info').contentWindow.document;			
@@ -110,12 +110,35 @@
 						alert(error.message);
 					}
 					
-				}*/
+				}
 				oUl.appendChild(oLi);
 			}
 			oIndex.appendChild(oUl);
+			//为框架中的条目添加伸缩功能
+			var oEm=oFrame.getElementsByTagName('em');
+			var oArticle=oFrame.getElementsByTagName('article');
+			var handler=function(){
+				var styleSheet=oArticle[this.index].style;
+				styleSheet.display=="block"?styleSheet.display="none":styleSheet.display="block";
+			}
+			for(var count=0;count<oEm.length;count++){
+				oEm[count].index=count;
+				EventUtil.addHandler(oEm[count],"click",handler);
+			}
 		}
+<<<<<<< HEAD
 		flushIndexTree();
 	});
+=======
+		var oFrame=document.getElementById('info');
+		flushIndexTree();
+		oFrame.onload=function(){
+			flushIndexTree();
+		}*/
+		
+
+	}
+
+>>>>>>> bd166514c3d909101a6973921bb80585e8cfd849
 </script>
 </html>
