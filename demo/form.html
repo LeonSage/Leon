@@ -129,9 +129,40 @@
 <script src="../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
 	$(function(){
+		//对cookie的设置,读取进行封装
+		function setCookie(name,value,expries){
+			var cookieText=encodeURIComponent(name)+"="+encodeURIComponent(value);
+			if(expries){
+				var expriesDate=new Date();
+				expriesDate.setDate(expriesDate.getDate()+expries);
+				cookieText+=";expries="+expriesDate.toGMTString();
+			}			
+			document.cookie=cookieText; 
+		}
+		function getCookie(name){
+			var cookieName=encodeURIComponent(name)+'=',
+				cookieStart=document.cookie.indexOf(cookieName),
+				cookieValue=null;
+			if (cookieStart>-1){
+				var cookieEnd=document.cookie.indexOf(";",cookieStart);
+				if(cookieEnd==-1){
+					cookieEnd=document.cookie.length;
+				}
+				cookieValue=decodeURIComponent(document.cookie.substring(cookieStart+cookieName.length,cookieEnd));
+			}
+			return cookieValue;
+		}
+
+		//为什么这里不能正确读取?
+		setCookie('color',"red");
+		var value=getCookie('color');
+		alert(value);
+
+
 		$username=$('#username');
 		$password=$('#password');
 		$submit=$(':submit');
+		//对用户名表单输入框进行校验,当失去焦点时进行校验,正确则success提示,错误则error提示并追加提示信息
 		$username.blur(function(){
 			if($username.val().length>6){
 				$(this).parent().append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>').parent().find('.warning').remove().end().removeClass('has-error').addClass('has-success has-feedback');
@@ -139,6 +170,7 @@
 				$(this).parent().parent().find('.warning').remove().end().find('.glyphicon-ok').remove().end().append("<label class='control-label warning'>*请输入大于6位的用户名</label>").addClass('has-error');
 			}
 		});
+		//对密码进行校验,功能与用户名一致
 		$password.blur(function(){
 			if($password.val().length>8){
 				$(this).parent().append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>').parent().find('.warning').remove().end().removeClass('has-error').addClass('has-success has-feedback');
@@ -146,13 +178,22 @@
 				$(this).parent().parent().find('.warning').remove().end().find('.glyphicon-ok').remove().end().append("<label class='control-label warning'>*请输入大于8位的密码</label>").addClass('has-error');
 			}
 		});
+		
 		//实现动态控制select标签的展示与隐藏(但到现在都没找到控制方法,除了使用size属性)
-		/*$('#nationality').keyup(function(e){
-			$(this).trigger("click");
+		/*$('#nationality').attr('size',1);
+		$('#nationality').keyup(function(e){
 			if(e.which==13){
-				$(this).click();
+				//alert($('#nationality').attr('size'));
+				if($('#nationality').attr('size')==1){
+					$('#nationality').attr('size',12);
+				}else{
+					$('#nationality').attr('size',1);
+					return false;
+				}				
 			};
-		});	*/
+		});*/
+
+		//通过单选项来完成表单样式风格
 		$(':radio').click(function(){
 				$('.container-fluid').css('color',$(this).val());
 		})
