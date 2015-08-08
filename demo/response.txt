@@ -1,0 +1,9 @@
+{
+	"name":"Leon",
+	"age":"22",
+	"school":{
+		"name":"xi'an dianzi keji University",
+		"location":"Shann'xi Province Xi'an city"
+	},
+	"dormitory":["wssdll","Horizon","Crack"]
+}

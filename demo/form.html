@@ -12,7 +12,7 @@
 	</style>
 </head>
 <body>
-	<!--尚未完成的功能:Cookie,富文本框(高度和宽度)-->
+	<!--尚未完成的功能:富文本框(高度和宽度)-->
 	<div class="container">
 		<div class="navbar navbar-default">
 			<div class="container-fluid">
@@ -152,11 +152,15 @@
 			}
 			return cookieValue;
 		}
+		function removeCookie(name){
+			//没有直接删除cookie的方法,因此可以使用相同的名字再次设置,并将失效时间设置为过去的时间,Date(0)为1970年1月1日.
+			setCookie(name,"",new Date(0));
+		}
 
-		//为什么这里不能正确读取?
-		setCookie('color',"red");
+		//为什么这里不能正确读取?(因为需要上传到服务器才能在域名下获取cookie)
+		/*setCookie('color',"red");
 		var value=getCookie('color');
-		alert(value);
+		alert(value);*/
 
 
 		$username=$('#username');
@@ -195,7 +199,9 @@
 
 		//通过单选项来完成表单样式风格
 		$(':radio').click(function(){
-				$('.container-fluid').css('color',$(this).val());
+			$('.container-fluid').css('color',$(this).val());
+			//在这里保存选择的颜色风格到cookie中去,并保存7天
+			setCookie('colorStyle',$(this).val(),7);
 		})
 	})
 </script>
