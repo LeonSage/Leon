@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta author="Leon">
+	<meta description="分别编写了striped,color,:between插件,完成对界面更为简洁明了方便的控制.">
+	<title>jQuery插件的编写</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../images/leon.ico">
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		.navbar-brand img{width: 40px;height: auto;margin-top: -10px;}
+		.occur{margin-top: 400px;}
+		#occur{border: 1px solid gray;height: auto;width: 80%;position: fixed;top: 20%;left: 10%;right: auto;display: none;}
+		.title{width: 100%;height: 80px;background: lightblue;}
+		.title button{display: inline-block;margin-top: -60px;}
+		.content{width: 100%;height: auto;font-size: 20px;background: white;}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a href="#" class="navbar-brand"><img src="../images/leon.png"></a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="../index.html">首页</a></li>
+						<li><a href="../resume.html">简历</a></li>
+						<li><a href="../learn.html">技能学习</a></li>
+						<li class="dropdown active">
+							<a href="#" class="drop-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">实例展示<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="scrollWindow.html">视频滚动窗口</a></li>
+								<li><a href="form.html">表单功能</a></li>
+								<li><a href="AJAX.html">AJAX</a></li>
+								<li class="active"><a href="plugins.html">jQuery插件的编写</a></li>
+							</ul>
+						</li>
+					</ul>
+					<p class="nav navbar-text navbar-nav navbar-right">Leon的生活</p>
+				</div>			
+			</div>
+		</div>
+		<div class="container-fluid">
+			<table class="table table-bordered table-responsive" id="striped">
+				<thead>
+					<tr>
+						<td colspan="3">使用自定义插件中的striped()方法完成表格的交错变色</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Leon</td>
+						<td>male</td>
+						<td>22</td>
+					</tr>
+					<tr>
+						<td>Leon</td>
+						<td>male</td>
+						<td>22</td>
+					</tr>
+					<tr>
+						<td>Leon</td>
+						<td>male</td>
+						<td>22</td>
+					</tr>
+					<tr>
+						<td>Leon</td>
+						<td>male</td>
+						<td>22</td>
+					</tr>
+					<tr>
+						<td>Leon</td>
+						<td>male</td>
+						<td>22</td>
+					</tr>
+					<tr>
+						<td>Leon</td>
+						<td>male</td>
+						<td>22</td>
+					</tr>
+				</tbody>				
+			</table>
+			<div class="form-group">
+				<button class="btn btn-default occur">出现</button>
+				<div class="container" id="occur">
+					<div class="row">
+						<div class="col-lg-6 title">
+							<h2>color()插件</h2>
+							<button class="btn btn-default col-lg-offset-11 close">Close</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 content">
+							<p>在本页面中使用了自己编写的jQuery插件,其中包含有color()方法,可以在添加有一个参数时,返回相应的rgb()值,在有两个参数时,设置其字体颜色为相应的颜色.</p>
+							<p>然后使用Toggle方法将该文本框展示出来.</p>
+							<p>但是在编写插件的过程中出现了选择器插件编写失败的问题.详情参考本页面注释部分.</p>							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="../js/jQuery/jquery-1.11.3.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<!--自己编写的插件-->
+<script src="../js/plugins/jquery.plugins.js"></script>
+<script>
+	$(function(){
+		//+value表示的是将一个字符串转变为数字.
+		/*var data="200";
+		alert(typeof(data));
+		data =+data;
+		alert(typeof(data));*/
+
+		//使用插件中的表格背景色交错样式
+		var $striped=$('#striped');
+		$striped.striped();
+
+		//控制详细信息的出现和消失
+		var $occur=$('.occur');
+		var $occurWindow=$('#occur');
+		var $close=$('.close');
+		$close.bind('click',function(){
+			$occurWindow.hide();
+		})
+		$occur.bind('click',function(){
+			$occurWindow.fadeToggle();
+		})
+		$occurWindow.color('green');
+	})
+</script>
+</body>
+</html>
