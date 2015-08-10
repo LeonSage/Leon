@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset='utf-8'>
+	<meta name="author" content="Leon">
+	<meta name="description" content="Leon的个人主页,在这里记录着他前端开发过程中学习到的技术以及实践,其中也包含着各种各样的喜怒哀乐.">
+	<link rel="shortcut icon" type="image/x-icon" href="./images/leon.ico">
+	<title>Leon购物</title>
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		.navbar-brand img{width: 40px;height: auto;margin-top: -10px;}
+		.jumbotronImg{width: 100%;height: auto;}
+		.jumbotronItems{padding-left: 15px;padding-right: 15px;margin-top: -60px;}
+		.jumbotronItem{background-color: rgba(50,50,50,0.5);color: white; height: 60px;text-align: center;}
+		.secondaryImg{width: 100%;height: auto;}
+		.classify .list-group>p:first-child{background: rgba(50,50,50,1);color: white;padding: 4px;}
+		.recommandBrand a{width: 45%;display: inline-block;line-height: 1.5em;}
+		.adImg img{width: 24%;margin-left:1%;height:auto;max-height: 245px;}
+		.adImg div{display: none;}
+		.adImg div:first-child{display: block;}
+		.adImg img:first-child{margin-left: 0px;}
+		.adStyle{display: inline-block;float: right;}
+		.adStyle li{background-color: lightgray;cursor: pointer;}
+		.adStyle li:first-child{background-color: gray;}
+		.panel{position: fixed;top: 10%;left: 20%;z-index:1;display:none; ;}
+		.panel-body{min-height: 60%;height: 400px;}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="#" class="navbar-brand"><img src="images/leon.png" alt="Brand"></a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="index.html">首页 <span class="sr-only">(Current)</span></a></li>
+						<li><a href="resume.html">简历</a></li>
+						<li class="active"><a href="LeonShop.html">Leon购物</a></li>
+						<li><a href="learn.html">技能学习</a></li>						
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="ture" aria-expanded="false">实例展示<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="demo/scrollWindow.html">视频滚动窗口</a></li>
+								<li><a href="demo/form.html">表单功能</a></li>
+								<li><a href="demo/AJAX.html">AJAX</a></li>
+								<li><a href="demo/plugins.html">jQuery插件的编写</a></li>
+							</ul>
+						</li>
+					</ul>
+					<p class="nav navbar-nav navbar-right navbar-text">Leon的生活</p>
+				</div>
+			</div>
+		</nav>
+		<div class="container-fluid">
+			<nav class="navbar navbar-inverse">
+				<div class="nav navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="#">首页</a></li>
+						<li><a href="#">推荐品牌</a></li>
+						<li><a href="#">女装</a></li>
+						<li><a href="#">男装</a></li>
+						<li><a href="#">鞋包配饰</a></li>
+					</ul>
+				</div>		
+			</nav>
+			<div class="row">
+				<div class="col-lg-2 classify">
+					<div class="list-group">
+						<p>商品分类</p>
+						<li class="list-group-item recommandBrand">
+							<p><strong>推荐品牌</strong></p>
+							<a href="###">耐克<span class="glyphicon glyphicon-fire"></span></a>
+							<a href="###">阿迪达斯</a>
+							<a href="###">达芙妮</a>
+							<a href="###">李宁</a>
+							<a href="###">安踏</a>
+							<a href="###">特步<span class="glyphicon glyphicon-fire"></span></a>
+						</li>
+						<li class="list-group-item recommandBrand">
+							<p><strong>女装</strong></p>
+							<a href="###">呢大衣</a>
+							<a href="###">T恤<span class="glyphicon glyphicon-fire"></span></a>
+							<a href="###">羽绒</a>
+							<a href="###">羊绒衫</a>
+							<a href="###">针织</a>
+							<a href="###">连衣裙<span class="glyphicon glyphicon-fire"></a>
+							<a href="###">皮外套</a>
+						</li>
+						<li class="list-group-item recommandBrand">
+							<p><strong>男装</strong></p>
+							<a href="###">衬衫</a>
+							<a href="###">T恤衫</a>
+							<a href="###">夹克<span class="glyphicon glyphicon-fire"></span></a>
+							<a href="###">牛仔裤</a>
+							<a href="###">西服</a>
+							<a href="###">卫衣</a>
+						</li>
+						<li class="list-group-item recommandBrand">
+							<p><strong>鞋包配饰</strong></p>
+							<a href="###">围巾</a>
+							<a href="###">旅行箱<span class="glyphicon glyphicon-fire"></span></a>
+							<a href="###">真皮包</a>
+							<a href="###">韩版</a>
+							<a href="###">单肩包</a>
+							<a href="###">达芙妮</a>
+							<a href="###">靴子</a>
+							<a href="###">毛线</a>
+						</li>
+					</div>
+				</div>
+				<div class="col-lg-10 detailPage">
+					<div class="row">
+						<div class="col-lg-8">
+							<img class="jumbotronImg" src="images/jumbotron1.jpg">
+							<div class="row jumbotronItems">
+								<div class="col-lg-3 jumbotronItem">
+									<p>相约情人节</p><p>全场119元起</p>
+								</div>
+								<div class="col-lg-3 jumbotronItem">
+									<p>新款上市</p><p>全场255元起</p>
+								</div>
+								<div class="col-lg-3 jumbotronItem">
+									<p>愤怒款爆炸</p><p>全场1元起</p>
+								</div>
+								<div class="col-lg-3 jumbotronItem">
+									<p>春季新品</p><p>全场5折</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<img class="secondaryImg" src="images/3.jpg">
+							<div class="list-group">
+								<p><strong>最新动态</strong></p>
+								<a href="###" class="list-group-item has-success">[活动]千百度冬靴新品火热让利<span class="glyphicon glyphicon-plus form-control-feedback"></span></a>
+								<div class="panel panel-primary container occurWindow">
+									<div class="panel-heading">
+										[活动]千百度冬靴新品火热让利
+									</div>
+									<div class="panel-body">
+										<pre>
+下面是一些关于客户端JS性能的一些优化的小技巧：
+
+1.[顶]关于JS的循环，循环是一种常用的流程控制。JS提供了三种循环：for(;;)、while()、for(in)。在这三种循环中 for(in)的效率最差，因为它需要查询Hash键，因此应尽量少用for(in)循环，for(;;)、while()循环的性能基本持平。当然，推 荐使用for循环，如果循环变量递增或递减，不要单独对循环变量赋值，而应该使用嵌套的++或－－运算符。
+
+2.如果需要遍历数组，应该先缓存数组长度，将数组长度放入局部变量中，避免多次查询数组长度。
+
+3.局部变量的访问速度要比全局变量的访问速度更快，因为全局变量其实是window对象的成员，而局部变量是放在函数的栈里的。
+
+4.尽量少使用eval，每次使用eval需要消耗大量时间，这时候使用JS所支持的闭包可以实现函数模板。
+										</pre>
+									</div>
+									<div class="panel-footer">
+										<button class="btn btn-default col-lg-offset-11">关闭</button>
+									</div>
+								</div>
+								<a href="###" class="list-group-item has-success">[活动]针织衫买一送三<span class="glyphicon glyphicon-plus form-control-feedback"></span></a>
+								<a href="###" class="list-group-item has-success">[活动]波司登羽绒新新款火热上市<span class="glyphicon glyphicon-plus form-control-feedback"></span></a>
+								<a href="###" class="list-group-item has-success">[活动]梅迪建牛仔裤全场8折<span class="glyphicon glyphicon-plus form-control-feedback"></span></a>
+								<a href="###" class="list-group-item has-success">[活动]屠龙宝刀,点击就送<span class="glyphicon glyphicon-plus form-control-feedback"></span></a>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<span>
+								<strong>品牌活动</strong>
+								<ul class="list-unstyled list-inline adStyle">
+									<li>运动</li>
+									<li>女鞋</li>
+									<li>男鞋</li>
+									<li>童鞋</li>
+								</ul>
+							</span>							
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 adImg">
+							<div class="sportsAd">
+								<img src="images/2.jpg">
+								<img src="images/3.jpg">
+								<img src="images/4.jpg">
+								<img src="images/5.jpg">
+							</div>
+							<div class="femaleShoesAd">
+								<img src="images/6.jpg">
+								<img src="images/7.jpg">
+								<img src="images/8.jpg">
+								<img src="images/1.jpg">
+							</div>
+							<div class="maleShoesAd">
+								<img src="images/8.jpg">
+								<img src="images/3.jpg">
+								<img src="images/2.jpg">
+								<img src="images/5.jpg">
+							</div>
+							<div class="childShoesAd">
+								<img src="images/5.jpg">
+								<img src="images/4.jpg">
+								<img src="images/1.jpg">
+								<img src="images/7.jpg">
+							</div>							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+<!--引入bootstrap和后面DOM操作所必须的jQuery库-->
+<script src="js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	//等待DOM树加载完成
+	$(function(){
+		//控制巨幕的行为
+		var $jumbotronItem=$('.jumbotronItem');
+		var $jumbotronImg=$('.jumbotronImg');
+		$jumbotronImg.bind('click',function(){
+			$(".detailPage").load('LeonShopDetails.html');
+		})
+
+		//声明一个轮询函数将间歇调用改变为超时调用.
+		//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.
+		function poll(){
+			//此处巨幕图片的命名格式为jumbotron*.jpg,所以通过查询第16位的数字来确定当前的索引来控制下一个的跳转路径.
+			var currentIndex=+($jumbotronImg.attr('src').charAt(16))+1;
+			currentIndex=currentIndex>4?1:currentIndex;
+			$jumbotronImg.attr('src',"images/jumbotron"+currentIndex+".jpg");
+			//通过在轮询函数中调用轮询函数本身完成间歇调用的模拟.
+			pollTimer=setTimeout(poll,2000);
+		}
+		//启用间歇调用控制巨幕图片的滚动
+		var pollTimer=setTimeout(poll,2000);
+		//绑定巨幕项的鼠标移入和移出,分别控制定时器的清除和重启,以及下一张图片.
+		$jumbotronItem.bind('mouseover',function(){
+			clearTimeout(pollTimer);
+			$(this).css('background-color','gray').parent().siblings('img').attr('src',"images/jumbotron"+($(this).index()+1)+".jpg");
+		}).bind('mouseout',function(){
+			pollTimer=setTimeout(poll,2000);
+			$(this).css('background-color','rgba(50,50,50,0.5)');
+		});
+
+		//控制广告推广部分的分页效果.
+		var $adStyle=$('.adStyle li');
+		var $adImg=$('.adImg div');
+		//绑定分页项的点击行为:改变选中项背景色,并使相应页显示
+		$adStyle.bind('click',function(){
+			$adStyle.css('background-color','lightgray');
+			$(this).css('background-color','gray');
+			$adImg.hide().eq($(this).index()).show();
+		});
+
+		//控制次要巨幕下推广页面的点击行为
+		var $foldedItem=$('.secondaryImg+div a');
+		var $close=$('.panel-footer button');
+		var $occurWindow=$('.occurWindow');
+		//绑定推广项的点击行为:尾部改变图标,显示具体项面板,并改变面板标题(此处偷懒,只写了一个面板,实际应用中应该每一个推广项写一个面板)
+		$foldedItem.bind('click',function(){
+			$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+			$occurWindow.find('.panel-heading').text($(this).text());
+			$occurWindow.show();
+		});
+		//绑定面板中关闭按钮的行为:点击时关闭面板,并改变推广项尾部图标.
+		$close.bind('click',function(){
+			$foldedItem.find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+			$occurWindow.hide();
+		})
+	})	
+</script>
+</body>
+</html>

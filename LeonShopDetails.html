@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset='utf-8'>
+	<meta name="author" content="Leon">
+	<meta name="description" content="Leon的个人主页,在这里记录着他前端开发过程中学习到的技术以及实践,其中也包含着各种各样的喜怒哀乐.">
+	<link rel="shortcut icon" type="image/x-icon" href="./images/leon.ico">
+	<title>Leon购物</title>
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		.thumbnailImg>img{width: 100%;height: auto;border: 1px dotted gray;}
+		.thumbnailImg li img{width: 20%;height: auto;float: left;}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="col-lg-10">
+			<div class="col-lg-5 thumbnailImg">
+				<img src="images/jumbotron3.jpg">
+				<button class="btn btn-default">观看清晰图片</button>
+				<ul class="list-unstyled list-inline">
+					<li><img src="images/jumbotron3.jpg"></li>
+					<li><img src="images/jumbotron2.jpg"></li>
+					<li><img src="images/jumbotron1.jpg"></li>
+				</ul>
+				<div>
+					<ol>
+						<li>
+							<p>产品属性</p>
+							<div>
+								<p>//声明一个轮询函数将间歇调用改变为超时调用.
+									//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.</p>
+							</div>
+						</li>
+						<li>
+							<p>产品属性</p>
+							<div>
+								<p>//声明一个轮询函数将间歇调用改变为超时调用.
+									//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.</p>
+							</div>
+						</li>
+						<li>
+							<p>产品属性</p>
+							<div>
+								<p>
+							</div>
+						</li>
+					</ol>
+				</div>
+			</div>
+			<div class="col-lg-7">
+				<h4>游戏截图</h4>
+				<p>//声明一个轮询函数将间歇调用改变为超时调用.
+					//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.</p>
+				<dl>
+					<dt>价格:</dt>
+					<dd><u>379.0元</u></dd>
+					<dt>促销:</dt>
+					<dd><strong>200.0元</strong></dd>
+					<dt>颜色:</dt>
+					<dd>蓝白</dd>
+					<button class="btn btn-default"> </button>
+					<button class="btn btn-default"> </button>
+					<button class="btn btn-default"> </button>
+					<dt>尺寸:</dt>
+					<dd>未选择</dd>
+					<button class="btn btn-default">S</button>
+					<button class="btn btn-default">L</button>
+					<button class="btn btn-default">SL</button>
+					<button class="btn btn-default">LL</button>
+					<dt>数量:</dt>
+					<dd><select>
+						<option>1</option>
+						<option>2</option>
+						<option>5</option>
+					</select></dd>
+					<dt>总计:</dt>
+					<dd>200元</dd>
+					<dt>给商品评分:</dt>
+					<dd>五角星</dd>
+				</dl>
+				<button class="btn btn-default">放入购物车</button>
+			</div>
+		</div>
+	</div>
+<!--引入bootstrap和后面DOM操作所必须的jQuery库-->
+<script src="js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	//等待DOM树加载完成
+	$(function(){
+		//控制巨幕的行为
+		var $jumbotronItem=$('.jumbotronItem');
+		var $jumbotronImg=$('.jumbotronImg');
+
+		//声明一个轮询函数将间歇调用改变为超时调用.
+		//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.
+		function poll(){
+			//此处巨幕图片的命名格式为jumbotron*.jpg,所以通过查询第16位的数字来确定当前的索引来控制下一个的跳转路径.
+			var currentIndex=+($jumbotronImg.attr('src').charAt(16))+1;
+			currentIndex=currentIndex>4?1:currentIndex;
+			$jumbotronImg.attr('src',"images/jumbotron"+currentIndex+".jpg");
+			//通过在轮询函数中调用轮询函数本身完成间歇调用的模拟.
+			pollTimer=setTimeout(poll,2000);
+		}
+		//启用间歇调用控制巨幕图片的滚动
+		var pollTimer=setTimeout(poll,2000);
+		//绑定巨幕项的鼠标移入和移出,分别控制定时器的清除和重启,以及下一张图片.
+		$jumbotronItem.bind('mouseover',function(){
+			clearTimeout(pollTimer);
+			$(this).css('background-color','gray').parent().siblings('img').attr('src',"images/jumbotron"+($(this).index()+1)+".jpg");
+		}).bind('mouseout',function(){
+			pollTimer=setTimeout(poll,2000);
+			$(this).css('background-color','rgba(50,50,50,0.5)');
+		});
+
+		//控制广告推广部分的分页效果.
+		var $adStyle=$('.adStyle li');
+		var $adImg=$('.adImg div');
+		//绑定分页项的点击行为:改变选中项背景色,并使相应页显示
+		$adStyle.bind('click',function(){
+			$adStyle.css('background-color','lightgray');
+			$(this).css('background-color','gray');
+			$adImg.hide().eq($(this).index()).show();
+		});
+
+		//控制次要巨幕下推广页面的点击行为
+		var $foldedItem=$('.secondaryImg+div a');
+		var $close=$('.panel-footer button');
+		var $occurWindow=$('.occurWindow');
+		//绑定推广项的点击行为:尾部改变图标,显示具体项面板,并改变面板标题(此处偷懒,只写了一个面板,实际应用中应该每一个推广项写一个面板)
+		$foldedItem.bind('click',function(){
+			$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+			$occurWindow.find('.panel-heading').text($(this).text());
+			$occurWindow.show();
+		});
+		//绑定面板中关闭按钮的行为:点击时关闭面板,并改变推广项尾部图标.
+		$close.bind('click',function(){
+			$foldedItem.find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+			$occurWindow.hide();
+		})
+	})	
+</script>
+</body>
+</html>
