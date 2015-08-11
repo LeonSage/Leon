@@ -61,15 +61,18 @@
 		</nav>
 		<div class="container-fluid">
 			<nav class="navbar navbar-inverse">
-				<div class="nav navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li><a href="#">首页</a></li>
-						<li><a href="#">推荐品牌</a></li>
-						<li><a href="#">女装</a></li>
-						<li><a href="#">男装</a></li>
-						<li><a href="#">鞋包配饰</a></li>
-					</ul>
-				</div>		
+				<div class="container-fluid">
+					<div class="collapse navbar-collapse">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="index.html">首页</a></li>
+							<li><a href="#" onclick="$('.detailPage').load('LeonShopDetails.html');">详情页</a></li>
+							<li><a href="#">推荐品牌</a></li>
+							<li><a href="#">女装</a></li>	
+							<li><a href="#">男装</a></li>
+							<li><a href="#">鞋包配饰</a></li>					
+						</ul>
+					</div>	
+				</div>
 			</nav>
 			<div class="row">
 				<div class="col-lg-2 classify">
@@ -223,9 +226,9 @@
 		//控制巨幕的行为
 		var $jumbotronItem=$('.jumbotronItem');
 		var $jumbotronImg=$('.jumbotronImg');
-		$jumbotronImg.bind('click',function(){
-			$(".detailPage").load('LeonShopDetails.html');
-		})
+		/*$jumbotronImg.bind('click',function(){
+			 $("detailPage").load('LeonShopDetails.html');
+		})*/
 
 		//声明一个轮询函数将间歇调用改变为超时调用.
 		//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.

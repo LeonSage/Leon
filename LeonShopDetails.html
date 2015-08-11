@@ -9,136 +9,196 @@
 	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
 		.thumbnailImg>img{width: 100%;height: auto;border: 1px dotted gray;}
-		.thumbnailImg li img{width: 20%;height: auto;float: left;}
+		.thumbnailImg li img{width: 20%;height: auto;display:inline-block;float: left;margin-right: 5%;}
+		.detailedImg{margin: 10px auto;}
+		.attr{border: 1px solid lightgray;border-top: none;padding: 5px;display: none;}
+		.activeAttr{display: block;}
+		.attr p{line-height: 25px;}
+		.goodDesc p span:first-child{font-weight: bold;width: 100px;display: inline-block; text-align: center;}
+		.onSale{color: rgb(255,153,18);font-size: 25px;}
+		.score{cursor: pointer;}
+		.input-sm{font-size: 15px;border: 0px;}
+		.magnifying{width: 80%;height: auto;position: absolute;border: 1px solid black;display: none;z-index: 3;}
 	</style>
 </head>
-<body>
+<body>	
 	<div class="container-fluid">
-		<div class="col-lg-10">
-			<div class="col-lg-5 thumbnailImg">
-				<img src="images/jumbotron3.jpg">
-				<button class="btn btn-default">观看清晰图片</button>
-				<ul class="list-unstyled list-inline">
-					<li><img src="images/jumbotron3.jpg"></li>
-					<li><img src="images/jumbotron2.jpg"></li>
-					<li><img src="images/jumbotron1.jpg"></li>
-				</ul>
-				<div>
-					<ol>
-						<li>
-							<p>产品属性</p>
-							<div>
-								<p>//声明一个轮询函数将间歇调用改变为超时调用.
-									//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.</p>
-							</div>
-						</li>
-						<li>
-							<p>产品属性</p>
-							<div>
-								<p>//声明一个轮询函数将间歇调用改变为超时调用.
-									//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.</p>
-							</div>
-						</li>
-						<li>
-							<p>产品属性</p>
-							<div>
+		<div class="row">
+			<div class="">
+				<div class="col-lg-5 thumbnailImg">
+					<img src="images/jumbotron1.jpg" id="imga">
+					<div class=""></div>
+					<div class="row">
+						<div class="col-lg-12">
+							<button class="btn btn-default detailedImg center-block distinct">观看清晰图片</button>
+						</div>						
+					</div>					
+					<div class="row">
+						<div class="col-lg-12">
+							<ul class="list-unstyled">
+								<li><img class="thumbnail" src="images/jumbotron3.jpg"></li>
+								<li><img class="thumbnail" src="images/jumbotron2.jpg"></li>
+								<li><img class="thumbnail" src="images/jumbotron1.jpg"></li>
+							</ul>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 attrSection">
+							<ul class="attrCards nav nav-tabs">
+								<li class="presentation active"><a>产品属性</a></li>
+								<li class="presentation"><a>产品尺码表</a></li>
+								<li class="presentation"><a>产品介绍</a></li>
+							</ul>
+							<div class="attr activeAttr">
 								<p>
+									声明一个轮询函数将间歇调用改变为超时调用.
+									在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.
+								</p>
 							</div>
-						</li>
-					</ol>
+							<div class="attr">
+								<p>
+									在1995年时，由Netscape公司的Brendan Eich，在网景导航者浏览器上首次设计实现而成。因为Netscape与Sun合作，Netscape管理层希望它外观看起来像Java，因此取名为JavaScript。但实际上它的语法风格与Self及Scheme较为接近。
+								</p>
+							</div>
+							<div class="attr">
+								<p>
+									为了取得技术优势，微软推出了VBScript来迎战JavaScript的脚本语言。为了互用性，Ecma国际（前身为欧洲计算机制造商协会）创建了ECMA-262标准（ECMAScript）。现在两者都属于ECMAScript的实现。尽管JavaScript作为给非程序人员的脚本语言，而非是作为给程序人员的编程语言来推广和宣传，但是JavaScript具有非常丰富的特性。[1]
+								</p>
+							</div>
+						</div>
+					</div>
+					
 				</div>
-			</div>
-			<div class="col-lg-7">
-				<h4>游戏截图</h4>
-				<p>//声明一个轮询函数将间歇调用改变为超时调用.
-					//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.</p>
-				<dl>
-					<dt>价格:</dt>
-					<dd><u>379.0元</u></dd>
-					<dt>促销:</dt>
-					<dd><strong>200.0元</strong></dd>
-					<dt>颜色:</dt>
-					<dd>蓝白</dd>
-					<button class="btn btn-default"> </button>
-					<button class="btn btn-default"> </button>
-					<button class="btn btn-default"> </button>
-					<dt>尺寸:</dt>
-					<dd>未选择</dd>
-					<button class="btn btn-default">S</button>
-					<button class="btn btn-default">L</button>
-					<button class="btn btn-default">SL</button>
-					<button class="btn btn-default">LL</button>
-					<dt>数量:</dt>
-					<dd><select>
-						<option>1</option>
-						<option>2</option>
-						<option>5</option>
-					</select></dd>
-					<dt>总计:</dt>
-					<dd>200元</dd>
-					<dt>给商品评分:</dt>
-					<dd>五角星</dd>
-				</dl>
-				<button class="btn btn-default">放入购物车</button>
+				<div class="col-lg-5 goodDesc">
+					<div class="magnifying col-lg-5"></div>
+					<h4><strong>无尽深渊</strong></h4>
+					<p class="content">Netscape在最初将其脚本语言命名为LiveScript，后来Netscape在与Sun合作之后将其改名为JavaScript。JavaScript最初受Java启发而开始设计的，目的之一就是“看上去像Java”，因此语法上有类似之处，一些名称和命名规范也借自Java。但JavaScript的主要设计原则源自Self和Scheme。JavaScript与Java名称上的近似，是当时网景为了营销考虑与太阳微系统达成协议的结果。为了取得技术优势，微软推出了JScript来迎战JavaScript的脚本语言。</p>
+					<p><span>价格:</span><span><s>379.0元</s></span></p>
+					<p><span>促销:</span><span class="onSale">200.0元</span></p>
+					<p><span>颜色:</span><span class="colorValue">未选择</span></p>
+					<p><span></span><span>
+						<button class="btn btn-success btn-lg" data-color="绿色"> </button>
+						<button class="btn btn-warning btn-lg" data-color="橘色"> </button>
+						<button class="btn btn-info btn-lg" data-color="天蓝色"> </button>
+					</span></p>
+					<p><span>尺寸:</span><span class="sizeValue">未选择</span></p>
+					<p><span></span><span>
+						<button class="btn btn-default" data-size="S">S</button>
+						<button class="btn btn-default" data-size="L">L</button>
+						<button class="btn btn-default" data-size="SL">SL</button>
+						<button class="btn btn-default" data-size="LL">LL</button>
+					</span></p>
+					<p><span>数量:</span><span>
+						<select class="amount input-sm">
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+						</select>
+					</span></p>
+					<p><span>总计:</span><span class="price">200元</span></p>
+					<p class="score"><span>给商品评分:</span>
+						<span class="sr-only">显示这个商品的评分.</span>
+						<span class="glyphicon glyphicon-heart-empty"></span>
+						<span class="glyphicon glyphicon-heart-empty"></span>
+						<span class="glyphicon glyphicon-heart-empty"></span>
+						<span class="glyphicon glyphicon-heart-empty"></span>
+						<span class="glyphicon glyphicon-heart-empty"></span>						
+					</p>
+					<button class="btn btn-primary submit" type="submit">放入购物车</button>
+				</div>
+				
 			</div>
 		</div>
+		
 	</div>
+	
 <!--引入bootstrap和后面DOM操作所必须的jQuery库-->
 <script src="js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/plugins/jquery.plugins.js"></script>
 <script>
 	//等待DOM树加载完成
 	$(function(){
-		//控制巨幕的行为
-		var $jumbotronItem=$('.jumbotronItem');
-		var $jumbotronImg=$('.jumbotronImg');
+		
 
-		//声明一个轮询函数将间歇调用改变为超时调用.
-		//在开发中经常使用超时调用模拟间歇调用,这是一种最佳模式,因为间歇调用时,后一个调用可能会在前一个调用结束之前启动.
-		function poll(){
-			//此处巨幕图片的命名格式为jumbotron*.jpg,所以通过查询第16位的数字来确定当前的索引来控制下一个的跳转路径.
-			var currentIndex=+($jumbotronImg.attr('src').charAt(16))+1;
-			currentIndex=currentIndex>4?1:currentIndex;
-			$jumbotronImg.attr('src',"images/jumbotron"+currentIndex+".jpg");
-			//通过在轮询函数中调用轮询函数本身完成间歇调用的模拟.
-			pollTimer=setTimeout(poll,2000);
-		}
-		//启用间歇调用控制巨幕图片的滚动
-		var pollTimer=setTimeout(poll,2000);
-		//绑定巨幕项的鼠标移入和移出,分别控制定时器的清除和重启,以及下一张图片.
-		$jumbotronItem.bind('mouseover',function(){
-			clearTimeout(pollTimer);
-			$(this).css('background-color','gray').parent().siblings('img').attr('src',"images/jumbotron"+($(this).index()+1)+".jpg");
+
+		$('.masking').hide();
+		$('.occurWindow').hide();
+		var $thumbnail=$('.thumbnail');
+		var $detailedImg=$('.thumbnailImg>img');
+		$thumbnail.bind('click',function(){
+			$detailedImg.attr('src',$(this).attr('src'));
+		}).bind('dblclick',function(){
+			$detailedImg.mask();
+		});
+		//$thumbnail.triggerHandler('dblclick');
+
+		var $distinct=$('.distinct');
+		$distinct.bind('click',function(){
+			$detailedImg.mask();
+		});
+
+		var $magnifying=$('.magnifying');
+		$detailedImg.bind('mouseover',function(){			
+			$magnifying.height($magnifying.width());
+			$magnifying.css('backgroundImage','url('+$(this).attr('src')+')');
+			$magnifying.show();
+			$(this).imgReal();
+			//alert($(this).imgReal());
 		}).bind('mouseout',function(){
-			pollTimer=setTimeout(poll,2000);
-			$(this).css('background-color','rgba(50,50,50,0.5)');
-		});
-
-		//控制广告推广部分的分页效果.
-		var $adStyle=$('.adStyle li');
-		var $adImg=$('.adImg div');
-		//绑定分页项的点击行为:改变选中项背景色,并使相应页显示
-		$adStyle.bind('click',function(){
-			$adStyle.css('background-color','lightgray');
-			$(this).css('background-color','gray');
-			$adImg.hide().eq($(this).index()).show();
-		});
-
-		//控制次要巨幕下推广页面的点击行为
-		var $foldedItem=$('.secondaryImg+div a');
-		var $close=$('.panel-footer button');
-		var $occurWindow=$('.occurWindow');
-		//绑定推广项的点击行为:尾部改变图标,显示具体项面板,并改变面板标题(此处偷懒,只写了一个面板,实际应用中应该每一个推广项写一个面板)
-		$foldedItem.bind('click',function(){
-			$(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
-			$occurWindow.find('.panel-heading').text($(this).text());
-			$occurWindow.show();
-		});
-		//绑定面板中关闭按钮的行为:点击时关闭面板,并改变推广项尾部图标.
-		$close.bind('click',function(){
-			$foldedItem.find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
-			$occurWindow.hide();
+			$magnifying.hide();
+		}).bind('mousemove',function(e){
+			offsetLeft=-e.pageX+(+($(this).offset().left));
+			document.title=offsetTop=-e.pageY+(+($(this).offset().top));
+			$magnifying.css('backgroundPosition', offsetLeft+'px '+offsetTop+'px');
 		})
+
+		var $attrCards=$('.attrCards li');
+		var $attr=$('.attr');
+		$attrCards.bind('click',function(){
+			$(this).addClass('active').siblings().removeClass('active');
+			$attr.eq($(this).index()).show().siblings().filter('.attr').hide();
+		})
+
+		var $selectColor=$('button[data-color]');
+		var $colorValue=$('.colorValue');
+		$selectColor.bind('click',function(){
+			$colorValue.text($(this).attr('data-color'));
+		})
+
+		var $selectSize=$('button[data-size]');
+		var $sizeValue=$('.sizeValue');
+		$selectSize.bind('click',function(){
+			$sizeValue.text($(this).attr('data-size'));
+		})
+
+		var $amount=$('.amount');
+		var $price=$('.price');
+		var unitPrice=parseInt($('.onSale').text());
+		$amount.bind('change',function(){
+			$price.text($(this).val()*unitPrice+"元");
+		})
+
+		var $score=$('.score .glyphicon');
+		$score.bind('mouseover',function(){
+			$score.removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
+			$(this).nextAll("span").removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
+		}).bind('click',function(){
+			$(this).nextAll("span").removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
+		})
+
+		var $submit=$('.submit');
+		$submit.bind('click',function(){
+			var goodInfo="您购买的产品是:无尽深渊\n尺寸是:"+$sizeValue.text()+"\n颜色是:"+$colorValue.text()+"\n数量是:"+$amount.val()+"\n总价格是:"+$price.text()+'.\n';
+			if(confirm(goodInfo)){
+				$().mask("感谢您对本店的支持,小二已经将您的货物整理好,准备出发了,谢谢客官的打赏.");
+			}else{
+				return false;
+			};
+		})
+		
 	})	
 </script>
 </body>
