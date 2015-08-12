@@ -12,6 +12,23 @@
 				return this.css("color",value);
 			}
 		},
+		//这是我自己定义的插件,可以由外界来调用这个函数
+		//这个函数可以用来查询图片的原始尺寸--用来完成图片放大镜的功能
+		"imgReal": function(callback){
+			//定义一个图片并将路径添加后加载
+			var tempImg=new Image();
+			tempImg.src=$(this).attr('src');
+			//如果图片加载完成则直接设置
+			if(tempImg.complete){
+				callback(tempImg.width,tempImg.height);	
+			}							
+			tempImg.onload=function(){
+				//这里给对象添加一个存储实际尺寸的属性
+				callback(tempImg.width,tempImg.height);
+
+			}		
+			
+		},
 		"striped":function(){
 			$(this).find('thead').css('backgroundColor','lightblue');
 			var $evenTr=$(this).find('tbody tr:even');
@@ -86,26 +103,8 @@
 				$occurWindow.appendTo('body');
 				$masking.prependTo('body');	
 			}					
-		},
-
-		"imgReal": function(){
-			//$(this).attr('data-realWidth','value');
-			var tempImg=new Image();
-			var value=0;
-			var that=this;
-			tempImg.src=$(this).attr('src');
-			
-			if(tempImg.complete){				
-				value=tempImg.width;
-			}			
-			tempImg.onload=function(){
-				var value=10;
-				value=tempImg.width;	
-				return $(this);
-				return false;	
-			}			
-			
 		}
+
 	});
 	
 	//扩展全局选择器

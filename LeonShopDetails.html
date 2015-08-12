@@ -3,12 +3,12 @@
 <head>
 	<meta charset='utf-8'>
 	<meta name="author" content="Leon">
-	<meta name="description" content="Leon的个人主页,在这里记录着他前端开发过程中学习到的技术以及实践,其中也包含着各种各样的喜怒哀乐.">
+	<meta name="description" content="在本页面中,提供了图片缩略图,选项卡,放大镜,鼠标指示区域,图片蒙版,鼠标滚动控制图片大小,鼠标拖动控制图片位置,文字蒙版,表单确认,表单序列化,打分功能等多个功能,作为一个小小的作品展示.其中也使用了bootstrap布局,jQuery插件编写,与主购物界面使用AJAX形成局部刷新的效果.">
 	<link rel="shortcut icon" type="image/x-icon" href="./images/leon.ico">
-	<title>Leon购物</title>
+	<title>Leon购物商品页</title>
 	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
-		.thumbnailImg>img{width: 100%;height: auto;border: 1px dotted gray;}
+		.thumbnailImg>img{width: 100%;height: auto;border: 1px dotted gray;z-index: 3;}
 		.thumbnailImg li img{width: 20%;height: auto;display:inline-block;float: left;margin-right: 5%;}
 		.detailedImg{margin: 10px auto;}
 		.attr{border: 1px solid lightgray;border-top: none;padding: 5px;display: none;}
@@ -18,7 +18,8 @@
 		.onSale{color: rgb(255,153,18);font-size: 25px;}
 		.score{cursor: pointer;}
 		.input-sm{font-size: 15px;border: 0px;}
-		.magnifying{width: 80%;height: auto;position: absolute;border: 1px solid black;display: none;z-index: 3;}
+		.magnifying{width: 50%;height: auto;position: absolute;border: 1px solid black;display: none;z-index: 3;}
+		.mouseTail{background-color: rgba(50,50,50,0.3);position: fixed;display: none;z-index: 3;}
 	</style>
 </head>
 <body>	
@@ -26,8 +27,8 @@
 		<div class="row">
 			<div class="">
 				<div class="col-lg-5 thumbnailImg">
-					<img src="images/jumbotron1.jpg" id="imga">
-					<div class=""></div>
+					<img src="images/jumbotron1.jpg">
+					<div class="mouseTail"></div>
 					<div class="row">
 						<div class="col-lg-12">
 							<button class="btn btn-default detailedImg center-block distinct">观看清晰图片</button>
@@ -117,63 +118,134 @@
 <!--引入bootstrap和后面DOM操作所必须的jQuery库-->
 <script src="js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
+<!--引入自己的插件,其中本页面使用到了imgReal()和mask()两个功能,分别提供获取照片实际尺寸和提供蒙版效果-->
 <script src="js/plugins/jquery.plugins.js"></script>
 <script>
 	//等待DOM树加载完成
 	$(function(){
-		
-
-
-		$('.masking').hide();
-		$('.occurWindow').hide();
+		//定义三张缩略图和一个提供放大镜以及滚轮控制尺寸,可以移动大小的细节图.
 		var $thumbnail=$('.thumbnail');
 		var $detailedImg=$('.thumbnailImg>img');
+		//当缩略图被点击时选中为细节图,双击时提供蒙版效果(可以滚轮控制尺寸,鼠标拖动位置).
 		$thumbnail.bind('click',function(){
 			$detailedImg.attr('src',$(this).attr('src'));
 		}).bind('dblclick',function(){
+			//使用了自定义插件中蒙版方法.
 			$detailedImg.mask();
 		});
-		//$thumbnail.triggerHandler('dblclick');
 
+		//定义清晰按钮,当点击时蒙版显示.
 		var $distinct=$('.distinct');
 		$distinct.bind('click',function(){
 			$detailedImg.mask();
 		});
 
+		//定义放大镜的窗口
 		var $magnifying=$('.magnifying');
-		$detailedImg.bind('mouseover',function(){			
+		//使用插件中的imgReal()方法,并使用回调函数获取图片的实际尺寸.
+		$detailedImg.imgReal(function(realWidth,realHeight){
+			$detailedImg.attr('data-realWidth',realWidth);				
+			$detailedImg.attr('data-realHeight',realHeight);
+		});
+		//定义放大镜窗口和细节图中两个图片的高度放大比例,宽度放大比例(因为并不是标准正方形,所以当鼠标在图片上移动时需要这个比例来控制显示区域).
+		var widthMultiple=$detailedImg.attr('data-realWidth')/$detailedImg.width();
+		var heightMultiple=$detailedImg.attr('data-realHeight')/$detailedImg.height();
+		//定义放大镜功能时在原图上显示的鼠标放大指示区域
+		var $mouseTail=$('.mouseTail');		
+		//定义鼠标指示区域宽度为细节图与放大比例的商,高度等于宽度(指示区域和放大镜区域均设计为正方形).
+		$mouseTail.width($magnifying.width()/widthMultiple);
+		$mouseTail.height($magnifying.width()/widthMultiple);
+		//细节图绑定鼠标移入事件
+		$detailedImg.bind('mouseover',function(event){			
+			//当第一次出现指示区域时定位到鼠标当前位置为区域中心并显示.
+			$mouseTail.css('left',event.pageX-0.5*$mouseTail.width());
+			$mouseTail.css('top',event.pageY-0.5*$mouseTail.width());
+			$mouseTail.show();
+		});
+
+		//对鼠标指示区域分别绑定鼠标移入移出和移动行为.
+		$mouseTail.bind('mouseover',function(){
+			//定义放大区域的高度并设置背景图片为细节图,然后显示放大区域(通过控制背景图片的位置来设计放大效果).				
 			$magnifying.height($magnifying.width());
-			$magnifying.css('backgroundImage','url('+$(this).attr('src')+')');
+			$magnifying.css('backgroundImage','url('+$detailedImg.attr('src')+')');
 			$magnifying.show();
-			$(this).imgReal();
-			//alert($(this).imgReal());
-		}).bind('mouseout',function(){
-			$magnifying.hide();
 		}).bind('mousemove',function(e){
-			offsetLeft=-e.pageX+(+($(this).offset().left));
-			document.title=offsetTop=-e.pageY+(+($(this).offset().top));
+			//将鼠标当前的位置信息获取下来(因为后面会使用两次,所以这样可以提升性能).
+			var pageX=e.pageX;
+			var pageY=e.pageY;
+			//当鼠标移动时控制指示区域始终将鼠标置于中心.
+			$mouseTail.css('left',pageX-0.5*$mouseTail.width());
+			$mouseTail.css('top',pageY-0.5*$mouseTail.width());
+			//获取细节图上鼠标的相对偏移量方便后面控制放大图的放大区域时使用
+			offsetLeft=-pageX+(+($detailedImg.offset().left));
+			offsetTop=-pageY+(+($detailedImg.offset().top));
+			//下面的3分支语句用来控制鼠标移动到临左边缘,临右边缘和非边缘时分别显示的放大区域和鼠标指示区域.
+			//当鼠标移动到临右边缘时
+			if(offsetLeft*widthMultiple<=0.5*$magnifying.width()-$detailedImg.attr('data-realWidth')){
+				//使放大区域为原图最右一个放大框的宽度.
+				offsetLeft=-($detailedImg.attr('data-realWidth')-$magnifying.width()-(+($detailedImg.offset().left))-15);
+				//使鼠标指示区域的左偏移量控制为图片最右
+				$mouseTail.css('left',$detailedImg.offset().left+$detailedImg.width()-$mouseTail.width());
+			}else if(offsetLeft*widthMultiple>-0.5*$magnifying.width()){
+			//当鼠标移动到最左边缘时
+				//设置放大区域背景图片偏移量为0.
+				offsetLeft=0;
+				//设置鼠标指示区域的左偏移量为图片最左.
+				$mouseTail.css('left',$detailedImg.offset().left);
+			}else{
+			//当鼠标在非边缘区域时
+				//设置放大区域背景图片偏移量.
+				offsetLeft=offsetLeft*widthMultiple+0.5*$magnifying.width();
+				//设置鼠标指示区域的左偏移量.
+				$mouseTail.css('left',event.pageX-0.5*$mouseTail.width());
+			}
+			//下面的3分支语句用来控制鼠标移动到临上边缘,临下边缘和非边缘区域时分别显示的放大区域背景图片偏移量和鼠标指示区域.
+			//详细设计原理参考上面的3分支语句.
+			if(offsetTop*widthMultiple<=0.5*$magnifying.height()-$detailedImg.attr('data-realHeight')){
+				offsetTop=-($detailedImg.attr('data-realHeight')-$magnifying.height()-(+($detailedImg.offset().top))-15);
+				$mouseTail.css('top',$detailedImg.offset().top+$detailedImg.height()-$mouseTail.width());
+			}else if(offsetTop*widthMultiple>-0.5*$magnifying.height()){
+				offsetTop=0;
+				$mouseTail.css('top',$detailedImg.offset().top);
+			}else{
+				offsetTop=offsetTop*widthMultiple+0.5*$magnifying.height();
+				$mouseTail.css('top',event.pageY-0.5*$mouseTail.width());
+			}
+			//设置放大区域背景图片偏移量.
 			$magnifying.css('backgroundPosition', offsetLeft+'px '+offsetTop+'px');
+		}).bind('mouseout',function(){
+		//当鼠标移出指示区域时(即鼠标离开细节图时).
+			//隐藏放大区域和指示区域.
+			$magnifying.hide();
+			$mouseTail.hide();
 		})
 
+		//选项卡功能
 		var $attrCards=$('.attrCards li');
 		var $attr=$('.attr');
+		//本选项卡使用了bootstrap中的nav nav-tabs类,所以只用添加active类就可以显示炫酷的特效
 		$attrCards.bind('click',function(){
 			$(this).addClass('active').siblings().removeClass('active');
+			//隐藏兄弟节点,显示自己.
 			$attr.eq($(this).index()).show().siblings().filter('.attr').hide();
 		})
 
+		//选择色彩功能
+		//通过属性选择器来选择含有自己想要功能的按钮集合(当元素中有一些自己想要定义的一些显示无关的属性时,使用data-yourAttr来命名).
 		var $selectColor=$('button[data-color]');
 		var $colorValue=$('.colorValue');
 		$selectColor.bind('click',function(){
 			$colorValue.text($(this).attr('data-color'));
 		})
 
+		//选择尺寸功能,与上同理.
 		var $selectSize=$('button[data-size]');
 		var $sizeValue=$('.sizeValue');
 		$selectSize.bind('click',function(){
 			$sizeValue.text($(this).attr('data-size'));
 		})
 
+		//计算总价功能,原理就是获取键值,转为数字,乘可得.
 		var $amount=$('.amount');
 		var $price=$('.price');
 		var unitPrice=parseInt($('.onSale').text());
@@ -181,20 +253,30 @@
 			$price.text($(this).val()*unitPrice+"元");
 		})
 
+		//评分功能.
+		//获取打分项里的5个心图标,如果没分则为glyphicon-heart-empty,否则为glyphicon-heart.
 		var $score=$('.score .glyphicon');
 		$score.bind('mouseover',function(){
+			//先全部设置为满心(因为jQuery中只有nextAll()过滤器,没有preAll()过滤器,不过可以写个插件,除了麻烦一点,自己的选择器插件还是有bug).
 			$score.removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
+			//将当前对象后的所有图片置换为空心类.
 			$(this).nextAll("span").removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
 		}).bind('click',function(){
+			//当点击时确定打分结果.
 			$(this).nextAll("span").removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
 		})
 
+		//提交表单确认功能(不提供校验和提交功能)
 		var $submit=$('.submit');
-		$submit.bind('click',function(){
+		$submit.bind('click',function(){			
+			//将表单中的信息序列化组成确认信息.
 			var goodInfo="您购买的产品是:无尽深渊\n尺寸是:"+$sizeValue.text()+"\n颜色是:"+$colorValue.text()+"\n数量是:"+$amount.val()+"\n总价格是:"+$price.text()+'.\n';
+			//当提交时给出选择框让用户确认是否购买了正确的商品.
 			if(confirm(goodInfo)){
+				//如果确认,则弹出文本(使用了插件中文字蒙版方法,其中$()对象指的是document).
 				$().mask("感谢您对本店的支持,小二已经将您的货物整理好,准备出发了,谢谢客官的打赏.");
 			}else{
+				//如果否认,则不提交.
 				return false;
 			};
 		})
