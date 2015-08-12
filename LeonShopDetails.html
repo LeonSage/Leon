@@ -8,7 +8,7 @@
 	<title>Leon购物商品页</title>
 	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
-		.thumbnailImg>img{width: 100%;height: auto;border: 1px dotted gray;z-index: 3;}
+		.thumbnailImg>img{width: 100%;height: auto;border: 1px dotted gray;z-index: 2;}
 		.thumbnailImg li img{width: 20%;height: auto;display:inline-block;float: left;margin-right: 5%;}
 		.detailedImg{margin: 10px auto;}
 		.attr{border: 1px solid lightgray;border-top: none;padding: 5px;display: none;}
@@ -126,9 +126,15 @@
 		//定义三张缩略图和一个提供放大镜以及滚轮控制尺寸,可以移动大小的细节图.
 		var $thumbnail=$('.thumbnail');
 		var $detailedImg=$('.thumbnailImg>img');
+		//使用插件中的imgReal()方法,并使用回调函数获取图片的实际尺寸.
+		$detailedImg.imgReal(function(realWidth,realHeight){
+			$detailedImg.attr('data-realWidth',realWidth);				
+			$detailedImg.attr('data-realHeight',realHeight);				
+		});
 		//当缩略图被点击时选中为细节图,双击时提供蒙版效果(可以滚轮控制尺寸,鼠标拖动位置).
 		$thumbnail.bind('click',function(){
 			$detailedImg.attr('src',$(this).attr('src'));
+			
 		}).bind('dblclick',function(){
 			//使用了自定义插件中蒙版方法.
 			$detailedImg.mask();
@@ -142,25 +148,31 @@
 
 		//定义放大镜的窗口
 		var $magnifying=$('.magnifying');
-		//使用插件中的imgReal()方法,并使用回调函数获取图片的实际尺寸.
-		$detailedImg.imgReal(function(realWidth,realHeight){
-			$detailedImg.attr('data-realWidth',realWidth);				
-			$detailedImg.attr('data-realHeight',realHeight);
-		});
-		//定义放大镜窗口和细节图中两个图片的高度放大比例,宽度放大比例(因为并不是标准正方形,所以当鼠标在图片上移动时需要这个比例来控制显示区域).
-		var widthMultiple=$detailedImg.attr('data-realWidth')/$detailedImg.width();
-		var heightMultiple=$detailedImg.attr('data-realHeight')/$detailedImg.height();
+		
+		
+		
 		//定义放大镜功能时在原图上显示的鼠标放大指示区域
 		var $mouseTail=$('.mouseTail');		
-		//定义鼠标指示区域宽度为细节图与放大比例的商,高度等于宽度(指示区域和放大镜区域均设计为正方形).
-		$mouseTail.width($magnifying.width()/widthMultiple);
-		$mouseTail.height($magnifying.width()/widthMultiple);
+		var widthMultiple,heightMultiple;
+		
+		$detailedImg.one('mouseover',function(){			
+			//定义放大镜窗口和细节图中两个图片的高度放大比例,宽度放大比例(因为并不是标准正方形,所以当鼠标在图片上移动时需要这个比例来控制显示区域).
+			widthMultiple=$detailedImg.attr('data-realWidth')/$detailedImg.width();
+			heightMultiple=$detailedImg.attr('data-realHeight')/$detailedImg.height();
+			//定义鼠标指示区域宽度为细节图与放大比例的商,高度等于宽度(指示区域和放大镜区域均设计为正方形).
+			$mouseTail.width($magnifying.width()/widthMultiple);
+			$mouseTail.height($magnifying.width()/widthMultiple);
+		});
 		//细节图绑定鼠标移入事件
-		$detailedImg.bind('mouseover',function(event){			
+		$detailedImg.bind('mouseover',function(event){	
+			
+			
 			//当第一次出现指示区域时定位到鼠标当前位置为区域中心并显示.
 			$mouseTail.css('left',event.pageX-0.5*$mouseTail.width());
 			$mouseTail.css('top',event.pageY-0.5*$mouseTail.width());
 			$mouseTail.show();
+
+
 		});
 
 		//对鼠标指示区域分别绑定鼠标移入移出和移动行为.
@@ -182,7 +194,7 @@
 			//下面的3分支语句用来控制鼠标移动到临左边缘,临右边缘和非边缘时分别显示的放大区域和鼠标指示区域.
 			//当鼠标移动到临右边缘时
 			if(offsetLeft*widthMultiple<=0.5*$magnifying.width()-$detailedImg.attr('data-realWidth')){
-				//使放大区域为原图最右一个放大框的宽度.
+				//使放大区域为原图最右一个放大框的宽度(其中最后加了一个偏移量,现在不太清楚这个偏移量哪来的,如果影响显示的话再调,初步估计是左边距的问题).
 				offsetLeft=-($detailedImg.attr('data-realWidth')-$magnifying.width()-(+($detailedImg.offset().left))-15);
 				//使鼠标指示区域的左偏移量控制为图片最右
 				$mouseTail.css('left',$detailedImg.offset().left+$detailedImg.width()-$mouseTail.width());
@@ -202,8 +214,8 @@
 			//下面的3分支语句用来控制鼠标移动到临上边缘,临下边缘和非边缘区域时分别显示的放大区域背景图片偏移量和鼠标指示区域.
 			//详细设计原理参考上面的3分支语句.
 			if(offsetTop*widthMultiple<=0.5*$magnifying.height()-$detailedImg.attr('data-realHeight')){
-				offsetTop=-($detailedImg.attr('data-realHeight')-$magnifying.height()-(+($detailedImg.offset().top))-15);
-				$mouseTail.css('top',$detailedImg.offset().top+$detailedImg.height()-$mouseTail.width());
+				offsetTop=-($detailedImg.attr('data-realHeight')-$magnifying.height());
+				$mouseTail.css('top',$detailedImg.offset().top+$detailedImg.height()-$mouseTail.height());
 			}else if(offsetTop*widthMultiple>-0.5*$magnifying.height()){
 				offsetTop=0;
 				$mouseTail.css('top',$detailedImg.offset().top);

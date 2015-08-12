@@ -87,7 +87,7 @@
 
 			}else{
 				//当为文本对象时则设置格式,其中为了美观使用到了bootstrap中的panel
-				var $occurWindow=$("<div class='panel panel-primary container' style='position: fixed;top: 20%;left: 20%;width:60%;right: auto;height: 40%;z-index:20;'></div>");
+				var $maskOccurWindow=$("<div class='panel panel-primary container' style='position: fixed;top: 20%;left: 20%;width:60%;right: auto;height: 40%;z-index:20;'></div>");
 				var $panelHead=$("<div class='panel-heading'>感谢您的购买.</div>");
 				var $panelBody=$("<div class='panel-body' style='padding: 20px;height: 70%;'></div>");
 				var $panelFoot=$("<div class='panel-footer'></div>");
@@ -95,7 +95,7 @@
 				$closeBtn.appendTo($panelFoot);
 				$closeBtn.bind('click',function(){
 					$masking.remove();
-					$occurWindow.remove();
+					$maskOccurWindow.remove();
 				});
 				//检测当为文本对象时,则设置其内容为蒙版内容,否则将字符串传递给蒙版文本.
 				if(text){
@@ -103,10 +103,10 @@
 				}else{
 					$panelBody.text($(this).text());
 				}				
-				$panelHead.appendTo($occurWindow);
-				$panelBody.appendTo($occurWindow);
-				$panelFoot.appendTo($occurWindow);
-				$occurWindow.appendTo('body');
+				$panelHead.appendTo($maskOccurWindow);
+				$panelBody.appendTo($maskOccurWindow);
+				$panelFoot.appendTo($maskOccurWindow);
+				$maskOccurWindow.prependTo('body');
 				$masking.prependTo('body');	
 			}					
 		}
