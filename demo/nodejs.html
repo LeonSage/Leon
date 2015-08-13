@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="Leon">
+	<meta name="description" content="使用了jQuery完成了表单校验并给出可视化提示和换肤功能.">
+	<title>蒙版</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../images/leon.ico">
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+	.navbar-brand img{width: 40px;height: auto;margin-top: -10px;}
+	</style>
+</head>
+<body>
+
+<script src="../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script src="helloworld.js"></script>
+<script>
+	$(function(){
+		$('#showModal').modal({
+			keyboard:true
+		});
+	})
+</script>
+</body>
+</html>
