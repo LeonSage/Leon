@@ -8,10 +8,12 @@
 	<title>Nodejs学习 </title>
 	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
+		body{position: relative;}
 		.navbar-brand img{width: 40px;height: auto;margin-top: -10px;}
+		.item{height: 300px;}
 	</style>
 </head>
-<body>
+<body data-spy="scroll" data-target="#navbar-example">
 	<div class="container">
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
@@ -46,21 +48,120 @@
 				</div>
 			</div>
 		</nav>
-		<div class="col-lg-8">
-			<h1>NodeJs初学者历险记,一次生动有趣的教程</h1>
-			<p>这里用bootstrap的滚动监听,右边为折叠文本,做一个超长页面类型的,当滚动到新的项时,右边折叠或打开并显示当前位置.</p>
-			<p>不知道把服务器寄存到哪里去,如果只是在这更新访问服务器的代码,但没有任何行为的实例好像很不符合风格啊!</p>
-			<p>明天好好想一下</p>
-			<p>这个地方呢就专门用来写自己的心得体会和基本教程吧!</p>
+		<div class="col-lg-9">
+			<div id="overview" role="main">
+				<div id="overview-doctype" class="item">
+					<h1>NodeJs初学者历险记,一次生动有趣的教程</h1>
+					<p>这里用bootstrap的滚动监听,右边为折叠文本,做一个超长页面类型的,当滚动到新的项时,右边折叠或打开并显示当前位置.</p>
+					<p>不知道把服务器寄存到哪里去,如果只是在这更新访问服务器的代码,但没有任何行为的实例好像很不符合风格啊!</p>
+					<p>明天好好想一下</p>
+					<p>这个地方呢就专门用来写自己的心得体会和基本教程吧!</p>
+				</div>
+				<div id="overview-mobile" class="item">
+					<h1>NodeJs初学者历险记,一次生动有趣的教程</h1>
+					<p>这里用bootstrap的滚动监听,右边为折叠文本,做一个超长页面类型的,当滚动到新的项时,右边折叠或打开并显示当前位置.</p>
+					<p>不知道把服务器寄存到哪里去,如果只是在这更新访问服务器的代码,但没有任何行为的实例好像很不符合风格啊!</p>
+					<p>明天好好想一下</p>
+					<p>这个地方呢就专门用来写自己的心得体会和基本教程吧!</p>
+				</div>
+				<div id="overview-type" class="item">
+					<h1>NodeJs初学者历险记,一次生动有趣的教程</h1>
+					<p>这里用bootstrap的滚动监听,右边为折叠文本,做一个超长页面类型的,当滚动到新的项时,右边折叠或打开并显示当前位置.</p>
+					<p>不知道把服务器寄存到哪里去,如果只是在这更新访问服务器的代码,但没有任何行为的实例好像很不符合风格啊!</p>
+					<p>明天好好想一下</p>
+					<p>这个地方呢就专门用来写自己的心得体会和基本教程吧!</p>
+				</div>
+				<div id="overview-normalize" class="item">
+					<h1>NodeJs初学者历险记,一次生动有趣的教程</h1>
+					<p>这里用bootstrap的滚动监听,右边为折叠文本,做一个超长页面类型的,当滚动到新的项时,右边折叠或打开并显示当前位置.</p>
+					<p>不知道把服务器寄存到哪里去,如果只是在这更新访问服务器的代码,但没有任何行为的实例好像很不符合风格啊!</p>
+					<p>明天好好想一下</p>
+					<p>这个地方呢就专门用来写自己的心得体会和基本教程吧!</p>
+				</div>
+				<div id="overview-container" class="item">
+					<h1>NodeJs初学者历险记,一次生动有趣的教程</h1>
+					<p>这里用bootstrap的滚动监听,右边为折叠文本,做一个超长页面类型的,当滚动到新的项时,右边折叠或打开并显示当前位置.</p>
+					<p>不知道把服务器寄存到哪里去,如果只是在这更新访问服务器的代码,但没有任何行为的实例好像很不符合风格啊!</p>
+					<p>明天好好想一下</p>
+					<p>这个地方呢就专门用来写自己的心得体会和基本教程吧!</p>
+				</div>
+			</div>			
+			
+			<div id="5" class="item">
+				<h1>NodeJs初学者历险记,一次生动有趣的教程</h1>
+				<p>这里用bootstrap的滚动监听,右边为折叠文本,做一个超长页面类型的,当滚动到新的项时,右边折叠或打开并显示当前位置.</p>
+				<p>不知道把服务器寄存到哪里去,如果只是在这更新访问服务器的代码,但没有任何行为的实例好像很不符合风格啊!</p>
+				<p>明天好好想一下</p>
+				<p>这个地方呢就专门用来写自己的心得体会和基本教程吧!</p>
+			</div>
+			
 			
 		</div>
-		<div class="col-lg-4 indexTree">
-			<dl>
-				<dt>概览</dt>
-			</dl>
-			<dl>
-				<dt></dt>
-			</dl>
+		<div class="col-lg-3" role="complementary" id="navbar-example">
+			<nav class="bs-docs-slidebar hidden-print hidden-xs hidden-sm affix">
+				<ul class="nav bs-docs-slidenav">
+					<li class="active">
+						<a href="#overview">概览</a>
+						<ul class="nav">
+							<li>
+								<a href="#overview-doctype">HTML5文档类型</a>
+							</li>
+							<li>
+								<a href="#overview-mobile">移动设备有限</a>
+							</li>
+							<li><a href="#overview-type">排版与链接</a></li>
+							<li>
+								<a href="#overview-normalize">HTML5文档类型</a>
+							</li>
+							<li>
+								<a href="#overview-container">移动设备有限</a>
+							</li>
+							<li><a href="#5">排版与链接</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="">概览</a>
+						<ul class="nav">
+							<li>
+								<a href="">HTML5文档类型</a>
+							</li>
+							<li>
+								<a href="">移动设备有限</a>
+							</li>
+							<li><a href="">排版与链接</a></li>
+							<li>
+								<a href="">HTML5文档类型</a>
+							</li>
+							<li>
+								<a href="">移动设备有限</a>
+							</li>
+							<li><a href="">排版与链接</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="">概览</a>
+						<ul class="nav">
+							:before
+							<li>
+								<a href="">HTML5文档类型</a>
+							</li>
+							<li>
+								<a href="">移动设备有限</a>
+							</li>
+							<li><a href="">排版与链接</a></li>
+							<li>
+								<a href="">HTML5文档类型</a>
+							</li>
+							<li>
+								<a href="">移动设备有限</a>
+							</li>
+							<li><a href="">排版与链接</a></li>
+							:after
+						</ul>
+					</li>
+					
+				</ul>
+			</nav>
 		</div>
 		
 	</div>
