@@ -4,27 +4,16 @@
 	<meta name="author" content="Leon">
 	<meta name="description" content="">
 	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<meta http-equiv="Refresh" content="10;url=index.html" />
+	<!-- <meta http-equiv="Refresh" content="10;url=index.html" /> -->
 	<link rel="shotcut icon" type="image/x-icon" href="./images/icon.ico">
 	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
 	<title>前端开发 </title>
 	<style type="text/css">
-		body,div,iframe,ul,li{margin: 0px;padding: 0px;}
-		ul{list-style: none;}
-		li{float: left;}
-		ol li{float: none;}
-		header{width: 100%;height: 10%;position: fixed;background-color: black;color: white;}
-		nav>ul{margin-top: 15px;}
-		nav>ul>li{padding: 5px;margin-left: 15px;border-radius: 5px;cursor: pointer;height: 20px;}
-		header .hoverStyle{background: red;}
-		header .active{background-color: red;}
-		#index{width: 10%;height:90%;background-color: #CCC;position:fixed;top: 10%;overflow: auto;z-index: 1;}
-		#index li{font-size: 15px;font-weight: bold;margin: 5px;}
-		#info{width: 89%;min-height: 90%;position: fixed;left: 10%;top: 10%;border: 0px;height: 90%;padding-left: 10px;}
-		#occur{border: 1px solid gray;height: auto;width: 60%;position: fixed;top: 20%;left: 20%;right: auto;display: none;}
-		.title{width: 100%;height: 80px;background: lightblue;}
-		.title button{display: inline-block;margin-top: -60px;}
-		.content{width: 100%;height: auto;font-size: 20px;background: white;}
+		
+		.navbar-header img{width: 40px;height: auto;margin-top: -10px;}
+		#index{height: 100%;min-height: 100%;}
+		#content{min-height: 400px;height: 90%;border: 0px;}
+		
 	</style>
 </head>
 <script type="text/javascript">
@@ -34,49 +23,59 @@
 	}
 </script>
 <body>
-	<header>
-		<nav>
-			<ul>
-				<li onclick="parent.document.getElementById('info').src='./html.html';$('#index').attr('src','htmlIndex.html');" class="active">HTML</li>
-				<li onclick="$('#info').attr('src','css.html');$('#index').attr('src','cssIndex.html');" >CSS</li>
-				<li onclick="parent.document.getElementById('info').src='./js.html'">Javascript</li>
-				<li onclick="parent.document.getElementById('info').src='./AJAX.html'">AJAX</li>
-				<li onclick="parent.document.getElementById('info').src='./jQuery.html'">jQuery</li>
-				<li onclick="parent.document.getElementById('info').src='./Bootstrap.html'">Bootstarp</li>
-				<li onclick="parent.document.getElementById('info').src='./optimization.html'">网站优化</li>
-			</ul>
+	<div class="container">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="#" class="navbar-brand"><img src="images/leon.png" alt="Brand"></a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="index.html">首页 <span class="sr-only">(Current)</span></a></li>
+						<li class="active"><a href="resume.html">简历</a></li>
+						<li><a href="LeonShop.html">Leon购物</a></li>
+						<li><a href="learn.html">技能学习</a></li>
+						<li><a href="NodeJsLearn.html">NodeJs学习</a></li>	
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="ture" aria-expanded="false">实例展示<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="demo/scrollWindow.html">视频滚动窗口</a></li>
+								<li><a href="demo/form.html">表单功能</a></li>
+								<li><a href="demo/AJAX.html">AJAX</a></li>
+								<li><a href="demo/plugins.html">jQuery插件的编写</a></li>
+							</ul>
+						</li>
+						<p class="nav navbar-nav navbar-right navbar-text">Leon的生活</p>
+					</ul>					
+				</div>				
+			</div>
 		</nav>
-	</header>
-	<div id="content">
-		<iframe src="htmlIndex.html" id="index"></iframe>
-		<iframe src="./html.html" id="info" name="info"></iframe>
-	</div>
-	<div class="container" id="occur">
-		<div class="row">
-			<div class="col-lg-6 title">
-				<h2>维护提醒<small>(本页面将在10秒钟后跳转到首页)</small></h2>
-				<button class="btn btn-default col-lg-offset-2 close">Close</button>
+		<div class="container content">
+			<div id="index" class="col-lg-2">
+				<div class="btn-group-vertical" role="group" aria-label="indexTree">
+					<div class="btn-group" roloe="group">
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							HTML<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li onclick="frames['content'].src='http://www.baidu.com'"><a href="#">langdafdf</a></li>
+							<li><a href="#">meta</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-3 content">
-				<p>由于本模块是很久以前写的,内容,板式,跳转方式均不是特别优异,所以决定对其进行更新.</p>
-				<p>下一版本更新特性:</p>
-				<ol>
-					<li>符合主页风格,形成有机整体.</li>
-					<li>将主导航和二级导航归并到左侧并形成索引树.</li>
-					<li>对右侧版本模块分别归类到不同文件夹中,充实内容,并根据内容形成相应实例.</li>					
-				</ol>							
-			</div>
+			<iframe src="htmlSection/lang.html" id="content" class="col-lg-10"></iframe>
 		</div>
 	</div>
 <script src="js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
 <script>
-	$('#occur').show();
-	$('.close').bind('click',function(){
-		$('#occur').hide();
-	})
 	$(document).ready(function(){
 		
 		var count,i;
@@ -89,82 +88,6 @@
 				}
 			}
 		}
-		//导航栏背景色控制,DOM事件添加		
-		var oHeaderLi=$('nav>ul>li');
-		for(count=0;count<oHeaderLi.length;count++){
-			EventUtil.addHandler(oHeaderLi[count],"mouseover",function(event){
-				if(event.srcElement.className=="active"){
-					return true;
-				}else{
-					event.srcElement.className="hoverStyle";
-				}		
-			});
-			EventUtil.addHandler(oHeaderLi[count],"mouseout",function(event){
-				if(event.srcElement.className=="hoverStyle"){
-					event.srcElement.className="";
-				}
-			});
-			var that=oHeaderLi[0];
-			var handler=function(event){
-				that.className="";
-				that=event.srcElement;
-				event.srcElement.className="active";
-			}
-			EventUtil.addHandler(oHeaderLi[count],"click",handler);
-		}
-		//索引树活跃状态控制
-		var oIndexLi=document.getElementById('index').getElementsByTagName('li');
-		for(count=0;count<oIndexLi.length;count++){
-			oIndexLi[count].onmouseover=function(){
-				for(count=0;count<oIndexLi.length;count++){
-					oIndexLi[count].style.backgroundColor="#CCC";
-				}
-				this.style.backgroundColor="pink";
-			}
-			oIndexLi[count].onmouseoclick=function(){
-				this.style.backgroundColor="pink";
-			}
-		}
-		//索引条目的生成
-		/*/*var flushIndexTree=function(){
-			var oIndex=document.getElementById('index');
-			oIndex.innerHTML="";
-			var oFrame=document.getElementById('info').contentWindow.document;			
-			var oUl=document.createElement('ul');
-			for(count=0;count<oFrame.getElementsByTagName('em').length;count++){
-				var oLi=document.createElement('li');
-				oLi.innerText=oFrame.getElementsByTagName('em')[count].innerText;
-				//使点击索引时对象出现在视口中
-				/*oLi.onclick=function(){
-					try{
-						oFrame.getElementsByTagName('em')[count].scrollIntoView();
-					}catch(error){
-						alert(error.message);
-					}
-					
-				}
-				oUl.appendChild(oLi);
-			}
-			oIndex.appendChild(oUl);
-			//为框架中的条目添加伸缩功能
-			var oEm=oFrame.getElementsByTagName('em');
-			var oArticle=oFrame.getElementsByTagName('article');
-			var handler=function(){
-				var styleSheet=oArticle[this.index].style;
-				styleSheet.display=="block"?styleSheet.display="none":styleSheet.display="block";
-			}
-			for(var count=0;count<oEm.length;count++){
-				oEm[count].index=count;
-				EventUtil.addHandler(oEm[count],"click",handler);
-			}
-		}
-		flushIndexTree();
-	});
-		var oFrame=document.getElementById('info');
-		flushIndexTree();
-		oFrame.onload=function(){
-			flushIndexTree();
-		}*/
 		
 	});
 </script>
