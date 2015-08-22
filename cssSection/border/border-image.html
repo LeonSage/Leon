@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>border-image</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of border-image in CSS3." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		pre{overflow-x:hidden; }
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">CSS3</a></li>
+		<li><a href="#">边框</a></li>
+		<li class="active">图片边框</li>
+	</ol>
+	<h1><strong>border-image</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			语法:
+		</div>
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt><xmp>border-image:</xmp></dt>
+				<dd><code>&lt;&quot;border-image-source&quot;&gt; || &lt;&quot;border-image-slice&quot;&gt; [/ &lt;&quot;border-image-width&quot;&gt;> | / &lt;&quot;border-image-height&quot;&gt; ? || &lt;&quot;border-image-outset&quot;&gt; ]? || &lt;&quot;border-image-repeat&quot;&gt;</code></dd>			
+
+				<dt>默认值:</dt>
+				<dd>看每个独立属性</dd>
+
+				<dt>适用于: </dt>
+				<dd>看每个独立属性</dd>
+
+				<dt>继承性:</dt>
+				<dd>无</dd>
+
+				<dt>动画性: </dt>
+				<dd>看每个独立属性</dd>
+			</dl>
+		</div>		
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">取值:</div>
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt><code>&lt;&quot;border-image-source&quot;&gt;</code>: </dt>
+				<dd><pre>border-image-source: none|image;<br />设置或检索对象的边框是否用图像定义样式或图像来源路径.</dd>
+
+				<dt><code>&lt;&quot;border-image-slice&quot;&gt;</code>: </dt>
+				<dd><pre>border-image-slice: number|%|fill;<br />该属性规定图像的上、右、下、左侧边缘的向内偏移，图像被分割为九个区域：四个角、四条边以及一个中间区域。除非使用了关键词 fill，否则中间的图像部分会被丢弃。如果省略第四个数值/百分比，则与第二个值相同。如果省略第三个值，则与第一个值相同。如果省略第二个值，则与第一个值相同。</pre></dd>			
+
+				<dt><code>&lt;&quot;border-image-width&quot;&gt;</code>: </dt>
+				<dd><pre>border-image-width: number|%|auto;<br />属性的四个规定将边框图像分割为九个部分的偏移。它们代表了从区域的上、右、下、左侧向内的距离。如果忽略第四个值，则与第二个值相同。如果省略第三个值，则与第一个值相同。如果省略第二个值，则与第一个值相同。不允许负值。</pre></dd>
+
+				<dt><code>&lt;&quot;border-image-outset&quot;&gt;</code>: </dt>
+				<dd><pre>border-image-outset: length|number;<br />规定边框图像超出边框盒的量。在上、右、下、左侧。如果忽略第四个值，则与第二个值相同。如果省略第三个值，则与第一个值相同。如果省略第二个值，则与第一个值相同。不允许负值.</pre></dd>
+
+				<dt><code>&lt;&quot;border-image-repeat&quot;&gt;</code>: </dt>
+				<dd><pre>border-image-repeat: stretch|repeat|round;<br />该属性规定如何延展和铺排边框图像的边缘和中间部分。因此，您可以规定两个值。如果省略第二个值，则采取与第一个值相同的值。</pre></dd>
+			</dl>
+			<table class="table table-striped table-bordered">
+				<tr>
+					<td>length</td>
+					<td>具体的像素数.</td>
+				</tr>
+				<tr>
+					<td>number</td>
+					<td>代表对应的 border-width 的倍数。slice--数字值，代表图像中像素（如果是光栅图像）或矢量坐标（如果是矢量图像）.</td>
+				</tr>
+				<tr>
+					<td>%</td>
+					<td>参考边框图像区域的尺寸：区域的高度影响水平偏移，宽度影响垂直偏移。</td>
+				</tr>
+				<tr>
+					<td>fill</td>
+					<td>保留边框图像的中间部分。</td>
+				</tr>
+				<tr>
+					<td>auto</td>
+					<td>如果规定该属性，则宽度为对应的图像切片的固有宽度。</td>
+				</tr>
+				<tr>
+					<td>stretch</td>
+					<td>默认值,4个角4个区域分别做水平方向和垂直方向的拉伸来填充边框的间隙.</td>
+				</tr>
+				<tr>
+					<td>repeat</td>
+					<td>让4个角4个区域做完水平方向和垂直方向的平铺边框背景图像来把边框之间的间隙填充。</td>
+				</tr>
+				<tr>
+					<td>round</td>
+					<td>环绕,是把4个角4个区域分成均等的区域,然后用背景图片刚好能铺满整个边框间隙,正好合适。</td>
+				</tr>
+
+			</table>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<ul>
+				<li>复合属性,设置或检索对象的边框样式使用图像来填充.</li>
+				<li>使用图像代替<code>&lt;&quot;border-style&quot;&gt;</code>去定义边框样式.当<code>&lt;&quot;border-image&quot;&gt;</code>为<code>none</code>或图像不可见时,将会显示<code>&lt;&quot;border-style&quot;&gt;</code>所定义的边框样式效果.</li>
+				<li>对应的脚本特性为borderImage</li>
+			</ul>
+		</div>
+		<div class="panel-footer">
+			关于border-image更详细的参考:<a href="http://www.360doc.com/content/14/1016/13/2792772_417403574.shtml">http://www.360doc.com/content/14/1016/13/2792772_417403574.shtml</a>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">示例:</div>
+		<div class="panel-body">
+			<textarea cols="80" rows="10">
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>box-shadow</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of box-shadow in CSS3." />
+	<style type="text/css">
+		body{padding: 0px;margin: 0px;}
+		/*如果需要修改请修改这里的样式表来控制不同的边框阴影*/
+		.sample{width: 50%;height: 100px;margin: 40px auto;background-color: rgba(50,50,50,0.2);padding:10px;}
+		.repeat-border{border: 20px solid #000;border-image-source: url(../../images/border-image.png);border-image-slice: 30 fill;border-image-outset: 30px; border-image-width: 30px;border-image-repeat: round; height: 300px;}
+		.stretch-border{border: 20px solid #000;border-image-source: url(../../images/border-image.png);border-image-slice: 30;border-image-outset: 0px; border-image-width: 30px;border-image-repeat: stretch; height: 300px;}
+	</style>
+</head>
+<body>
+	
+	<div class="sample stretch-border">
+		伸展型边框<br />border: 20px solid #000;border-image-source: url(../../images/border-image.png);border-image-slice: 30;border-image-outset: 0px; border-image-width: 30px;border-image-repeat: stretch; height: 400px;
+	</div>
+	<div class="sample repeat-border">
+		平铺性边框<br />border: 20px solid #000;border-image-source: url(../../images/border-image.png);border-image-slice: 30 fill;border-image-outset: 30px; border-image-width: 30px;border-image-repeat: round; height: 400px;
+	</div>
+</body>
+</html>
+		</textarea>
+		<button type="button" class="btn btn-info runBtn" >运行</button>
+		<button type="button" class="btn btn-info copyBtn" ><abbr title="只能在IE上使用">复制</abbr></button>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">运行结果:</div>
+		<div class="panel-body" id="bar">
+			
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var $run=$('.runBtn');
+		var $bar=$('#bar');
+		var $copy=$('.copyBtn');
+		var $textarea=$('textarea');
+
+		$run.on('click',function(){
+			//使展示板上生成文本框内的HTML代码
+			$bar.html($textarea.val());
+			//滑动展示板到视口
+			//当检测到scrollTop为body下元素时(非IE内核)
+			if(document.body.scrollTop){
+				$("body").animate({scrollTop:$('#bar').offset().top});
+			}else if(document.documentElement.scrollTop){
+				//当检测到scrollTop为documentElement下元素时(IE内核)
+				document.documentElement.scrollTop=$('#bar').offset().top;
+			}			
+		});
+		$copy.on('click',function(){
+			$textarea.select();			
+			//alert("Done?"+$textarea.val().substring($textarea.selectionStart,$textarea.selectionEnd));
+			//只有IE内核支持浏览器命令execCommand("copy");
+			document.execCommand("Copy");
+			//检测浏览器,当存在MSIE关键字且当前不是Opera浏览器时,则为IE浏览器
+			if(navigator.userAgent.indexOf("MSIE")>-1&&navigator.userAgent.indexOf("Opera")<0){
+				alert("已复制到粘贴板.");
+			}else{
+				alert("抱歉,该复制功能当前只能在IE浏览器下使用.");
+			}
+		});
+	});
+</script>
+</body>
+</html>

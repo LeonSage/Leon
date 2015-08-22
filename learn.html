@@ -5,7 +5,7 @@
 	<meta name="description" content="">
 	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<!-- <meta http-equiv="Refresh" content="10;url=index.html" /> -->
-	<link rel="shotcut icon" type="image/x-icon" href="./images/icon.ico">
+	<link rel="shotcut icon" type="image/x-icon" href="./images/leon.ico">
 	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
 	<title>前端开发 </title>
 	<style type="text/css">
@@ -13,7 +13,7 @@
 		.navbar-header img{width: 40px;height: auto;margin-top: -10px;}
 		#index{height: 100%;min-height: 100%;}
 		#content{min-height: 400px;height: 90%;border: 0px;}
-		
+		.content{height: 100%;scroll-x:none;}
 	</style>
 </head>
 <script type="text/javascript">
@@ -38,9 +38,9 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li><a href="index.html">首页 <span class="sr-only">(Current)</span></a></li>
-						<li class="active"><a href="resume.html">简历</a></li>
+						<li><a href="resume.html">简历</a></li>
 						<li><a href="LeonShop.html">Leon购物</a></li>
-						<li><a href="learn.html">技能学习</a></li>
+						<li class="active"><a href="learn.html">技能学习</a></li>
 						<li><a href="NodeJsLearn.html">NodeJs学习</a></li>	
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="ture" aria-expanded="false">实例展示<span class="caret"></span></a>
@@ -51,20 +51,57 @@
 								<li><a href="demo/plugins.html">jQuery插件的编写</a></li>
 							</ul>
 						</li>
-						<p class="nav navbar-nav navbar-right navbar-text">Leon的生活</p>
-					</ul>					
-				</div>				
+						
+					</ul>
+					<p class="nav navbar-nav navbar-right navbar-text">Leon的生活</p>					
+				</div>			
 			</div>
 		</nav>
 		<div class="container content">
 			<div id="index" class="col-lg-2">
 				<div class="btn-group-vertical" role="group" aria-label="indexTree">
-					<div class="btn-group" roloe="group">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							HTML<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu">
-							<li onclick="frames['content'].src='http://www.baidu.com'"><a href="#">langdafdf</a></li>
+							<li onclick="iframeJump('http://www.baidu.com');" id="lang"><a href="#">langdafdf</a></li>
+							<li><a href="#">meta</a></li>
+						</ul>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							CSS<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li onclick="iframeJump('cssSection/box-shadow.html');" id="lang"><a href="#">box-shadow</a></li>
+							<li onclick="iframeJump('cssSection/border/border-image.html');" id="lang"><a href="#">border-image</a></li>
+						</ul>
+					</div>
+					<div class="btn-group" roloe="group">
+						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							JavaScript<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li onclick="iframeJump('http://www.baidu.com');" id="lang"><a href="#">langdafdf</a></li>
+							<li><a href="#">meta</a></li>
+						</ul>
+					</div>
+					<div class="btn-group" roloe="group">
+						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							jQuery<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li onclick="iframeJump('http://www.baidu.com');" id="lang"><a href="#">langdafdf</a></li>
+							<li><a href="#">meta</a></li>
+						</ul>
+					</div>
+					<div class="btn-group" roloe="group">
+						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							bootstrap<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li onclick="iframeJump('http://www.baidu.com');" id="lang"><a href="#">langdafdf</a></li>
 							<li><a href="#">meta</a></li>
 						</ul>
 					</div>
@@ -76,6 +113,15 @@
 <script src="js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
 <script>
+	var iframeJump=function(url){
+		//兼容360极速和IE8+
+		if(window.parent.frames['content'].location){
+			window.parent.frames['content'].location.href=url;
+		}else{
+			//兼容Firefox和Chrome
+			window.parent.frames['content'].src=url;
+		}
+	}
 	$(document).ready(function(){
 		
 		var count,i;

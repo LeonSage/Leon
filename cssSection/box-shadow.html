@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>box-shadow</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of box-shadow in CSS3." />
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">CSS3</a></li>
+		<li><a href="#">边框</a></li>
+		<li class="active">边框阴影</li>
+	</ol>
+	<h1><strong>box-shadow</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			语法:
+		</div>
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt><xmp>box-shadow:</xmp></dt>
+				<dd><xmp>none | <shadow> [, <shadow> ]*</xmp></dd>
+
+				<dt><xmp><shadow> = </xmp></dt>
+				<dd><xmp>inset?&&<length>{2,4}&&<color>?</xmp></dd>				
+
+				<dt>默认值:</dt>
+				<dd>none</dd>
+
+				<dt>适用于: </dt>
+				<dd>所有元素</dd>
+
+				<dt>继承性:</dt>
+				<dd>无</dd>
+
+				<dt>动画性: </dt>
+				<dd>是,除了内外阴影切换时</dd>
+			</dl>
+		</div>		
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">取值:</div>
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>none: </dt>
+				<dd>无阴影</dd>
+
+				<dt><xmp><length>①:</xmp></dt>
+				<dd>第一个长度值用来设置对象的阴影水平偏移值.可以为负值表示相反反向.默认为向右投射阴影.</dd>				
+
+				<dt><xmp><length>②:</xmp></dt>
+				<dd>第2个长度值用来设置对象的阴影垂直偏移值.可以为负值表示相反反向.默认为向下投射阴影.</dd>
+
+				<dt><xmp><length>③:</xmp></dt>
+				<dd>第3个长度值用来设置对象的阴影模糊值.不允许为负值.如果不设值,表示不模糊处理.</dd>
+
+				<dt><xmp><length>④:</xmp></dt>
+				<dd>第4个长度值用来设置对象的阴影外延值.可以为负值表示减短阴影长度.如果不设值,表示长度不变.</dd>
+
+				<dt>inset: </dt>
+				<dd>设置对象的阴影类型为内阴影.该属性不存在时,阴影类型默认为外阴影.</dd>
+			</dl>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<ul>
+				<li>可以设置多组阴影效果,每组参数以逗号隔开.</li>
+				<li>对应的脚本属性为boxShadow.</li>
+			</ul>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">示例:</div>
+		<div class="panel-body">
+			<textarea cols="80" rows="10">
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>box-shadow</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of box-shadow in CSS3." />
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body{padding: 0px;margin: 0px;}
+		/*如果需要修改请修改这里的样式表来控制不同的边框阴影*/
+		.sample{width: 50%;height: 100px;margin: 20px auto;background-color: rgba(50,50,50,0.2);padding:10px;}
+		.outset{box-shadow: 5px 5px rgba(0,0,0,.6);}
+		.outset-blur{box-shadow: 5px 5px 5px rgba(0,0,0,.6);}
+		.outset-extension{box-shadow: 5px 5px 5px 10px rgba(0,0,0,.6);}
+		.inset{box-shadow: 5px 5px 5px 1px rgba(0,0,0,0.6) inset;}
+		.multiple-shadow{box-shadow: 0 0 5px 3px rgba(255,0,0,0.6),
+									0 0 5px 6px rgba(0,182,0,0.6),
+									0 0 5px 10px rgba(255,255,0,0.6);}
+	</style>
+</head>
+<body>
+	<div class="sample outset">
+		外阴影常规效果<br />box-shadow:5px 5px rgba(0,0,0,.6);
+	</div>
+	<div class="sample outset-blur">
+		外阴影模糊效果<br />box-shadow:5px 5px 5px rgba(0,0,0,.6);
+	</div>
+	<div class="sample outset-extension">
+		外阴影模糊外延效果<br />box-shadow:5px 5px 5px 10px rgba(0,0,0,.6);
+	</div>
+	<div class="sample inset">
+		内阴影效果<br />box-shadow:5px 5px 5px 1px rgba(0,0,0,.6) inset;
+	</div>
+	<div class="sample multiple-shadow">
+		多层外阴影模糊外延效果<br />box-shadow: 0 0 5px 3px rgba(255,0,0,0.6),<br />
+									0 0 5px 6px rgba(0,182,0,0.6),<br />
+									0 0 5px 10px rgba(255,255,0,0.6);
+	</div>
+</body>
+</html>
+		</textarea>
+		<button type="button" class="btn btn-info runBtn" >运行</button>
+		<button type="button" class="btn btn-info copyBtn" ><abbr title="只能在IE上使用">复制</abbr></button>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">运行结果:</div>
+		<div class="panel-body" id="bar">
+			
+		</div>
+	</div>
+<script src="../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var $run=$('.runBtn');
+		var $bar=$('#bar');
+		var $copy=$('.copyBtn');
+		var $textarea=$('textarea');
+		$run.on('click',function(){
+			//使展示板上生成文本框内的HTML代码
+			$bar.html($textarea.val());
+			//滑动展示板到视口
+			//当检测到scrollTop为body下元素时(非IE内核)
+			if(document.body.scrollTop){
+				$("body").animate({scrollTop:$('#bar').offset().top});
+			}else if(document.documentElement.scrollTop){
+				//当检测到scrollTop为documentElement下元素时(IE内核)
+				document.documentElement.scrollTop=$('#bar').offset().top;
+			}			
+		});
+		$copy.on('click',function(){
+			$textarea.select();			
+			//alert("Done?"+$textarea.val().substring($textarea.selectionStart,$textarea.selectionEnd));
+			//只有IE内核支持浏览器命令execCommand("copy");
+			document.execCommand("Copy");
+			//检测浏览器,当存在MSIE关键字且当前不是Opera浏览器时,则为IE浏览器
+			if(navigator.userAgent.indexOf("MSIE")>-1&&navigator.userAgent.indexOf("Opera")<0){
+				alert("已复制到粘贴板.");
+			}else{
+				alert("抱歉,该复制功能当前只能在IE浏览器下使用.");
+			}
+		});
+	});
+</script>
+</body>
+</html>
