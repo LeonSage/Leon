@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>transform</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of transform in CSS3." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		pre{overflow-x:hidden; }
+		tr{text-align: center;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">CSS3</a></li>
+		<li><a href="#">转换</a></li>
+		<li class="active">transform</li>
+	</ol>
+	<h1><strong>transform</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			语法:
+		</div>
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>transform : </dt>
+				<dd>none | <code>&lt;transform-function&gt;+</code></dd>			
+
+				<dt class="title">transform-function list : </dt>
+				<dd> </dd>
+
+				<dt>matrix() = </dt>
+				<dd>matrix(<code>&lt;number&gt;[,&lt;number&gt;]{5,5}</code>)</dd>
+
+				<dt>matrix3d() = </dt>
+				<dd>matrix3d(<code>&lt;number&gt;[,&lt;number&gt;]{15,15}</code>)</dd>
+
+				<dt>translate() = </dt>
+				<dd>translate(<code>&lt;translation-value&gt;[,&lt;translation-value&gt;]?</code>)</dd>
+
+				<dt>translate3d() = </dt>
+				<dd>translate3d(<code>&lt;translation-value&gt;,&lt;translation-value&gt;,&lt;length&gt;</code>)</dd>
+
+				<dt>translatex() = </dt>
+				<dd>translatex(<code>&lt;translation-value&gt;</code>)</dd>
+
+				<dt>translatey() = </dt>
+				<dd>translatey(<code>&lt;translation-value&gt;</code>)</dd>
+
+				<dt>translatez() = </dt>
+				<dd>translatez(<code>&lt;length&gt;</code>)</dd>
+
+				<dt>rotate() = </dt>
+				<dd>rotate(<code>&lt;angle&gt;</code>)</dd>
+
+				<dt>rotate3d() = </dt>
+				<dd>rotate3d(<code>&lt;number&gt;,&lt;number&gt;,&lt;number&gt;,&lt;angle&gt;</code>)</dd>
+
+				<dt>rotatex() = </dt>
+				<dd>rotatex(<code>&lt;angle&gt;</code>)</dd>
+
+				<dt>rotatey() = </dt>
+				<dd>rotatey(<code>&lt;angle&gt;</code>)</dd>
+
+				<dt>rotatez() = </dt>
+				<dd>rotatez(<code>&lt;angle&gt;</code>)</dd>
+
+				<dt>scale() = </dt>
+				<dd>scale(<code>&lt;number&gt;[,&lt;number&gt;]?</code>)</dd>
+
+				<dt>scale3d() = </dt>
+				<dd>scale3d(<code>&lt;number&gt;,&lt;number&gt;,&lt;number&gt;</code>)</dd>
+
+				<dt>scalex() = </dt>
+				<dd>scalex(<code>&lt;number&gt;</code>)</dd>
+
+				<dt>scaley() = </dt>
+				<dd>scaley(<code>&lt;number&gt;</code>)</dd>
+
+				<dt>scalez() = </dt>
+				<dd>scalez(<code>&lt;number&gt;</code>)</dd>
+
+				<dt>skew() = </dt>
+				<dd>skew(<code>&lt;angle&gt;[,&lt;angle&gt;]?</code>)</dd>
+
+				<dt>skewx() = </dt>
+				<dd>skewx(<code>&lt;angle&gt;</code>)</dd>
+
+				<dt>skewy() = </dt>
+				<dd>skewy(<code>&lt;angle&gt;</code></dd>
+
+				<dt>perspective() = </dt>
+				<dd>perspective(<code>&lt;length&gt;</code>)</dd>
+
+				<dt><code>translation-value</code> = </dt>
+				<dd><code>&lt;length&gt; | &lt;percentage&gt;</code></dd>
+
+				<dt>默认值 : </dt>
+				<dd><span class="label label-default">none</span></dd>
+
+				<dt>适用于 : </dt>
+				<dd>所有块级元素及某些内联元素.</dd>
+
+				<dt>继承性 : </dt>
+				<dd>无</dd>
+
+				<dt>动画性 : </dt>
+				<dd>是</dd>
+
+				<dt>计算值 : </dt>
+				<dd>指定值,但相对长度会转变为绝对长度</dd>
+
+				<dt>媒体 : </dt>
+				<dd>视觉</dd>
+			</dl>
+		</div>		
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">取值:</div>
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>none : </dt>
+				<dd>无转换</dd>
+
+				<dt class="title">2D Transform Functions : </dt>
+				<dd></dd>
+
+				<dt><code>matrix()</code> : </dt>
+				<dd><pre>以一个含6值的(a,b,c,d,e,f)变换矩阵的形式指定一个2D变换,相当于直接应用一个[a,b,c,d,e,f]变换矩阵.</pre></dd>
+
+				<dt><code>translate()</code> : </dt>
+				<dd><pre>指定对象的2D translation(2D平移).第一个参数对应x轴,第二个参数对应Y轴.如果第二个参数未提供,则默认为0.</pre></dd>
+
+				<dt><code>translatex()</code> : </dt>
+				<dd><pre>指定对象X轴(水平方向)的平移.</pre></dd>
+
+				<dt><code>translatey()</code> : </dt>
+				<dd><pre>指定对象Y轴(垂直方向)的平移.</pre></dd>
+
+				<dt><code>rotate()</code> : </dt>
+				<dd><pre>指定对象的2D rotate(2D旋转),需要先有<code>&lt;&quot;transform-origin&quot;&gt;</code>属性的定义.</pre></dd>
+
+				<dt><code>scale()</code> : </dt>
+				<dd><pre>指定对象的2D scale(2D 缩放).第一个参数对应X轴,第二个参数对应Y轴.如果第二个参数未提供,则默认为0.</pre></dd>
+
+				<dt><code>scalex()</code> : </dt>
+				<dd><pre>指定对象X轴(水平方向)的缩放.</pre></dd>
+
+				<dt><code>scaley()</code> : </dt>
+				<dd><pre>指定对象Y轴(垂直方向)的缩放.</pre></dd>
+
+				<dt><code>skew()</code> : </dt>
+				<dd><pre>指定对象的skew transformation(斜切扭曲).第一个参数对应X轴,第二个参数对应Y轴.如果第二个参数未提供,则默认为0.</pre></dd>
+
+				<dt><code>skewx()</code> : </dt>
+				<dd><pre>指定对象X轴(水平方向)的扭曲.</pre></dd>
+
+				<dt><code>skewy()</code> : </dt>
+				<dd><pre>指定对象Y轴(垂直方向)的扭曲.</pre></dd>
+
+				<dt class="title">3D Transform Functions : </dt>
+				<dd></dd>
+
+				<dt><code>matrix3d()</code> : </dt>
+				<dd><pre>以一个4 x 4矩阵的形式指定一个3D变换.</pre></dd>
+
+				<dt><code>translate3d()</code> : </dt>
+				<dd><pre>指定对象的3D位移.第一个参数对应X轴,第二个参数对应Y轴,第3个参数对应Z轴.参数不允许省略.</pre></dd>
+
+				<dt><code>translatez()</code> : </dt>
+				<dd><pre>指定对象Z轴的平移.</pre></dd>
+
+				<dt><code>rotate3d()</code> : </dt>
+				<dd><pre>指定对象的3D旋转角度.其中前3个参数分别代表旋转的x,y,z轴方向,第4个参数代表旋转的角度,参数不允许省略.</pre></dd>
+
+				<dt><code>rotatex()</code> : </dt>
+				<dd><pre>指定对象在X轴的旋转角度.</pre></dd>
+
+				<dt><code>rotatey()</code> : </dt>
+				<dd><pre>指定对象在Y轴的旋转角度.</pre></dd>
+
+				<dt><code>rotatez()</code> : </dt>
+				<dd><pre>指定对象在Z轴的旋转角度.</pre></dd>
+
+				<dt><code>scale3d()</code> : </dt>
+				<dd><pre>指定对象的3D缩放.第一个参数对应X轴,第二个参数对应Y轴,第3个参数对应Z轴.参数不允许省略.</pre></dd>
+
+				<dt><code>scalez()</code> : </dt>
+				<dd><pre>指定对象的Z轴缩放.</pre></dd>
+
+				<dt><code>perspective()</code> : </dt>
+				<dd><pre>指定透视距离.</pre></dd>
+
+			</dl>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<ul>
+				<li>设置或检索对象的转换.</li>
+				<li>对应的脚本特性为transform</li>
+			</ul>
+		</div>
+		<div class="panel-footer">
+			关于transform:matrix()更详细的参考,讲的非常好:<a href="http://blog.csdn.net/henren555/article/details/9699449">http://blog.csdn.net/henren555/article/details/9699449</a>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">兼容性:</div>
+		
+		<div class="panel-body">
+			<ul class="list-inline">
+				<li><button type="button" class="btn btn-success"></button> = 支持</li>
+				<li><button type="button" class="btn btn-info"></button> = 部分支持</li>
+				<li><button type="button" class="btn btn-danger"></button> = 不支持</li>
+			</ul>
+			<table class="table table-bordered">
+					<tr>
+						<th>Values</th>
+						<th>IE</th>
+						<th>Firefox</th>
+						<th>Chrome</th>
+						<th>Safari</th>
+						<th>Opera</th>
+						<th>iOS Safari</th>
+						<th>Android Browser</th>
+						<th>Android Chrome</th>
+					</tr>
+				<tbody>
+					<tr>
+						<th rowspan="3" class="list-head">Basic support</th>
+						<td class="danger">6.0-8.0</td>
+						<td class="danger">2.0-3.0</td>
+						<td class="success"><span class="label label-info">-webkit-</span> 4.0-35.0</td>
+						<td class="success"><span class="label label-info">-webkit-</span> 6.0-8.0</td>
+						<td class="success"><span class="label label-info">-webkit-</span> 15.0-22.0</td>
+						<td class="success"><span class="label label-info">-webkit-</span> 6.0-8.4</td>
+						<td class="success"><span class="label label-info">-webkit-</span> 2.1-4.4.4</td>
+						<td class="success"><span class="label label-info">-webkit-</span> 18.0-34.0</td>
+					</tr>
+					<tr>
+						<td class="success"><span class="label label-info">-ms-</span> 9.0</td>
+						<td class="success"><span class="label label-info">-moz-</span> 3.5-15.0</td>
+						<td class="success" rowspan="2">36.0+</td>
+						<td class="success" rowspan="2">9.0+</td>
+						<td class="success" rowspan="2">23.0+</td>
+						<td class="success" rowspan="2">9.0+</td>
+						<td class="success" rowspan="2">40.0+</td>
+						<td class="success" rowspan="2">35.0+</td>
+
+					</tr>
+					<tr>
+						<td class="success">10.0+</td>
+						<td class="success">16.0+</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">示例:</div>
+		<div class="panel-body">
+			<textarea cols="80" rows="10">
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>transform</title>
+	<style type="text/css">
+		body{padding: 0px;margin: 0px;}
+		/*如果需要修改请修改这里的样式表来控制不同的边框阴影*/
+		.sample{width: 50%;height: 100px;margin: 40px auto;background-color: rgba(50,50,50,0.2);border:1px solid black;}
+		.translate-x{transform:translateX(20px);background-color: rgba(155,190,210,0.5);width: 100%;height: 100%;padding:10px;}
+		.translate-y{transform:translateY(20px);background-color: rgba(155,190,210,0.5);width: 100%;height: 100%;padding:10px;}
+		.rotate{transform:rotate(-15deg);background-color: rgba(155,190,210,0.5);width: 100%;height: 100%;padding:10px;}
+		.single-degree-skew{text-align:center;transform:skew(-45deg);background-color: rgba(155,190,210,0.5);width: 100%;height: 100%;padding:10px;}
+		.double-degree-skew{text-align:center;transform:skew(-25deg,-15deg);background-color: rgba(155,190,210,0.5);width: 100%;height: 100%;padding:10px;}
+		.scale-magnify{transform:scale(2.0);background-color: rgba(155,190,210,0.5);width: 100%;height: 100%;padding:10px;}
+		.scale-reduce{transform:scale(0.8);background-color: rgba(155,190,210,0.5);width: 100%;height: 100%;padding:10px;}
+		.matrix{transform:matrix(0.8,0,0,1.5,30,30);background-color: rgba(155,190,210,0.5);width: 100%;height: 100%;padding:10px;}
+	</style>
+</head>
+<body>
+	<div class="sample">
+		<div class="translate-x">
+			<p>向右平移</p>
+			<p>transform:translateX(20px)</p>
+		</div>
+	</div>
+	<div class="sample">
+		<div class="translate-y">
+			<p>向下平移</p>
+			<p>transform:translateY(20px)</p>
+		</div>
+	</div>
+	<div class="sample">
+		<div class="rotate">
+			<p>旋转,正值为顺时针,负值为逆时针</p>
+			<p>transform:rotate(-15deg)</p>
+		</div>
+	</div>
+	<div class="sample">
+		<div class="single-degree-skew">
+			<p>一维扭曲</p>
+			<p>transform:skew(-45deg)</p>
+		</div>
+	</div>
+	<div class="sample">
+		<div class="double-degree-skew">
+			<p>二维扭曲</p>
+			<p>transform:skew(-25deg,-15deg)</p>
+		</div>
+	</div>
+	<div class="sample">
+		<div class="scale-magnify">
+			<p>放大</p>
+			<p>transform:sclae(2.0)</p>
+		</div>
+	</div>
+	<div class="sample">
+		<div class="scale-reduce">
+			<p>缩小</p>
+			<p>transform:sclae(0.8)</p>
+		</div>
+	</div>
+	<div class="sample">
+		<div class="matrix">
+			<p>矩阵变换</p>
+			<p>transform:matrix(0.8,0,0,1.5,30,30)</p>
+		</div>
+	</div>
+	
+</body>
+</html>
+		</textarea>
+		<button type="button" class="btn btn-info runBtn" >运行</button>
+		<button type="button" class="btn btn-info copyBtn" ><abbr title="只能在IE上使用">复制</abbr></button>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">运行结果:</div>
+		<div class="panel-body" id="bar">
+			
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../js/plugins/userAgentDetect.js"></script>
+<script>
+	$(function(){
+		var $run=$('.runBtn');
+		var $bar=$('#bar');
+		var $copy=$('.copyBtn');
+		var $textarea=$('textarea');
+		//对不能实现transform样式的浏览器进行提示并显示错误信息和提示信息.
+		//对低版本的谷歌浏览器进行提示升级
+		if(client.browserValue=="chrome"&&parseFloat(client.browser.ver)<36.0){
+			alert("您的浏览器为Chrome,且版本号低于36.0,不支持transform样式,可以使用-webkit-transform样式进行控制,如果希望使用CSS3/transform样式,请升级浏览器后使用.");
+		}
+		$run.on('click',function(){
+			//使展示板上生成文本框内的HTML代码
+			$bar.html($textarea.val());
+			//滑动展示板到视口
+			//当检测到scrollTop为body下元素时(非IE内核)
+			if(document.body.scrollTop){
+				$("body").animate({scrollTop:$('#bar').offset().top});
+			}else if(document.documentElement.scrollTop){
+				//当检测到scrollTop为documentElement下元素时(IE内核)
+				document.documentElement.scrollTop=$('#bar').offset().top;
+			}			
+		});
+		$copy.on('click',function(){
+			$textarea.select();			
+			//alert("Done?"+$textarea.val().substring($textarea.selectionStart,$textarea.selectionEnd));
+			//只有IE内核支持浏览器命令execCommand("copy");
+			document.execCommand("Copy");
+			//检测浏览器,当存在MSIE关键字且当前不是Opera浏览器时,则为IE浏览器
+			if(navigator.userAgent.indexOf("MSIE")>-1&&navigator.userAgent.indexOf("Opera")<0){
+				alert("已复制到粘贴板.");
+			}else{
+				alert("抱歉,该复制功能当前只能在IE浏览器下使用.");
+			}
+		});
+	});
+</script>
+</body>
+</html>
