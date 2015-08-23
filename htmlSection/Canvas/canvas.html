@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>Canvas</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of canvas in HTML5." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		tr{text-align: center;}
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		#rect-drawing,#rotate-clock-drawing,#text-clock-drawing,#clock-drawing{border:1px solid gray;width: 500px;}
+		.dt-lg-350 dt{width: 350px;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">HTML5</a></li>
+		<li><a href="#">Canvas</a></li>
+		<li class="active">canvas基本绘图</li>
+	</ol>
+	<h1><strong>Canvas</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<ul>
+				<li>这个元素负责在页面中设定一个区域,通过js动态地在这个区域内绘制图形.</li>
+				<li>&lt;canvas&gt;还建议了一个名为WebGL的3D上下文,但是只是实验性的,到所有浏览器支持还需要一段时间.一些老版本的操作系统,如WinXP,由于缺少必要的绘图驱动程序,即便浏览器支持也无济于事.</li>
+			</ul>
+		</div>
+		<div class="panel-footer">
+			关于本章节Canvas内容,主要参考于书籍&lt;&lt;JavaScript 高级程序设计(第3版)&gt;&gt;.
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">兼容性:</div>
+		
+		<div class="panel-body">
+			<ul class="list-inline">
+				<li><button type="button" class="btn btn-success"></button> = 支持</li>
+				<li><button type="button" class="btn btn-info"></button> = 部分支持</li>
+				<li><button type="button" class="btn btn-danger"></button> = 不支持</li>
+			</ul>
+			<table class="table table-bordered">
+					<tr>
+						<th>Values</th>
+						<th>IE</th>
+						<th>Firefox</th>
+						<th>Chrome</th>
+						<th>Safari</th>
+						<th>Opera</th>
+						<th>iOS Safari</th>
+						<th>Android Browser</th>
+						<th>Android Chrome</th>
+					</tr>
+					<tr>
+						<th >Basic support</th>
+						<td class="success">9.0+</td>
+						<td class="success">1.5+</td>
+						<td class="success"></td>
+						<td class="success">2.0+</td>
+						<td class="success"></td>
+						<td class="success"></td>
+						<td class="success"></td>
+						<td class="success"></td>
+					</tr>
+			</table>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			使用Canvas绘图
+		</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>绘图区域</span>
+				<p>要使用&lt;canvas&gt;元素,必须先设置其width和height属性,指定可以绘图的区域大小.出现在开始和结束标签中的内容是后备信息,如果浏览器不支持&lt;canvas&gt;元素,就会显示这些信息.</p>
+				
+				<pre>&lt;canvas id="drawing" width="200" height="200"&gt;A drawing of something.&lt;/canvas&gt;</pre>
+				<p class="help-block">也可以通过CSS为该元素添加样式,如果不添加任何样式或者不绘制任何图形,在页面中是看不到该元素的.</p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>获取对象上下文</span>
+				<p>要在这个画布上(canvas)上绘图,需要取得绘图上下文.而去的绘图上下文对象的引用,需要调用getContext()方法并传入上下文的名字.传入"2d",就可以取得2D上下文对象.</p>
+				<pre>
+var drawing=document.getElementById("drawing");
+//确定浏览器支持&lt;cnavas&gt;元素
+if(drawing.getContext){
+	var context=drawing.getContext("2d");
+	//更多代码
+}
+				</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>导出图片</span>
+				<p>使用toDataURL()方法,可以导出在&lt;canvas&gt;元素上绘制的图像.这个方法接受一个参数,即图像的MIME类型格式,而且适合于创建图像的任何上下文.</p>
+				<pre>
+//取得一幅PNG格式的图像
+var drawing=document.getElementById("drawing");
+if(drawing.getContext){
+	//取得图像的数据URI
+	var imgURI= drawing.toDataURL("image/png");
+	image.src=imgURI;
+	document.body.appendChild(image);
+}
+				</pre>
+				<p class="help-block">默认情况下,浏览器会将图片编码为PNG格式.<br />如果绘制到画布上的图像来自不同的域,toDataURL()方法会抛出错误.</p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>设置描边样式和填充样式</span>
+				<p>使用2D绘图上下文提供的方法,可以绘制简单的2D图形,比如矩形,弧线和路径.2D上下文的坐标开始于&lt;canvas&gt;元素的左上角,原点坐标为(0,0).</p>
+				<p>2D上下文的两种基本绘图操作是填充和描边.填充,就是用指定的样式(颜色,渐变或图像)填充图形;描边,就是只在图形的边缘画线.大多数2D上下文操作都会细分为填充和描边两个操作,而操作的结果取决于两个属性:fillStyle和strokeStyle.</p>
+				<p>这两个属性的值可以是字符串,渐变对象或模式对象,而且默认值均为"#000".指定颜色可以为任何格式,如颜色名,十六进制码,rgb,rgba或hsla.</p>
+				<pre>
+//设置描边样式和填充样式
+var drawing=document.getElementById("drawing");
+if(drawing.getContext){
+	var context=drawing.getContext("2d");
+	context.strokeStyle="red";
+	context.fillStyle="#0000ff";
+}
+				</pre>
+				<p class="help-block">所有涉及描边和填充的操作都将使用这两个样式,直至重新设置这两个值.<br />这两个属性的值也可以是渐变对象或模式对象.</p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>绘制矩形</span>
+				<p>矩形是唯一一种可以在2D上下文中直接绘制的形状.</p>
+				<p>与矩形有关的方法包括fillRect(),strokeRect()和clearRect().这3个方法都能接受4个参数:矩形的x坐标,y坐标,宽度和高度,单位均为px.</p>
+				<p>这两个属性的值可以是字符串,渐变对象或模式对象,而且默认值均为"#000".指定颜色可以为任何格式,如颜色名,十六进制码,rgb,rgba或hsla.</p>
+				<p>描边线条的宽度由lineWidth属性控制,该属性可以是任意整数.</p>
+				<p>lineCap属性可以控制线条末端的形状是平头("butt"),圆头("round")和方头("square").</p>
+				<p>lineJoin属性可以控制线条相交的方式是圆交("round"),斜交("bevel")还是斜接("miter").</p>
+				<p>clearRect()方法用于清楚画布上的矩形区域,本质上是通过上下文把某一区域变透明.</p>
+				<pre>
+//绘制矩形
+var drawing=document.getElementById("rect-drawing");
+if(drawing.getContext){
+	var context=rectDrawing.getContext('2d');
+	//绘制红色矩形
+	context.fillStyle="#ff0000";
+	context.fillRect(10,10,50,50);
+	//绘制蓝色矩形
+	context.fillStyle="rgba(0,0,255,0.5)";
+	context.fillRect(30,30,50,50);
+	//绘制紫色边框
+	context.strokeStyle="rgba(150,50,225,1)"
+	context.strokeRect(50,50,50,50);
+	//控制线条宽度为10像素
+	context.lineWidth=10;
+	//控制线条相交的方式为圆交
+	context.lineJoin="round";	
+	context.strokeRect(120,10,100,100);
+	//控制线条相交的方式为斜交
+	context.lineJoin="miter";
+	context.strokeRect(140,30,100,100);
+	//控制线条相交的方式为斜接			
+	context.lineJoin="bevel"
+	context.strokeRect(160,50,100,100);
+	//在两个矩形重叠的地方清除一个小矩形
+	context.clearRect(40,40,10,10);
+}else{
+	alert("本浏览器不支持Canvas绘图.")
+}
+				</pre>
+				<canvas id="rect-drawing">The rect-drawing.</canvas>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>绘制路径</span>
+				<p>要绘制路径,首先必须调用beginPath()方法,表示要开始绘制新路径.然后再通过下列方法来实际的绘制路径:</p>
+				<dl class="dl-horizontal dt-lg-350">
+
+					<dt><abbr title="arc(x,y,radius,startAngle,endAngle,counterclockwise)"><code>arc(x,y,radius,startAngle,endAngle,counterclockwise)</code></abbr> : </dt>
+					<dd><pre>以(x,y)为圆心绘制一条弧线,弧线半径为radius,起始和结束角度(用弧度表示)分别为startAngle和endAngle.最后一个参数表示是否逆时针,false为顺时针方向计算.</pre></dd>
+
+					<dt><code>arcTo(x1,y1,x2,y2,radius)</code> : </dt>
+					<dd><pre>从上一点开始绘制一条弧线,到(x2,y2)为止,并且以给定的半径radius穿过(x1,y1).</pre></dd>
+
+					<dt><code>bezierCurveTo(c1x,c1y,c2x,c2y,x,y)</code> : </dt>
+					<dd><pre>从上一点开始绘制一条曲线,到(x,y)为止,并且以(c1x,c1y)和(c2x,c2y)为控制点.</pre></dd>
+
+					<dt><code>lineTo(x,y)</code> : </dt>
+					<dd><pre>从上一点开始绘制一条直线,到(x,y)为止.</pre></dd>
+
+					<dt><code>moveTo(x,y)</code> : </dt>
+					<dd><pre>将绘图游标移动到(x,y),不画线.</pre></dd>
+
+					<dt><code>quadraticCurveTo(cx,cy,x,y)</code> : </dt>
+					<dd><pre>从上一点开始绘制二次曲线,到(x,y)为止,并且以(cx,cy)作为控制点.</pre></dd>
+
+					<dt><code>rect(x,y,width,height)</code> : </dt>
+					<dd><pre>从点(x,y)开始绘制一个宽度为width和高度为height的矩形.这个方法绘制的是矩形路径,不是strokeRect()和fillRect()绘制的独立的形状.</pre></dd>
+
+				</dl>
+				
+				<p>创建路径后,如果想绘制一条连接到路径起点的线条,可以调用closePath().</p>
+				<p>如果路径已经完成,可以调用fill()方法用fillStyle填充它.</p>
+				<p>还可以调用stroke()方法对路径描边,使用的是strokeStyle.</p>
+				<p>最后可以使用clip()方法,在路径上创建一个剪切区域.</p>
+				<p>在2D绘图上下文中中,路径是一种主要的绘图方式,因为路径能为要绘制的图形提供更多控制,可以使用isPointInPath(x,y)的方法来确定画布上的(x,y)一点是否在路径上.</p>
+				<pre>
+//绘制一个概念时钟表盘
+var clockDrawing=document.getElementById('clock-drawing');
+if(clockDrawing.getContext){
+	var context=clockDrawing.getContext('2d');
+	//开始绘制路径
+	context.beginPath();
+	//绘制外圆
+	context.arc(70,70,69,0,2*Math.PI,false);
+	//在绘制内圆之前,必须把路径移动到内圆上的某一点,以避免绘制出多余的线条.
+	context.moveTo(135,70);
+	//绘制内圆
+	context.arc(70,70,65,0,2*Math.PI,false);
+	//绘制分针
+	context.moveTo(70,70);
+	context.lineTo(70,15);
+	//绘制时针
+	context.moveTo(70,70);
+	context.lineTo(30,70);
+	//最后一步是调用stroke()方法,这样才能把图形绘制到画布上.
+	context.stroke();
+}else{
+	alert("本浏览器不支持Canvas绘图.")
+}
+				</pre>
+				<canvas id="clock-drawing">The clock-drawing.</canvas>
+				<p class="help-block"><br /></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>绘制文本</span>
+				<p>绘制文本主要有两个方法:fillText()和strokeText().这两个方法都可以接收4个参数:文本字符串,x坐标,y坐标,可选的最大像素宽度.</p>
+				<p>这两个方法都以下列3个属性为基础.</p>
+				<dl class="dl-horizontal">
+
+					<dt><code>font</code> : </dt>
+					<dd><pre>表示文本样式,大小和字体,用CSS中指定字体的格式来指定,例如"10px Arial".</pre></dd>
+
+					<dt><code>textAlign</code> : </dt>
+					<dd><pre>表示文本对齐方式.可能的值有"start","end","left","right","center".默认值为start.</pre></dd>
+
+					<dt><code>textBaseline</code> : </dt>
+					<dd><pre>表示文本的基线.可能的值有"top","hanging","middle","alphabetic","ideographic"和"bottom".默认值为ideographic.</pre></dd>
+
+				</dl>
+				
+				<p>这几个属性都有默认值,不需要每次使用都重新设置一遍值.</p>
+				<p>相对来说,使用fillText()的时候比strokeText()多,因为它模仿了在网页中正常显示文本.</p>
+				<pre>
+//绘制一个带有文本的时钟表盘
+var textClockDrawing=document.getElementById('text-clock-drawing');
+if(textClockDrawing.getContext){
+	var context=textClockDrawing.getContext('2d');
+	//开始绘制路径
+	context.beginPath();
+	//绘制外圆
+	context.arc(70,70,69,0,2*Math.PI,false);
+	//在绘制内圆之前,必须把路径移动到内圆上的某一点,以避免绘制出多余的线条.
+	context.moveTo(135,70);
+	//绘制内圆
+	context.arc(70,70,65,0,2*Math.PI,false);
+	//绘制分针
+	context.moveTo(70,70);
+	context.lineTo(70,15);
+	//绘制时针
+	context.moveTo(70,70);
+	context.lineTo(30,70);
+	//设置字体
+	context.font="bold 14px";
+	//设置水平对齐方式
+	context.textAlign="center";
+	//设置垂直对齐方式
+	context.textBaseline="middle";
+	//分别设置4个值的文本和位置
+	context.fillText("12",70,15);
+	context.fillText("3",125,70);
+	context.fillText("6",70,125);
+	context.fillText("9",15,70);
+	//最后一步是调用stroke()方法,这样才能把图形绘制到画布上.
+	context.stroke();
+}else{
+	alert("本浏览器不支持Canvas绘图.")
+}
+				</pre>
+				<canvas id="text-clock-drawing">The text-clock-drawing.</canvas>
+				<p class="help-block"><br />文本对齐方式建议使用"start"和"end",不要使用"left"和"right",因为前两者的意思更稳妥,能同时适合从左到右和从右到左阅读的语言.</p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>变换</span>
+				<p>2D绘制上下文支持各种基本的绘制变换.通过绘制上下文时,会以默认值初始化变换矩阵,在默认的变换矩阵下,所有处理都按描述直接绘制,为绘制上下文应用变换,会导致使用不同的变换矩阵应用处理,从而产生不同的结果.</p>
+				<p>可以通过如下方法修改变换矩阵:</p>
+				<dl class="dl-horizontal dt-lg-350">
+
+					<dt><code>rotate(angle)</code> : </dt>
+					<dd><pre>围绕原点旋转图像angle弧度.</pre></dd>
+
+					<dt><code>scale(scaleX,scaleY)</code> : </dt>
+					<dd><pre>缩放图像,在x方向乘以scaleX,在y方向乘以scaleY.默认值为1.0.</pre></dd>
+
+					<dt><code>translate(x,y)</code> : </dt>
+					<dd><pre>将坐标原点移动到(x,y).执行这个变换后,坐标(0,0)会变成之前有(x,y)表示的点.</pre></dd>
+
+					<dt><code>transform(m1_1,m1_2,m2_1,m2_2,dx,dy)</code> : </dt>
+					<dd><pre>直接修改变换矩阵,方式是乘以如下矩阵.
+| m1_1  m1_2  dx |
+| m2_1  m2_2  dy |
+|   0     0    1 |
+  					</pre></dd>
+
+					<dt><code>setTransform(m1_1,m1_2,m2_1,m2_2,dx,dy)</code> : </dt>
+					<dd><pre>将变换矩阵重置为默认状态,然后再调用transform().</pre></dd>
+
+				</dl>
+				
+				<p>在上下文中执行的变换将会一直有效直到被再次修改.</p>
+				<p>虽然没有办法将一切设置重置为默认值,但可以使用save()和restore()方法来完成某组属性和变换的组合.当save()后,当前的所有设置都会进入一个栈的结构,得以妥善保管.当restore()后,栈结构回退一级,恢复之前状态,可以多次调用.</p>
+				<p>save()方法保存的只是对绘图上下文的设置和变换,不会保存绘图上下文的内容.</p>
+				<pre>
+var rotateClockDrawing=document.getElementById('rotate-clock-drawing');
+if(rotateClockDrawing.getContext){
+	var context=rotateClockDrawing.getContext('2d');
+	context.beginPath();
+	context.arc(70,70,69,0,2*Math.PI,false);
+	context.moveTo(135,70);
+	context.arc(70,70,65,0,2*Math.PI,false);
+	context.font="bold 14px";
+	context.textAlign="center";
+	context.textBaseline="middle";
+	context.fillText("12",70,15);
+	context.fillText("3",125,70);
+	context.fillText("6",70,125);
+	context.fillText("9",15,70);
+	//变换原点位置到表盘中心
+	context.translate(70,70);
+	//旋转表针45°
+	context.rotate(1);
+	//画出新的路径时,需移动到原点
+	context.moveTo(0,0);
+	//绘制分针
+	context.lineTo(0,-55);
+	context.moveTo(0,0);
+	//绘制时针
+	context.lineTo(-40,0);			
+	context.stroke();
+}else{
+	alert("本浏览器不支持Canvas绘图.")
+}
+				</pre>
+				<canvas id="rotate-clock-drawing">The rotate-clock-drawing.</canvas>
+				<p class="help-block"></p>
+			</section>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">示例:</div>
+		<div class="panel-body">
+			<textarea cols="80" rows="10">
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>canvas</title>
+	<style type="text/css">
+		body{padding: 0px;margin: 0px;}
+	</style>
+</head>
+<body>
+	<div class="sample">
+		<canvas id="rotate-clock-sample">The rotate-clock-sample.</canvas>
+	</div>
+	<script>
+		var rotateClockSample=document.getElementById('rotate-clock-sample');
+		if(rotateClockSample.getContext){
+			var context=rotateClockSample.getContext('2d');
+			context.beginPath();
+			context.arc(70,70,69,0,2*Math.PI,false);
+			context.moveTo(135,70);
+			context.arc(70,70,65,0,2*Math.PI,false);
+			context.font="bold 14px";
+			context.textAlign="center";
+			context.textBaseline="middle";
+			context.fillText("12",70,15);
+			context.fillText("3",125,70);
+			context.fillText("6",70,125);
+			context.fillText("9",15,70);
+			context.translate(70,70);
+			context.rotate(1);
+			context.moveTo(0,0);
+			context.lineTo(0,-55);
+			context.moveTo(0,0);
+			context.lineTo(-40,0);			
+			context.stroke();
+		}else{
+			alert("本浏览器不支持Canvas绘图.")
+		}
+	</script>
+</body>
+</html>
+		</textarea>
+		<button type="button" class="btn btn-info runBtn" >运行</button>
+		<button type="button" class="btn btn-info copyBtn" ><abbr title="只能在IE上使用">复制</abbr></button>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">运行结果:</div>
+		<div class="panel-body" id="bar">
+			
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var $run=$('.runBtn');
+		var $bar=$('#bar');
+		var $copy=$('.copyBtn');
+		var $textarea=$('textarea');
+
+		//在绘制矩形模块中进行样式展示
+		var rectDrawing=document.getElementById('rect-drawing');
+		if(rectDrawing.getContext){
+			var context=rectDrawing.getContext('2d');
+			context.fillStyle="#ff0000";
+			context.fillRect(10,10,50,50);
+			context.fillStyle="rgba(0,0,255,0.5)";
+			context.fillRect(30,30,50,50);
+			context.strokeStyle="rgba(150,50,225,1)"
+			context.strokeRect(50,50,50,50);
+			context.lineJoin="round";
+			context.lineWidth=10;
+			context.strokeRect(120,10,100,100);
+			context.lineJoin="miter";
+			context.strokeRect(140,30,100,100);			
+			context.lineJoin="bevel"
+			context.strokeRect(160,50,100,100);
+			context.clearRect(40,40,10,10);
+		}else{
+			alert("本浏览器不支持Canvas绘图.")
+		}
+
+		//在绘制路径模块中进行样式展示
+		var clockDrawing=document.getElementById('clock-drawing');
+		if(clockDrawing.getContext){
+			var context=clockDrawing.getContext('2d');
+			context.beginPath();
+			context.arc(70,70,69,0,2*Math.PI,false);
+			context.moveTo(135,70);
+			context.arc(70,70,65,0,2*Math.PI,false);
+			context.moveTo(70,70);
+			context.lineTo(70,15);
+			context.moveTo(70,70);
+			context.lineTo(30,70);
+			context.stroke();
+		}else{
+			alert("本浏览器不支持Canvas绘图.")
+		}
+
+		//在绘制带有文本的时钟路径模块中进行样式展示
+		var textClockDrawing=document.getElementById('text-clock-drawing');
+		if(textClockDrawing.getContext){
+			var context=textClockDrawing.getContext('2d');
+			context.beginPath();
+			context.arc(70,70,69,0,2*Math.PI,false);
+			context.moveTo(135,70);
+			context.arc(70,70,65,0,2*Math.PI,false);
+			context.moveTo(70,70);
+			context.lineTo(70,20);
+			context.moveTo(70,70);
+			context.lineTo(30,70);
+			context.font="bold 14px";
+			context.textAlign="center";
+			context.textBaseline="middle";
+			context.fillText("12",70,15);
+			context.fillText("3",125,70);
+			context.fillText("6",70,125);
+			context.fillText("9",15,70);
+			context.stroke();
+		}else{
+			alert("本浏览器不支持Canvas绘图.")
+		}
+
+		//在绘制时钟旋转的路径模块中进行样式展示
+		var rotateClockDrawing=document.getElementById('rotate-clock-drawing');
+		if(rotateClockDrawing.getContext){
+			var context=rotateClockDrawing.getContext('2d');
+			context.beginPath();
+			context.arc(70,70,69,0,2*Math.PI,false);
+			context.moveTo(135,70);
+			context.arc(70,70,65,0,2*Math.PI,false);
+			context.font="bold 14px";
+			context.textAlign="center";
+			context.textBaseline="middle";
+			context.fillText("12",70,15);
+			context.fillText("3",125,70);
+			context.fillText("6",70,125);
+			context.fillText("9",15,70);
+			context.translate(70,70);
+			context.rotate(1);
+			context.moveTo(0,0);
+			context.lineTo(0,-55);
+			context.moveTo(0,0);
+			context.lineTo(-40,0);			
+			context.stroke();
+		}else{
+			alert("本浏览器不支持Canvas绘图.")
+		}
+
+		$run.on('click',function(){
+			//使展示板上生成文本框内的HTML代码
+			$bar.html($textarea.val());
+			//滑动展示板到视口
+			//当检测到scrollTop为body下元素时(非IE内核)
+			if(document.body.scrollTop){
+				$("body").animate({scrollTop:$('#bar').offset().top});
+			}else if(document.documentElement.scrollTop){
+				//当检测到scrollTop为documentElement下元素时(IE内核)
+				document.documentElement.scrollTop=$('#bar').offset().top;
+			}			
+		});
+		$copy.on('click',function(){
+			$textarea.select();			
+			//alert("Done?"+$textarea.val().substring($textarea.selectionStart,$textarea.selectionEnd));
+			//只有IE内核支持浏览器命令execCommand("copy");
+			document.execCommand("Copy");
+			//检测浏览器,当存在MSIE关键字且当前不是Opera浏览器时,则为IE浏览器
+			if(navigator.userAgent.indexOf("MSIE")>-1&&navigator.userAgent.indexOf("Opera")<0){
+				alert("已复制到粘贴板.");
+			}else{
+				alert("抱歉,该复制功能当前只能在IE浏览器下使用.");
+			}
+		});
+	});
+</script>
+</body>
+</html>

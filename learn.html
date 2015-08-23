@@ -12,7 +12,7 @@
 		
 		.navbar-header img{width: 40px;height: auto;margin-top: -10px;}
 		#index{height: 100%;min-height: 100%;}
-		#content{min-height: 400px;height: 90%;border: 0px;}
+		#content{height: 90%;border: 0px;}
 		.content{height: 100%;scroll-x:none;}
 	</style>
 </head>
@@ -65,7 +65,7 @@
 							HTML<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu">
-							<li onclick="iframeJump('http://www.baidu.com');" id="lang"><a href="#">langdafdf</a></li>
+							<li onclick="iframeJump('htmlSection/Canvas/canvas.html');"><a href="#">canvas</a></li>
 							<li><a href="#">meta</a></li>
 						</ul>
 					</div>
@@ -108,7 +108,7 @@
 					</div>
 				</div>
 			</div>
-			<iframe src="htmlSection/lang.html" id="content" class="col-lg-10"></iframe>
+			<iframe src="htmlSection/Canvas/canvas.html" id="content" class="col-lg-10"></iframe>
 		</div>
 	</div>
 <script src="js/jQuery/jquery-1.11.3.min.js"></script>
@@ -124,8 +124,6 @@
 		}
 	}
 	$(document).ready(function(){
-		
-		var count,i;
 		var EventUtil={
 			addHandler:function(element,type,handler){
 				if(element.addEventListener){
@@ -134,8 +132,7 @@
 					element.attachEvent("on"+type,handler);
 				}
 			}
-		}
-		
+		}		
 	});
 </script>
 </body>
