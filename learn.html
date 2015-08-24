@@ -106,6 +106,16 @@
 							<li><a href="#">meta</a></li>
 						</ul>
 					</div>
+					<div class="btn-group" roloe="group">
+						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							NodeJs<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li onclick="iframeJump('NodeJsSection/module/globalAttr.html');"><a href="#">全局变量</a></li>
+							<li onclick="iframeJump('NodeJsSection/module/path.html');"><a href="#">path模块</a></li>
+							<li onclick="iframeJump('NodeJsSection/module/fs.html');"><a href="#">fs模块</a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 			<iframe src="htmlSection/Canvas/canvas.html" id="content" class="col-lg-10"></iframe>
@@ -122,6 +132,9 @@
 			//兼容Firefox和Chrome
 			window.parent.frames['content'].src=url;
 		}
+	}
+	function handleResponse(response){
+		alert("You`re at IP address "+response.ip+" ,which is in "+response.city+" , "+response.region_name);
 	}
 	$(document).ready(function(){
 		var EventUtil={

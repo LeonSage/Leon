@@ -11,6 +11,15 @@ function startwork(response){
 		var startTime=new Date().getTime();
 		while(new Date().getTime()<startTime+ms);
 	}
+	fs.readFile('./index.html','utf-8',function(err,data){
+		if(err){
+			throw err;
+		}
+		response.setHeader('Content-Type','text/html;charset=utf-8');
+		response.writeHead(200,{"Content-Type":"text/html"});
+		response.write(data);
+		response.end();
+	})	
 	//sleep(10000);
 
 	/*exec("ls -lah",function(error,stdout,stderr){
@@ -19,6 +28,16 @@ function startwork(response){
 		console.log("stdout:"+stdout);
 		response.end();
 	});*/
+}
+
+function jQuery(response){
+	fs.readFile('../jQuery/jquery-1.11.3.min.js','utf-8',function(err,data){
+		if(err) throw err;
+		response.setHeader('Content-Type','text/html;charset=utf-8');
+		response.writeHead(200,{"Content-Type":"text/html"});
+		response.write(data);
+		response.end();
+	})
 }
 
 function textarea(response,postData){
@@ -35,7 +54,7 @@ function textarea(response,postData){
 		"</body>"+
 		"</html>";
 	response.writeHead(200,{"Content-Type":"text/html"});
-	response.write(body);
+	response.write("Other Domain");
 	response.end();
 }
 

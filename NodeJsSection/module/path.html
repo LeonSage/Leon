@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-path</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'path' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">module</a></li>
+		<li class="active">内置path模块</li>
+	</ol>
+	<h1><strong>Path</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<ul>
+			</ul>
+		</div>
+		<div class="panel-footer">
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			Path模块的标准方法
+		</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>path.normalize(pathname)</span>
+				<p>标准化路径:</p>
+				<ol>
+					<li>发现多个斜杠 ( / ) 替换为一个.</li>
+					<li>路径末尾有斜杠,保留这个斜杠.</li>
+					<li>路径里面包含../.时自动进行计算.</li>
+				</ol>
+				
+				<pre>
+path.normalize('/f/e//d');		//输出  /f/e/d
+path.normalize('.f/e/d/');		//输出	/f/e/d/
+path.normalize('/f/e/d/..');		//输出	/f/e
+path.normalize('/f/e/d/.');		//输出	/f/e/d</pre>
+				
+			</section>
+
+			<section>
+				<span class="label label-info" title>path.join([path1],[path2],[...])</span>
+				<p>合并参数得到一个标准化的路径字符串</p>
+				<pre>path.join('/f','e','d/c','..')		//输出	/f/e/d</pre>
+				<p class="help-block">变量必须为字符串.<br />在version-0.8,非字符串变量会静默的被忽视.<br />在version-10.0+,将会抛出一个异常.</p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>path.dirname(pathname)</span>
+				<p>返回一个路径的目录名称</p>
+				<pre>path.dirname('f/e/d');		//输出	/f/e</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>path.extname(pathname)</span>
+				<p>返回一个路径的文件扩展名:路径最低的一级目录中'.'字符后的任何字符串,如果没有或只有一个单独的'.',返回空字符串.</p>
+				<pre>
+path.extname('/f/e/d.html');		//输出	.html
+path.extname('f/e/d/.');		//输出	''</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>path.sep</span>
+				<p>当前的默认路径格式,'\\'或'/'.</p>
+				<pre>
+'foo/bar/baz'.split(path.sep);		//*nix返回['foo','bar','baz']
+'foo\\bar\\baz'.split(path.sep);		//windows返回['foo','bar','baz']</pre>
+				<p class="help-block"></p>
+			</section>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">示例:</div>
+		<div class="panel-body">
+			<textarea cols="80" rows="10">
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>canvas</title>
+	<style type="text/css">
+		body{padding: 0px;margin: 0px;}
+	</style>
+</head>
+<body>
+	<div class="sample">
+		<canvas id="rotate-clock-sample">The rotate-clock-sample.</canvas>
+	</div>
+	<script>
+		var rotateClockSample=document.getElementById('rotate-clock-sample');
+		if(rotateClockSample.getContext){
+			var context=rotateClockSample.getContext('2d');
+			context.beginPath();
+			context.arc(70,70,69,0,2*Math.PI,false);
+			context.moveTo(135,70);
+			context.arc(70,70,65,0,2*Math.PI,false);
+			context.font="bold 14px";
+			context.textAlign="center";
+			context.textBaseline="middle";
+			context.fillText("12",70,15);
+			context.fillText("3",125,70);
+			context.fillText("6",70,125);
+			context.fillText("9",15,70);
+			context.translate(70,70);
+			context.rotate(1);
+			context.moveTo(0,0);
+			context.lineTo(0,-55);
+			context.moveTo(0,0);
+			context.lineTo(-40,0);			
+			context.stroke();
+		}else{
+			alert("本浏览器不支持Canvas绘图.")
+		}
+	</script>
+</body>
+</html>
+		</textarea>
+		<button type="button" class="btn btn-info runBtn" >运行</button>
+		<button type="button" class="btn btn-info copyBtn" ><abbr title="只能在IE上使用">复制</abbr></button>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">运行结果:</div>
+		<div class="panel-body" id="bar">
+			
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var $run=$('.runBtn');
+		var $bar=$('#bar');
+		var $copy=$('.copyBtn');
+		var $textarea=$('textarea');
+
+		$run.on('click',function(){
+			//使展示板上生成文本框内的HTML代码
+			$bar.html($textarea.val());
+			//滑动展示板到视口
+			//当检测到scrollTop为body下元素时(非IE内核)
+			if(document.body.scrollTop){
+				$("body").animate({scrollTop:$('#bar').offset().top});
+			}else if(document.documentElement.scrollTop){
+				//当检测到scrollTop为documentElement下元素时(IE内核)
+				document.documentElement.scrollTop=$('#bar').offset().top;
+			}			
+		});
+		$copy.on('click',function(){
+			$textarea.select();			
+			//alert("Done?"+$textarea.val().substring($textarea.selectionStart,$textarea.selectionEnd));
+			//只有IE内核支持浏览器命令execCommand("copy");
+			document.execCommand("Copy");
+			//检测浏览器,当存在MSIE关键字且当前不是Opera浏览器时,则为IE浏览器
+			if(navigator.userAgent.indexOf("MSIE")>-1&&navigator.userAgent.indexOf("Opera")<0){
+				alert("已复制到粘贴板.");
+			}else{
+				alert("抱歉,该复制功能当前只能在IE浏览器下使用.");
+			}
+		});
+	});
+</script>
+</body>
+</html>

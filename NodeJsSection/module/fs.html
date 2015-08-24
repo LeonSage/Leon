@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">module</a></li>
+		<li class="active">内置fs模块</li>
+	</ol>
+	<h1><strong>file system文件系统</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<pre>var fs=require('fs');</pre>
+			<p>在本模块中的函数分为两个部分,如:<code>unlink()</code>和<code>unlinkSync()</code>,他们的功能是一样的,只是<code>unlink()</code>是同步类型,参数为回调函数,而<code>unlinkSync()</code>中是没有回调函数的.</p>
+			<pre>
+//异步函数:
+fs.unlink('/tmp/hello',function(err){
+	if(err)	throw err;
+	console.log('successfully deleted /tmp/hello');
+});
+
+//同步函数
+fs.unlinkSync('/tmp/hello');
+console.log('successfully deleted /tmp/hello');</pre>
+			<p>同步类型的方法并没有固定的执行顺序,如下面的方法就可能出错:</p>
+			<pre>
+fs.rename('/tmp/hello','/tmp/world',function(err){
+	if(err)	throw err;
+	console.log('rename completed');
+})
+fs.stat('/tmp/world',function(err,stats){
+	if(err)	throw err;
+	console.log('stats: '+JSON.stringfy(stats));
+})</pre>
+			<p>fs.stats很可能在fs.rename之前被执行,就会发生错误.下面是正确的调用方法:</p>
+			<pre>
+fs.rename('/tmp/hello','tmp/world',function(err){
+	if(err)	throw err;
+	fs.stat('tmp/world',function(err,stats){
+		if(err)	throw err;
+		console.log('stats: '+JSON.stringfy(stats));
+	})
+})</pre>
+			<p>在很繁忙的系统中,强烈建议使用异步类型的函数.因为同步的,在它没有执行结束前,将阻塞整个进程.</p>
+		</div>
+		<div class="panel-footer">
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			fs模块的标准方法
+		</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>文件重命名</span>
+				<pre>fs.rename(oldPath,newPath,[callback]);</pre>				
+			</section>			
+
+			<section>
+				<span class="label label-info" title>fs.stat(path,[callback])</span>
+				<p>他们的回调函数拥有两个参数(err,stats),stats为fs.Stats对象.</p>
+				<pre></pre>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<th>stats方法</th>
+						<th>作用</th>
+					</tr>
+					<tr>
+						<td>stats.isFile()</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>stats.isDirectory()</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>stats.isBlockDevice()</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>stats.isCharacterDevice()</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>stats.isSymbolicLink()</td>
+						<td>只在fs.lstats()下可用.</td>
+					</tr>
+					<tr>
+						<td>stats.isFIFO()</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>stats.isSocket()</td>
+						<td></td>
+					</tr>
+				</table>
+				<p class="help-block">类似的还有<code>fs.fstat(fd,[callback])</code>和<code>fs.lstat(path,[callback])</code></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.link(srcpath,dstpath,[callback])</span>
+				<pre>
+fs.link(srcpath,dstpath,[callback]);
+fs.symlink(srcpath,dstpath,[type],[callback]);
+	//type参数为dir,file或junction,只适合windows,其他平台type被忽略.
+	//当用的是junction时,dstpath(destination path目标路径)要为绝对路径.
+	//dstpath将会被自动标准化(normalized)为绝对路径.
+
+fs.readlink(path,[callback]);
+	//回调函数拥有两个参数(err,linkString).</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.realpath(path [,cache],callback)</span>
+				<p>回调函数拥有两个参数(err,resolvePath).</p>
+				<pre>
+var cache={'/etc':'/private/etc'};
+fs.realpath(process.cwd()+"/etc/password",cache,function(err,resolvePath){
+	if(err) throw err;
+	console.log(resolvePath);
+});</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>操作目录</span>
+				<pre>
+//删除目录
+fs.rmdir(path [,callback]);
+//创建目录
+fs.mkdir(path [,mode] [,callback]);
+//查询目录下文件
+fs.readdir(path [,callback]);
+	//回调函数拥有两个参数(err,files),files为path路径下文件名的数组.</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>读写操作</span>
+				<pre>
+//将缓冲区写入到文件
+fs.write(fd,buffer,offset,length,position [,callback]);
+	//buffer为写到fd的内容,在buffer中选择偏移量为offset长度为length的字符串写,在fd中开始位置为position的地方开始写入.
+	//回调函数有三个参数(err,written,buffer).
+
+//将文件内容读取到缓冲区
+fs.read(fd,buffer,offset,length,position [,callback]);
+	//在buffer的offset位置写入fd文件中position位置开始的内容,内容长度为length.
+	//回调函数有3个参数(err,bytesRead,buffer).</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>文件操作</span>
+				<pre>
+//读取文件的全部内容
+fs.readFile(filename [,encoding] [,callback]);
+	//回调函数有两个参数(err,data),data为文件的内容.
+
+//将内容写入到文件中
+fs.writeFile(filename,data [,encoding] [,callback]);
+
+//将内容添加到文件中去,文件不存在自动创建
+fs.appendFile(filename,data,encoding="utf-8" [,callback]);
+	//当data为缓冲区数据时,encoding忽略不写,data可以为string或buffer.
+
+//监视文件,在每次文件被使用时触发listener回调函数
+fs.watchFile(filename [,options],listener);
+	//不稳定,如果可用,请使用fs.watch();
+	//options有两个选项:persistent 布尔值(文件被监视进程是否继续);interval 时间单位/毫秒(文件多长时间被查询一次).
+
+fs.watchFile('message.text',function(curr,prev){
+	console.log('the current mtime is: '+curr.mtime);
+	console.log('the previous mtime is: '+prev.mtime);
+})
+
+fs.unwatchFile(filename [,listener]);
+	//不稳定,如果可用,使用fs.watch();
+
+fs.watch(filename [,options] [,listener]);
+	//不稳定,不是所有的平台都通用
+
+//目前只有Linux和windows平台提供了filename参数
+fs.watch('somedir',function(event,filename){
+	console.log('event is: '+event);
+	if(filename){
+		console.log("filename provided: "+filename);
+	}else{
+		console.log("filename not provided.");
+	}
+})</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>判断路径是否存在</span>
+				<pre>
+//fs.exists(path [,callback]);
+
+fs.exists('etc/passwd',function(exists){
+	util.debug(exists?"it's there.":"no passwd file!");
+})</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>创建数据流</span>
+				<pre>
+//创建读取字符流
+fs.createReadStream(path [,options]);
+
+//options参数列表
+{
+	flags:'r',
+	encoding:null/'utf-8'/'ascii'/'base64',
+	fd:null,
+	mode:0666,
+	bufferSize:64*1024
+}//也包含start,end表示开始位置和起始位置
+
+//创建写入字符流
+fs.createWriteStream(path [,options]);
+
+//options参数列表
+{
+	flags:'w',
+	encoding:null,
+	mode:0666
+}//也包括start允许从什么位置开始写入数据</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>更改时间戳</span>
+				<pre>
+//更改path路径下的文件的文件时间戳
+fs.utimes(path,atime,mtime [,callback]);
+
+//更改有关该文件说明符的文件的文件时间戳
+fs.futimes(fd,atime,utime [,callback]);</pre>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.unlink(path [,callback])</span>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.close(fd [,callback])</span>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.fsync(fd [,callback])</span>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.open(path,flags [,mode] [,callback])</span>
+				<p>回调函数拥有两个参数(err,fd).</p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.truncate(fd,len,[callback])</span>
+				<p></p>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.chown(path,uid,gid,[callback])</span>
+				<p></p>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.fchown(fd,uid,gid,[callback])</span>
+				<p></p>
+				<p class="help-block">fd:fill description文件说明符</p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.lchown(path,uid,gid,[callback])</span>
+				<p></p>
+				<p class="help-block"></p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>fs.chmod(path,mode,[callback])</span>
+				<p></p>
+				<p class="help-block">类似的还有<code>fs.fchmod(fd,mode,[callback])</code>和<code>fs.lchmod(path,mode,[callback])</code></p>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>
