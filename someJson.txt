@@ -1,0 +1,9 @@
+//定义一个方法返回json格式的内容
+function jsonpcallback(json){
+	console.log(json);
+	//序列化输出json
+	alert(JSON.stringify(json));
+}
+
+//执行回调函数,参数为要返回的内容
+jsonpcallback({"Email":"moyanxidian@foxmail.com","Remark":"Shannxi"})

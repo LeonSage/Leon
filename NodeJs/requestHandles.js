@@ -3,15 +3,12 @@ var fs=require("fs");
 var formidable=require('formidable');
 
 
-function startwork(response){
-
-	console.log("Request handler 'startwork' was called.");
-
+function index(response){
 	function sleep(ms){
 		var startTime=new Date().getTime();
 		while(new Date().getTime()<startTime+ms);
 	}
-	fs.readFile('./index.html','utf-8',function(err,data){
+	fs.readFile('../index.html','utf-8',function(err,data){
 		if(err){
 			throw err;
 		}
@@ -106,7 +103,7 @@ function show(response){
 	});
 }
 
-exports.startwork=startwork;
+exports.index=index;
 exports.upload=upload;
 exports.textarea=textarea;
 exports.show=show;

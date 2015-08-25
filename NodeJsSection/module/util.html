@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-util</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'util' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}	
+		.alert{height: 30px;line-height: 20px;font-size: 15px;padding: 5px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">module</a></li>
+		<li class="active">内置util模块</li>
+	</ol>
+	<h1><strong>utility公共实用函数库</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<pre>var util=require('util');</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			fs模块的标准方法
+		</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>格式化输出</span>
+				<pre>
+//util.format(format[...]);
+	//其中参数为:%s--字符串,%d--整数,%j--JSON,%--%不为一个参数.
+console.log(util.format('%s:%s','f00'));		//输出'f00:%s'
+console.log(util.format('%s:%s','foo','bar','baz'));		//输出'foo:bar baz'
+console.log(util.format(1,2,3));		//输出'1 2 3'</pre>				
+			</section>			
+
+			<section>
+				<span class="label label-info" title>调试</span>
+				<p>同步输出函数,将阻止进程并立即将string给stderr.</p>
+				<pre>util.debug('message on stderr.');</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>报错</span>
+				<p>和util.debug()类似,但会立即将所有的参数传递给stderr.</p>
+				<pre>util.error('util error');</pre>
+				<div class="alert alert-danger">现已不推荐使用,请使用console.error()代替.</div>
+			</section>
+
+			<section>
+				<span class="label label-info" title>同步输出函数</span>
+				<pre>
+//将阻止进程并立即将所有的参数带换行的输出给stdout.
+util.puts('block','process');
+
+//将阻止进程,将每个参数都转换为字符串并传递给stdout,但不带换行.
+util.print('block','process','\n');
+
+//在stdout输出,并带上时间戳
+util.log('Timestamped message.');</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>描述对象</span>
+				<pre>
+//util.inspect(object [,showHidden] [,depath] [,color]);
+
+//以字符串类型返回对Object的描述,对debugging有所帮助
+console.log(util.inspect(util));
+
+//如果showHidden=true,那么object的非枚举属性也会被显示,默认为false
+console.log(util.inspect(util,true));
+
+//如果depath确定了,则inspect方法就会进行几次递归.在处理成员复杂的object时很有用,默认递归两次
+console.log(util.inspect(util,true,null));
+
+//如果color=true,输出数据将带颜色.默认为false.
+console.log(util.inspect(util,true,null,true));</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>判断对象格式</span>
+				<pre>
+//判断对象是否为数组
+console.log(util.isArray([]))		//输出true
+console.log(util.isArray(new Array))		//输出true
+console.log(util.isArray({}))		//输出true
+
+//判断对象是否为正则对象
+console.log(util.isRegExp(/some regexp/));		//输出true
+console.log(util.isRegExp(new RegExp('another regexp')));		//输出true
+console.log(util.isRegExp({}))		//输出false
+
+//判断对象是否为日期
+console.log(util.isDate(new Date()));		//输出true
+console.log(util.isDate(Date()));		//输出false,无new返回的是字符串
+console.log(util.isDate({}));		//输出false
+
+//判断对象是否为错误对象
+console.log(util.isError(new Error()));		//输出true
+console.log(util.isError(new TypeError()));		//输出true
+console.log(util.isError({"name":"Error","message":"an error occured."}));		//输出false</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>读写数据</span>
+				<p>从readableStream读数据,并将数据写入到writeableStream,当writeableStream.write(data)写数据时函数返回false时readableStream将停止工作,知道writeableStream的drain方法被调用.</p>
+				<p>callback只有一个error参数,当writeableStream关闭或者出错时该方法才会调用.</p>
+				<pre>util.pump(readableStream,writeableStream [,callback]);</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>父类继承</span>
+				<pre>
+//util.inherits(constructor,superConstructor);
+
+var events=require('events');
+function MyStream(){
+	events.EventEmitter.call(this);
+}
+util.inherits(MyStream,events.EventEmitter);
+MyStream.prototype.write=function(data){
+	this.emit('data',data);
+}
+var stream=new MyStream();
+console.log(stream instanceof events.EventEmitter);		//输出true
+console.log(MyStream.super_===events.EventEmitter);		//super_得到父类,输出true
+stream.on('data':function(data){
+	console.log('Recieved data: '+data);
+})
+stream.write('It works!');</pre>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

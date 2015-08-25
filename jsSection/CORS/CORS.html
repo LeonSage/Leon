@@ -200,6 +200,111 @@ var script=document.createElement("script");
 script.src="http://freegeoip.net/json/?callback=handleResponse";
 document.body.insertBefore(script,document.body.firstChild);
 				</pre>
+				<p class="alert alert-info">JSONP具体解决跨域问题:</p>
+				<p>先在本地使用NodeJs建立两个本地服务器,分别监听:1337和:1338端口,根据同源策略,浏览器不能发起请求.</p>
+				<pre>
+//以client为例,省略了部分代码,留下了主体实现.
+//server类似,只是变成了.listen(1337,'127.0.0.1');
+
+//引入内置模块,分别负责http的创建,地址的切分,路径的组合,文件系统的读取
+var http=require('http')
+	,url=require('url')
+	,path=require('path')
+	,fs=require('fs');
+function client(handles){
+	//创建监听127.0.0.1(即本地地址,相当于localhost://)的:1337端口的服务端程序
+	http.createServer(function (request,response){
+		//将url转换为对象并获取其中的pathname
+		var pathname=url.parse(request.url).pathname;
+		//如果pathname存在处理程序,则由处理程序完成(此处省略了处理程序--返回请求的网页)
+		if(typeof(handles[pathname])==="function"){
+			return handles[pathname](response,request);
+		}
+		//将目录名和路径名进行组合形成请求的文件路径
+		var filename=path.join(__dirname,'..',pathname);
+		//使用文件系统中的函数确定文件路径是否存在请求文件
+		fs.exists(filename,function(exists){
+			//如果不存在,则返回404 Not Found并写下日志文件
+			if(!exists){
+				console.error("Request for "+filename+" : 404 Not Found.");
+				/*response.setHeader('Content-Type','text/plain;charset=utf-8');*/
+				response.writeHead(404,{"Content-Type":"text/plain"});
+				response.write("404 Not Found");
+				response.end();
+				return;
+			}else{
+				//如果存在,则读取文件
+				fs.readFile(filename,'binary',function(err,file){
+					//在读取过程中,发生服务器内部错误,则返回500 Server Error并写下日志
+					if(err){
+						console.error("Request for "+filename+" : 500 "+err);
+						response.writeHead(500,{"Content-Type":"text/plain"});
+						response.write(err);
+						response.end();
+						return;
+					}
+					var contentType="none";
+					//查看文件名的后缀对设置对应的响应格式
+					var ext=path.extname(filename);
+					switch(ext){
+						case ".html": contentType="text/html";break;
+						case ".js": contentType="text/javascript";break;
+						case ".css": contentType="text/css";break;
+					}
+					//处理成功,返回200 OK并写下日志
+					//response.setHeader('Content-Type','text/html;charset=utf-8');
+					response.writeHead(200,{"Content-Type":contentType});
+					response.write(file,"binary");
+					response.end();
+					console.log("Request for "+filename+" : 200 OK.");
+				})
+			}			
+		});
+	}).listen(1338,'127.0.0.1');
+	//服务器启动,并输出服务器路径
+	console.log('Server running at http://127.0.0.1:1338/');
+}</pre>
+				<p>在其中一个端口开启的页面上设置一个按钮并请求不同端口上的资源.</p>
+				<pre>
+//jQuery操作AJAX请求不同端口下的someJson.txt文件
+var $.get($("src="http://localhost:1337/someJson.txt",function(data){
+	console.log(data);
+});</pre>
+				<p>但根据同源策略,很明显浏览器不能发起请求,会返回<code>not allowed by Access-Control-Allow-Origin</code></p>
+				<p>浏览器对script不存在同源策略,所以我们可以使用CDN来请求不同的库.</p>
+				<pre>&lt;script src="http://localhost:1337/../js/bootstrap/js/bootstrap.min.js"&gt;&lt;//script&gt;	//请求不同源的js不会发生错误</pre>
+				<p>所以我们可以通过script来获取不同源的json,并赋予一个回调函数来返回需要的内容.</p>
+				<pre>
+//HTML页面中的按钮
+&lt;button class="btn btn-primary btn-lg jsonp"&gt;请求:1337&lt;/button&gt;
+
+$('.jsonp').on('click',function(){
+	var $jsonp=$('&lt;script src="http://localhost:1337/someJson.txt?callback=jsonpcallback"&gt;&lt;//script&gt;');
+		$jsonp.appendTo('body');
+});</pre>
+				<p>在someJson.txt的内容为:</p>
+				<pre>
+//定义一个方法返回json格式的内容
+function jsonpcallback(json){
+	console.log(json);
+	//序列化输出json
+	alert(JSON.stringify(json));
+}
+
+//执行回调函数,参数为要返回的内容
+jsonpcallback({"Email":"moyanxidian@foxmail.com","Remark":"Shannxi"})</pre>
+				<p>服务器会返回200 OK,并输出<code>Object {"Email":"moyanxidian@foxmail.com","Remark":"Shannxi"}</code></p>
+				<p>可以利用jQuery的AJAX来更为方便的实现:</p>
+				<pre>
+$.ajax({
+	url:"http://localhost:1337/someJson.txt",
+	dataType:"jsonp",
+	jsonp:"callback",
+	success:function(data){
+		console.log(data);
+	}
+})</pre>
+				<p>结果输出和上述一样.</p>
 				<p class="help-block"></p>
 			</section>
 
@@ -269,62 +374,6 @@ if(rotateClockDrawing.getContext){
 			</section>
 		</div>
 	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">示例:</div>
-		<div class="panel-body">
-			<textarea cols="80" rows="10">
-<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-<head>
-	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
-	<title>canvas</title>
-	<style type="text/css">
-		body{padding: 0px;margin: 0px;}
-	</style>
-</head>
-<body>
-	<div class="sample">
-		<canvas id="rotate-clock-sample">The rotate-clock-sample.</canvas>
-	</div>
-	<script>
-		var rotateClockSample=document.getElementById('rotate-clock-sample');
-		if(rotateClockSample.getContext){
-			var context=rotateClockSample.getContext('2d');
-			context.beginPath();
-			context.arc(70,70,69,0,2*Math.PI,false);
-			context.moveTo(135,70);
-			context.arc(70,70,65,0,2*Math.PI,false);
-			context.font="bold 14px";
-			context.textAlign="center";
-			context.textBaseline="middle";
-			context.fillText("12",70,15);
-			context.fillText("3",125,70);
-			context.fillText("6",70,125);
-			context.fillText("9",15,70);
-			context.translate(70,70);
-			context.rotate(1);
-			context.moveTo(0,0);
-			context.lineTo(0,-55);
-			context.moveTo(0,0);
-			context.lineTo(-40,0);			
-			context.stroke();
-		}else{
-			alert("本浏览器不支持Canvas绘图.")
-		}
-	</script>
-</body>
-</html>
-		</textarea>
-		<button type="button" class="btn btn-info runBtn" >运行</button>
-		<button type="button" class="btn btn-info copyBtn" ><abbr title="只能在IE上使用">复制</abbr></button>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">运行结果:</div>
-		<div class="panel-body" id="bar">
-			
-		</div>
-	</div>
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
@@ -333,54 +382,17 @@ if(rotateClockDrawing.getContext){
 		var $bar=$('#bar');
 		var $copy=$('.copyBtn');
 		var $textarea=$('textarea');
+		$('body').scrollTop(5500);
 
-		//在绘制矩形模块中进行样式展示
-		var rectDrawing=document.getElementById('rect-drawing');
-		if(rectDrawing.getContext){
-			var context=rectDrawing.getContext('2d');
-			context.fillStyle="#ff0000";
-			context.fillRect(10,10,50,50);
-			context.fillStyle="rgba(0,0,255,0.5)";
-			context.fillRect(30,30,50,50);
-			context.strokeStyle="rgba(150,50,225,1)"
-			context.strokeRect(50,50,50,50);
-			context.lineJoin="round";
-			context.lineWidth=10;
-			context.strokeRect(120,10,100,100);
-			context.lineJoin="miter";
-			context.strokeRect(140,30,100,100);			
-			context.lineJoin="bevel"
-			context.strokeRect(160,50,100,100);
-			context.clearRect(40,40,10,10);
-		}else{
-			alert("本浏览器不支持Canvas绘图.")
-		}
-
-		//在绘制路径模块中进行样式展示
-		var clockDrawing=document.getElementById('clock-drawing');
-		if(clockDrawing.getContext){
-			var context=clockDrawing.getContext('2d');
-			context.beginPath();
-			context.arc(70,70,69,0,2*Math.PI,false);
-			context.moveTo(135,70);
-			context.arc(70,70,65,0,2*Math.PI,false);
-			context.moveTo(70,70);
-			context.lineTo(70,15);
-			context.moveTo(70,70);
-			context.lineTo(30,70);
-			context.stroke();
-		}else{
-			alert("本浏览器不支持Canvas绘图.")
-		}
-
-		//在绘制时钟旋转的路径模块中进行样式展示
-		function handleResponse(response){
+		//CORS
+		/*function handleResponse(response){
 			alert("You`re at IP address "+response.ip+" ,which is in "+response.city+" , "+response.region_name);
 		}
 		var script=document.createElement("script");
 		script.src="CORS.html/?callback=handleResponse";
-		document.body.insertBefore(script,document.body.firstChild);
+		document.body.insertBefore(script,document.body.firstChild);*/
 		//alert("You`re at IP address "+response.ip+" ,which is in "+response.city+" , "+response.region_name);
+
 		$run.on('click',function(){
 			//使展示板上生成文本框内的HTML代码
 			$bar.html($textarea.val());

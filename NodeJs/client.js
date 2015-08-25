@@ -1,5 +1,4 @@
 var server=require('./server');
-var router=require('./router');
 var requestHandles=require('./requestHandles')
 	,fs=require('fs')
 	,path=require('path')
@@ -7,13 +6,10 @@ var requestHandles=require('./requestHandles')
 	,http=require('http');
 
 var handlers={};
-handlers["/"]=requestHandles.startwork;
-handlers["/startwork"]=requestHandles.startwork;
+handlers["/"]=requestHandles.index;
 handlers["/upload"]=requestHandles.upload;
 handlers["/textarea"]=requestHandles.textarea;
 handlers["/show"]=requestHandles.show;	
 handlers["/fileUpload"]=requestHandles.fileUpload;
 
-
-
-server.start(router.router,handlers);
+server.client(handlers);
