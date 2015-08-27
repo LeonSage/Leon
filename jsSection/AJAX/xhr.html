@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>XMLHttpRequest</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of XMLHttpRequest in js." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		tr{text-align: center;}
+		textarea{width: 80%;min-height: 250px;}
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">JS</a></li>
+		<li><a href="#">AJAX</a></li>
+		<li class="active">XHR对象</li>
+	</ol>
+	<h1><strong>XMLHttpRequest</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">AJAX说明:</div>
+		<div class="panel-body">
+			<p>AJAX,是对<code>Asynchronous JavaScript + XML</code>的简写.这一技术能够向服务器请求额外的数据而无需卸载页面.</p>
+			<p>AJAX技术的核心是XMLHttpRequest对象(简称XHR),虽然名字中含有XML的成分,但AJAX通信与数据格式无关;这种技术就是无需刷新页面即可从服务器取得数据,但不一定是XML数据.</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">XHR说明:</div>
+		<div class="panel-body">
+			<p>在IE5中,XHR对象是通过MSXML库中的一个ActiveX对象实现的.因此,在IE中可能会遇到三种不同版本的XHR对象,即MSXML2.XMLHttp,MSXML2.XMLHttp.3.0和MSXML2.XMLHttp.6.0.要使用MSXML库中的XHR对象,需要一个封装函数来进行能力检测来创建:</p>
+			<pre>
+//适用于IE7之前的版本
+//会根据IE中可用的MSXML库的情况创建最新版本的XHR对象
+function createXHR(){
+	if(typeof arguments.callee.activeXString!="string"){
+		var versions=["MSXML2.XMLHttp.6.0","MSXML2.XMLHttp.3.0","MSXML2.XMLHttp"],i,len;
+		for(i=0,len=versions.length;i&lt;len;i++){
+			try{
+				new ActiveXObject(version[i]);
+				arguments.callee.activeXString=version[i];
+				break;
+			}catch(ex){
+				//跳过
+			}
+		}
+	}
+	return new ActiveXObject(arguments.callee.activeXString);
+}</pre>
+			<p class="alert alert-danger">现微软已经正式放弃IE6,所以请使用XHR对象,上述内容已弃置不用.</p>
+			<p>IE7+,Firefox,Opera,Chrome和Safari都支持原生的XHR对象,在这些浏览器中可以创建XHR对象:</p>
+			<pre>var xhr=new XMLHttpRequest();</pre>
+		</div>
+		<div class="panel-footer">
+			关于本章节XHR内容,主要参考于书籍<strong>&lt;&lt;JavaScript 高级程序设计(第3版)&gt;&gt;</strong>.
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">HTTP头部信息</div>
+		<div class="panel-body">
+			<p>每个HTTP请求和响应都会带有相应的头部信息,XHR对象也提供了操作这两种头部(即请求头部和响应头部)信息的方法.默认情况下,在发送XHR请求的同时,还会发送下列头部信息:</p>
+			<ul class="dl-horizontal">
+				<dt><code>Accept : </code></dt>
+				<dd><pre>浏览器能够处理的内容类型.</pre></dd>
+				<dt><code>Accept-Charset : </code></dt>
+				<dd><pre>浏览器能够显示的字符集.</pre></dd>
+				<dt><code>Accept-Encoding : </code></dt>
+				<dd><pre>浏览器能够处理的压缩编码.</pre></dd>
+				<dt><code>Accept-Language : </code></dt>
+				<dd><pre>浏览器当前设置的语言.</pre></dd>
+				<dt><code>Connection : </code></dt>
+				<dd><pre>浏览器与服务器之间连接的类型.</pre></dd>
+				<dt><code>Cookie : </code></dt>
+				<dd><pre>当前页面设置的任何Cookie.</pre></dd>
+				<dt><code>Host : </code></dt>
+				<dd><pre>发出请求的页面所在的域.</pre></dd>
+				<dt><code>Referer : </code></dt>
+				<dd><pre>发出请求的页面URI.注意,HTTP规范将这个头部字段拼写错了,正确的英语拼法是referrer,但为了保证和规范一致,也只能将错就错了..</pre></dd>
+				<dt><code>User-Agent : </code></dt>
+				<dd><pre>浏览器的用户代理字符串.</pre></dd>
+			</ul>
+			<p>虽然不同浏览器实际发送的头部信息会有所不同,但以上列出的基本上是所有浏览器都会发送的.使用setRequesetHeader()方法可以设置自定义的请求头部信息.这个方法接受两个参数:头部字段的名称和头部字段的值.要成功发送请求头部信息,必须在调用open()方法之后且调用send()方法之前调用setRequestHeader().</p>
+			<pre>xhr.setRequestHeader("MyHeader","MyValue");</pre>
+			<p class="alert alert-info">服务器在接收到这种自定义的头部信息之后,可以执行相应的后续操作.建议读者使用自定义的头部字段名称,不要使用浏览器正常发送的字段名称,否则有可能会影响服务器的响应.有的浏览器允许开发人员重写默认的头部信息,但有的浏览器则不允许这样做.</p>
+			<p>调用XHR对象的getResponseHeader()方法并传入头部字段名称,可以取得相应的响应头部信息.而调用getAllResponseHeaders()方法则可以取得一个包含所有头部信息的长字符串.</p>
+			<pre>
+var myHeader=xhr.getResponseHeader("MyHeader");
+var allHeaders=xhr.getAllResponseHeaders();</pre>
+			<p>在服务端,也可以利用头部信息向浏览器发送额外的,结构化的数据.在没有自定义信息的情况下,getAllResponseHeaders()方法通常会返回如下所示的多行文本内容:</p>
+			<pre>
+Date: Sun, 14 Nov 2004 18:04:03 GMT
+Server: Apache/1.3.29 (Unix)
+Vary: Accept
+X-Powered-By: PHP/4.3.8
+Connection: close
+Content-Type: text/html;charset=iso-8859-1</pre>
+			<p>这种格式化的输出可以方便我们检查响应中所有头部字段的名称,而不必一个一个地检查某个字段是否存在.</p>
+			<textarea cols="" rows="15" class="Content-Type">
+//点击运行执行下面代码
+var xhr=new XMLHttpRequest();
+xhr.onreadystatechange=function(){
+	if(xhr.readyState==4){
+		if((xhr.status&gt;=200&&xhr.status&lt;300||xhr.status==304)){
+			//可以在控制台看到输出的内容
+			console.log(xhr.responseText);
+			var myHeader=xhr.getAllResponseHeaders();
+			//当修改为请求不同后缀的文件时,可以看到Content-Type值的变化.
+			alert(myHeader);
+		}else{
+			alert("Request was unsuccessful: "+xhr.status);
+		}
+	}
+};
+//如在这里修改路径会获取其他的文件内容(如index.html,resume.html),也可能得到404.
+xhr.open("get","../../someJson.txt",true);
+xhr.send(null);
+			</textarea>
+			<button class="btn btn-primary run">运行</button>
+			<button class="btn btn-primary copy"><abbr title="当前只有IE可用">复制</abbr></button>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">GET请求</div>
+		<div class="panel-body">
+			<p>GET是最常见的请求类型,最常用于向服务器查询某些信息.必要时,可以将查询字符串追加到URL的末尾,以便将信息发送给服务器.对XHR而言,位于传入open()方法的URL末尾的查询字符串必须经过正确的编码才行.比如如果传入的用户名为汉字的话,不进行编码并传输就会显示乱码.</p>
+			<p>使用GET请求经常会发生的一个错误,就是查询字符串的格式有问题.查询字符串中每个参数的名称和值都必须使用encodeURIComponent()进行编码,然后才能放到URL的末尾;而且所有名-值对儿都必须由和号(&)分割.</p>
+			<pre>
+//辅助向现有URL的末尾添加查询字符串参数
+function addURLParam(url,name,value){
+	//检查URL是否包含问号(确定是否有参数存在),如果没有,则添加一个问号;否则,就添加一个和号.
+	url+=(url.indexOf("?")==-1?"?":"&");
+	//将参数名称和值进行编码并添加到URL的末尾,最后返回修改后的URL.
+	url+=encodeURIComponent(name)+"="+encodeURIComponent(value);
+	return url;
+}
+var url="example.php";
+//添加参数
+url=addURLParam(url,"name","Nicholas");
+url=addURLParam(url,"book","Professional JavaScript");
+//初始化请求
+xhr.open("get",url,true);</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">POST请求</div>
+		<div class="panel-body">
+			<p>使用频率仅次于GET的就是POST请求,通常用于向服务器发送应该被保存的数据.POST请求应该把数据作为请求的主体提交,而GET请求传统上不是这样.POST请求的主体可以包含非常多的数据,而且格式不限.</p>
+			<pre>xhr.open("post","example.php",true);</pre>
+			<p>发送POST请求的第二步就是向send()方法中传入某些数据.由于XHR最初的设计主要是为了处理XML,因此可以在此传入XML DOM文档,传入的文档经序列化之后将作为请求主体被提交到服务器.当然,也可能在此传入任何想要发送到服务器的字符串.</p>
+			<p>默认情况下,服务器对POST请求和提交web表单的请求不会一视同仁.因此,服务器端必须有程序来读取发送过来的原始数据,并从中解析出有用的部分.不过,我们可以使用XHR来模仿表单提交:首先将Content-Type头部信息设置为<code>application/x-www-form-urlencoded</code>,也就是表单提交时的内容类型,其次是以适当的格式创建一个字符串.POST数据的格式与查询字符串格式相同.如果需要将页面中表单的数据进行序列化,然后再通过XHR发送到服务器,那么就可以使用serialize()函数来创建字符串:</p>
+			<pre>
+xhr.open("post","postexample.php",true);
+xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+var form=document.getElementById('user-info');
+xhr.send(serialize(form));</pre>
+			<p>这个函数可以将ID为"user-info"的表单中的数据序列化之后发送给服务器.那么下面的PHP文件postexample.php就可以通过$_POST取得提交的数据了:</p>
+			<pre>
+&lt;?php
+	header("Content-Type:text/plain");
+	echo &lt;&lt;&lt;EOF
+Name:{$_POST["user-name"]}
+Email:{$_POST["user-email"]}
+EOF;
+?&gt;</pre>
+			<p>如果不设置Content-Type头部信息,那么发送给服务器的数据就不会出现在$_POST超级全局变量中.这时候,要访问同样的数据,就必须借助$HTTP_RAW_POST_DATA.</p>
+			<p class="alert alert-info">与GET请求相比,POST请求消耗的资源会更多一些.从性能角度来看,以发送相同的数据计,GET请求的速度最多可达到POST请求的两倍.</p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var $copy=$('.copyBtn')
+			,$copy=$('.copy')
+			,$textarea=$('textarea');
+
+		//当点击运行时获取文件内容
+		$('.run').on('click',function(){
+			eval($('.Content-Type').val());
+		})
+		$copy.on('click',function(){
+			$textarea.select();			
+			//alert("Done?"+$textarea.val().substring($textarea.selectionStart,$textarea.selectionEnd));
+			//只有IE内核支持浏览器命令execCommand("copy");
+			document.execCommand("Copy");
+			//检测浏览器,当存在MSIE关键字且当前不是Opera浏览器时,则为IE浏览器
+			if(navigator.userAgent.indexOf("MSIE")>-1&&navigator.userAgent.indexOf("Opera")<0){
+				alert("已复制到粘贴板.");
+			}else{
+				alert("抱歉,该复制功能当前只能在IE浏览器下使用.");
+			}
+		});
+	});
+</script>
+</body>
+</html>

@@ -52,6 +52,7 @@
 		<div class="jumbotron">
 			<div class="container">
 				<h1>Hello,world!</h1>
+				<button class="btn btn-primary cors">Get 1337</button>
 			</div>			
 		</div>		
 	</div>
@@ -61,7 +62,22 @@
 <script>
 	//等待DOM树加载完成
 	$(function(){
-		
+		var $cors=$('.cors');
+		$cors.on('click',function(){
+			var xhr=new XMLHttpRequest();
+			xhr.onreadystatechange=function(){
+				if(xhr.readyState==4){
+					if(xhr.status>=200&&xhr.status<300||xhr.status==304){
+						console.log(xhr.responseText);
+					}else{
+						console.log("Request was unsuccessful: "+xhr.status);
+					}
+				}
+			}
+			xhr.open("get","../someJson.txt",true);
+			xhr.send(null);
+			
+		})
 	})	
 </script>
 </body>

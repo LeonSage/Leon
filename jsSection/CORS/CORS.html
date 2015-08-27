@@ -16,9 +16,7 @@
 		tr{text-align: center;}
 		section{margin-bottom: 20px;}
 		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
-		#rect-drawing,#rotate-clock-drawing,#text-clock-drawing,#clock-drawing{border:1px solid gray;width: 500px;}
-		.dt-lg-350 dt{width: 350px;}
-		textarea{width: 80%;min-height: 300px;}
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
 	</style>
 </head>
 <body>
@@ -52,10 +50,46 @@
 		<div class="panel-body">
 			<section>
 				<span class="label label-info" title>IE对CORS的实现</span>
-				<p>要使用&lt;canvas&gt;元素,必须先设置其width和height属性,指定可以绘图的区域大小.出现在开始和结束标签中的内容是后备信息,如果浏览器不支持&lt;canvas&gt;元素,就会显示这些信息.</p>
+				<p>微软在IE8中引入了XDR(XDomainRequest)类型.这个对象与XHR类似,但能实现安全可靠的跨域通信.XDR对象的安全机制部分实现了W3C的CORS规范.</p>
+				<p>以下是XDR与XHR之间的一些不同之处:</p>
+				<ul>
+					<li>coockie不会随请求发送,也不会随响应返回.</li>
+					<li>只能设置请求头部信息中的Content-Type字段</li>
+					<li>不能访问响应头部信息.</li>
+					<li>只支持GET和POST请求.</li>
+				</ul>
+				<p>这些变化使得CSRF(Cross-Site Request Forgery,跨站点请求伪造)和XSS(Cross-Site Scripting,跨站点脚本)的问题得到了缓解.被请求的资源可以根据它认为合适的任意数据(用户代理,来源页面等)来决定是否设置Access-Control-Allow-Origin头部.作为请求的一部分,Origin头部的值表示请求的来源域,以便远程资源明确地识别XDR请求.</p>
+				<p>XDR对象的使用方法和XHR对象非常相似.也是创建一个XDomainRequest的实例,调用open()方法,再调用send()方法.但与XHR对象的open()方法不同,XDR对象的open()方法只接受两个参数:请求的类型和URL.</p>
+				<p>所有XDR请求都是异步执行的,不能用它来创建同步请求.请求返回之后,会触发load事件,响应的数据也会保存在responseText属性中,如下所示:</p>
 				
-				<pre>&lt;canvas id="drawing" width="200" height="200"&gt;A drawing of something.&lt;/canvas&gt;</pre>
-				<p class="help-block">也可以通过CSS为该元素添加样式,如果不添加任何样式或者不绘制任何图形,在页面中是看不到该元素的.</p>
+				<pre>
+var xdr=new XDomainRequest();
+xdr.onload=function(){
+	alert(xdr.responseText);
+};
+xdr.open("get","http://www.server.com/page/");
+xdr.send(null);</pre>
+				<p>在接收到响应后,你只能访问响应的原始文本;没有办法确定响应的状态代码.而且,只要响应有效就会触发load事件,如果失败(包括响应中缺少Access-Control-Allow-Origin头部)就会触发error事件.遗憾的是,除了错误本身之外,没有其他的信息可用,因此唯一能够确定的就只有请求未成功了.要检测错误,可以像下面这样指定一个onerror事件处理程序:</p>
+				<pre>
+xdr.onerror=function(){
+	alert("An error occurred.");
+}</pre>
+				<div class="alert alert-info">鉴于导致XDR请求失败的因素很多,因此建议你不要忘记通过onerror事件处理程序来捕获该事件;否则,即使请求失败也不会有任何提示.</div>
+				<p>在请求返回之前调用abort()方法可以终止请求:</p>
+				<pre>xdr.abort();		//终止请求</pre>
+				<p>与XHR一样,XDR对象也支持timeout属性以及ontimeout事件处理程序.</p>
+				<pre>
+//这个例子会在一秒钟之后超时,并随即调用ontimeout事件处理程序
+xdr.timeout=1000;
+xdr.ontimeout=function(){
+	alert("Request took too long.");
+}</pre>
+				<p>为支持POST请求,XDR对象提供了contentType属性,用来表示发送数据的格式.</p>
+				<pre>
+xdr.open("post","http://www.server.con/page/");
+xdr.contentType="application/x-www-form-urlencoded";
+xdr.send("name1=value1&name2=value2");</pre>
+				<p class="alert alert-info">这个属性是通过XDR对象影响头部信息的唯一方式.</p>
 			</section>
 
 			<section>
@@ -382,7 +416,7 @@ if(rotateClockDrawing.getContext){
 		var $bar=$('#bar');
 		var $copy=$('.copyBtn');
 		var $textarea=$('textarea');
-		$('body').scrollTop(5500);
+		//$('body').scrollTop(5500);
 
 		//CORS
 		/*function handleResponse(response){

@@ -104,6 +104,7 @@ function client(handles){
 						case ".html": contentType="text/html";break;
 						case ".js": contentType="text/javascript";break;
 						case ".css": contentType="text/css";break;
+						case ".txt": contentType="text";break;
 					}
 					//response.setHeader('Content-Type','text/html;charset=utf-8');
 					response.writeHead(200,{"Content-Type":contentType});

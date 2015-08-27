@@ -85,7 +85,7 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li onclick="iframeJump('jsSection/CORS/CORS.html');"><a href="#">CORS</a></li>
-							<li><a href="#">meta</a></li>
+							<li onclick="iframeJump('jsSection/AJAX/xhr.html');"><a href="#">XHR</a></li>
 						</ul>
 					</div>
 					<div class="btn-group" roloe="group">
@@ -146,7 +146,15 @@
 					element.attachEvent("on"+type,handler);
 				}
 			}
-		}		
+		}
+
+		var obj={
+			"name":"NICO",
+			"age":29
+		};
+		var str=JSON.stringify(obj);
+		console.log(new Date().toJSON());
+		console.log(obj.toString())
 	});
 </script>
 </body>
