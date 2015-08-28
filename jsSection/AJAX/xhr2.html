@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>XMLHttpRequest2级</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of XMLHttpRequest2级 in js." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		tr{text-align: center;}
+		textarea{width: 80%;min-height: 250px;}
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">JS</a></li>
+		<li><a href="#">AJAX</a></li>
+		<li class="active">XHR2级对象</li>
+	</ol>
+	<h1><strong>XMLHttpRequest2级</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>鉴于XHR已经得到广泛接受,成为了事实标准,W3C也着手制定相应的标准以规范其行为.XMLHttpRequest1级只是把已有的XHR对象的实现细节描述了出来.而XMLHttpRequest2级则进一步发展了XHR.并非所有的浏览器都完整的实现了XMLHttpRequest2级规范,但所有浏览器都实现了它规定的部分内容.</p>
+		</div>
+		<div class="panel-footer">
+			关于本章节XHR内容,主要参考于书籍<strong>&lt;&lt;JavaScript 高级程序设计(第3版)&gt;&gt;</strong>.
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">FormData:</div>
+		<div class="panel-body">
+			<ul class="list-inline">
+				<li><button type="button" class="btn btn-success"></button> = 支持</li>
+				<li><button type="button" class="btn btn-info"></button> = 部分支持</li>
+				<li><button type="button" class="btn btn-danger"></button> = 不支持</li>
+			</ul>
+			<table class="table table-bordered">
+					<tr>
+						<th>Browsers</th>
+						<th>IE</th>
+						<th>Firefox</th>
+						<th>Chrome</th>
+						<th>Safari</th>
+						<th>Opera</th>
+						<th>Android-webkit-</th>
+					</tr>
+					<tr>
+						<th >Basic support</th>
+						<td class="danger"></td>
+						<td class="success">4+</td>
+						<td class="success"></td>
+						<td class="success">5.0+</td>
+						<td class="danger"></td>
+						<td class="success">3+</td>
+					</tr>
+			</table>
+			<p>现代Web应用中频繁使用的一项功能就是表单数据的序列化,XMLHttpRequest2级为此定义了FormData类型.FormData为序列化表单以及创建与表单格式相同的数据(用于通过XHR传输)提供了便利.</p>
+			<pre>
+//创建一个FormData对象,并向其中添加了一些数据
+var data=new FormData();
+//append()函数接收两个参数:键-值对儿,分别对应表单字段的名字和字段中包含的值.
+data.append("name","Nicholas");
+
+//也可以直接用表单元素的数据预先向其中填入键值对儿.
+var data=new FormData(document.forms[0]);
+//创建了FormData的实例后,可以将它直接传给XHR的send()方法
+var xhr=createXHR();
+xhr.onreadystatechange=function(){
+	if(xhr.readyState=4){
+		if(xhr.status&gt;=200&&xhr.status&lt;300||xhr.status==304){
+			alert(xhr.responseText);
+		}else{
+			alert("Request was unsuccessful: "+xhr.status);
+		}
+	}
+};
+xhr.open("post","postexample.php",true);
+xhr.form=document.getElementById("user-info");
+xhr.send(new FormData(form));</pre>
+			<p class="alert alert-info">使用FormData的方便之处体现在不必明确地在XHR对象上请求头部.XHR对象能够识别传入的数据类型是FormData的实例,并配置适当的头部信息.</p>
+		</div>		
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">超时设定</div>
+		<div class="panel-body">
+			<ul class="list-inline">
+				<li><button type="button" class="btn btn-success"></button> = 支持</li>
+				<li><button type="button" class="btn btn-info"></button> = 部分支持</li>
+				<li><button type="button" class="btn btn-danger"></button> = 不支持</li>
+			</ul>
+			<table class="table table-bordered">
+					<tr>
+						<th>Browsers</th>
+						<th>IE</th>
+						<th>Firefox</th>
+						<th>Chrome</th>
+						<th>Safari</th>
+						<th>Opera</th>
+					</tr>
+					<tr>
+						<th >Basic support</th>
+						<td class="success">8+</td>
+						<td class="danger"></td>
+						<td class="danger"></td>
+						<td class="danger"></td>
+						<td class="danger"></td>
+					</tr>
+			</table>
+			<p>IE8为XHR对象添加了一个timeout属性,表示请求在等待响应多少毫秒之后就终止,在给timeout设置一个数值后,如果在规定的时间内浏览器还没有接收到响应,就会触发timeout事件,进而会调用ontimeout事件处理程序.这项功能后来被收入了XMLHttpRequest2级规范中了.</p>
+			<pre>
+xhr.onreadystatechange=function(){
+	if(xhr.readyState==4){
+		try{
+			if((xhr.status&gt;=200&&xhr.status&lt;300)||xhr.status==304){
+				alert(xhr.responseText);
+			}else{
+				alert("Request was unsuccessful: "+xhr.status);
+			}catch(ex){
+				ontimeout();		//假设由ontimeout事件处理程序处理
+			}
+		}
+	}
+};
+xhr.timeout=1000;		//将超时设置为1秒钟(仅适用于IE8+)
+xhr.ontimeout=function(){
+	alert("Request did not return in a second.");
+};</pre>
+			<p>本例中如果不使用try-catch块,也可以自动终止请求.但是如果在请求终止时,readyState状态变为4,则会调用onreadystatechange()事件处理程序,这时如果访问status属性,则会导致错误,为避免浏览器报告错误,可以使用try-catch块调用ontimeout()事件处理程序.</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">重写返回类型</div>
+		<div class="panel-body">
+			<ul class="list-inline">
+				<li><button type="button" class="btn btn-success"></button> = 支持</li>
+				<li><button type="button" class="btn btn-info"></button> = 部分支持</li>
+				<li><button type="button" class="btn btn-danger"></button> = 不支持</li>
+			</ul>
+			<table class="table table-bordered">
+					<tr>
+						<th>Browsers</th>
+						<th>IE</th>
+						<th>Firefox</th>
+						<th>Chrome</th>
+						<th>Safari</th>
+						<th>Opera</th>
+					</tr>
+					<tr>
+						<th >Basic support</th>
+						<td class="danger"></td>
+						<td class="success"></td>
+						<td class="success"></td>
+						<td class="success">4.0+</td>
+						<td class="danger"></td>
+					</tr>
+			</table>
+			<p>Firefox最早引入了overrideMimeType()方法,用于重写XHR响应的MIME类型.这个方法后来也被纳入了XMLHttpRequest2级规范.因为返回响应的MIME类型决定了XHR对象如何处理它,所以提供一种方法能够重写服务器返回的MIME类型是很有用的.</p>
+			<p>比如,服务器返回的MIME类型是text/plain.但数据中实际包含的是XML.根据MIME类型,即使数据是XML,responseXML属性中仍然是null.通过调用overrideMimeType()方法,可以保证把响应当做XML而非纯文本来处理.</p>
+			<pre>xhr.overrideMimeType("text/xml");</pre>
+			<p class="alert alert-info">调用overrideMimeType()必须在send()方法之前,才能保证重写响应的MIME类型.</p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

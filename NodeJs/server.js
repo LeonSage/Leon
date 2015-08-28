@@ -90,6 +90,10 @@ function client(handles){
 				response.end();
 				return;
 			}else{
+				fs.stat(filename,function(err,stats){
+					if(err) throw err;
+					console.log(stats);
+				})
 				fs.readFile(filename,'binary',function(err,file){
 					if(err){
 						console.error("Request for "+filename+" : 500 "+err);
