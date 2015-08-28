@@ -18,8 +18,8 @@
 		section{margin-bottom: 20px;}
 		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
 		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
-		.progress-border{height: 20px;width: 80%;background-color: rgba(150,150,150,0.3);border-radius: 2px;}
-		.progress-loaded{height: 100%;width: 80%;background-color: rgba(0,180,0,0.5);}
+		.progress-border{height: 20px;width: 80%;background-color: rgba(150,150,150,0.3);border-radius: 2px;overflow: hidden;margin: 20px 10px;}
+		.progress-loaded{height: 100%;width: 0%;background-color: rgba(0,180,0,0.5);text-align: center;}
 	</style>
 </head>
 <body>
@@ -120,10 +120,14 @@ xhr.onprogress=function(event){
 };</pre>
 			<p>为确保正常执行,必须在调用open()方法前添加onprogress事件处理程序.</p>
 		</div>
-	</div>
-	<textarea cols="" rows="15" class="Content-Type">
+	
+		<textarea cols="" rows="15" class="progress-code">
 //点击运行执行下面代码
-var xhr=new XMLHttpRequest();
+var xhr=new XMLHttpRequest()
+	,$progressLoaded=$('.progressLoaded')
+	,$progressBorder=$('.progressBorder')
+	,length
+	,percentage;
 xhr.onload=function(){
 	if(xhr.status&gt;=200&&xhr.status&lt;300||xhr.status==304){
 		alert(xhr.responseText);
@@ -132,19 +136,23 @@ xhr.onload=function(){
 	}
 };
 xhr.onprogress=function(event){
-	var length=xhr.getResponseHeader("Content-Length");
-	document.title=event.loaded+event.total;
-	$('#progress').text(length);
+	length=xhr.getResponseHeader("Content-Length");
+	percentage=event.loaded/length;
+	percentage>1.0?1.0:percentage;
+	$progressLoaded.width(pencentage*$progressBorder.width());
+	percentage=parseInt(percentage*100);
+	percentage>100?100:percentage;
+	$progressLoaded.text(percentage+"%");
 }
 xhr.open("get","../../someJson.txt",true);
 xhr.send(null);
-//alert(parseInt("1223")/parseInt("2008"));
-			</textarea>
-			<button class="btn btn-primary run">运行</button>
-			<button class="btn btn-primary copy"><abbr title="当前只有IE可用">复制</abbr></button>
-	<div class="progress-border"><div class="progress-loaded"></div></div>
-	<button class="btn btn-primary static-progress">启动进度条</button>
-	
+		</textarea>
+		<button class="btn btn-primary copy"><abbr title="当前只有IE可用">复制</abbr></button>
+		<div></div>
+		<div class="progress-border"><div class="progress-loaded">0%</div></div>
+		<button class="btn btn-primary download-progress">下载进度条</button>
+		<button class="btn btn-info static-progress">模拟进度条</button>
+	</div>
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
@@ -155,29 +163,27 @@ xhr.send(null);
 			,$progressLoaded=$('.progress-loaded')
 			,$progressBorder=$('.progress-border')
 			,$staticProgress=$('.static-progress')
+			,$downloadProgress=$('.download-progress')
 			,progressTimer
 			,percentage;
 		function progress(){
 			percentage=$progressLoaded.width()/$progressBorder.width();
 			var random=Math.random()/10+percentage;	
 			random>=1.0?1.0:random;
-			console.log(random);
 			$progressLoaded.width(random*$progressBorder.width());
 			percentage=parseInt(random*100);
 			percentage=percentage>100?100:percentage;
 			$progressLoaded.text(percentage+"%");
-			if(parseInt(percentage)<=100){
+			if(parseInt(percentage)<100){
 				progressTimer=setTimeout(progress,1000);
 			}else{
 				clearTimeout(progressTimer);
-			}
-			
+			}			
 		}
 		$staticProgress.on("click",progress);
-		//当点击运行时获取文件内容
-		$('.run').on('click',function(){
-			eval($('.Content-Type').val());
-		})
+		$downloadProgress.on("click",function(){
+			eval($('.progress-code').val());
+		});
 		$copy.on('click',function(){
 			$textarea.select();			
 			//alert("Done?"+$textarea.val().substring($textarea.selectionStart,$textarea.selectionEnd));
