@@ -110,7 +110,7 @@ var xhr=new XMLHttpRequest();
 xhr.onreadystatechange=function(){
 	if(xhr.readyState==4){
 		if((xhr.status&gt;=200&&xhr.status&lt;300||xhr.status==304)){
-			//可以在控制台看到输出的内容
+			//可以在控制台看到输出的内容 
 			console.log(xhr.responseText);
 			var myHeader=xhr.getAllResponseHeaders();
 			//当修改为请求不同后缀的文件时,可以看到Content-Type值的变化.

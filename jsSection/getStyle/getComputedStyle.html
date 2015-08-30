@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title> js获取当前样式</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of current style and its'value in js." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		tr{text-align: center;}
+		textarea{width: 80%;min-height: 250px;}
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+		.computedStyle{width: 80%;margin-left: 10%;height: auto;margin-bottom: 20px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">JS</a></li>
+		<li><a href="#">getStyle</a></li>
+		<li class="active">获取当前样式</li>
+	</ol>
+	<h1><strong>获取当前样式</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<div id="progress"></div>
+			<p>上图中HTML DOM Element的属性和方法(其中高度,宽度,左右,上下只写一种):</p>
+			<img src="../../images/computedStyle.bmp" class="computedStyle" />
+			<ul class="dl-horizontal">
+				<dt><code>element.style : </code></dt>
+				<dd><pre>设置或返回元素的style属性.</pre></dd>
+				<dt><code>element.clientWidth : </code></dt>
+				<dd><pre>返回元素的可见宽度.</pre></dd>
+				<dt><code>element.scrollHeight : </code></dt>
+				<dd><pre>返回元素的整体高度.</pre></dd>
+				<dt><code>element.scrollLeft : </code></dt>
+				<dd><pre>返回元素左边缘与视图之间的距离.</pre></dd>
+				<dt><code>element.offsetParent : </code></dt>
+				<dd><pre>返回元素的偏移容器.</pre></dd>
+				<dt><code>element.offsetWidth : </code></dt>
+				<dd><pre>返回元素的宽度.</pre></dd>
+				<dt><code>element.offsetLeft : </code></dt>
+				<dd><pre>返回元素的水平偏移位置.</pre></dd>				
+				<dt><code>window.screenTop : </code></dt>
+				<dd><pre>网页正文部分上.</pre></dd>
+				<dt><code>window.screen.height : </code></dt>
+				<dd><pre>屏幕分辨率的高.</pre></dd>
+				<dt><code>window.screen.availHeight : </code></dt>
+				<dd><pre>屏幕可用工作区的高度.</pre></dd>				
+				<dt><code>event.clientX : </code></dt>
+				<dd><pre>相对文档的水平坐标.</pre></dd>
+				<dt><code>event.offsetX : </code></dt>
+				<dd><pre>相对容器的水平坐标.</pre></dd>
+			</ul>
+		</div>
+		<div class="panel-footer">
+			<p>内容参考自<a href="http://www.w3school.com.cn/jsref/dom_obj_all.asp">W3CSchool标准手册</a></p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">获取当前样式:</div>
+		<div class="panel-body">			
+			<p>通过element.style.width;,但是它只能获取DOM元素style属性里的样式规则,通过class属性引用的外部样式表就获取不到了.</p>
+			<p>DOM标准里有个全局方法getComputedStyle,可以获取到元素的样式信息.</p>
+			<pre>window.getComputedStyle(obj,null).width;</pre>
+			<p>但是IE不支持,它有一个自己的实现方法叫做currentStyle,它是作为DOM元素属性存在的.</p>
+			<pre>element.currentStyle('width');</pre>
+			<p class="alert alert-info">如果要获取当前对象的颜色信息,IE返回的是16进制的,而Firefox返回的是rgb()格式的.</p>
+		</div>	
+		
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

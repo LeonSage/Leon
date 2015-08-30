@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta name="author" content="Leon">
+	<meta name="description" content="">
+	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<!-- <meta http-equiv="Refresh" content="10;url=index.html" /> -->
+	<link rel="shotcut icon" type="image/x-icon" href="./images/leon.ico">
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
+	<title>算法 </title>
+	<style type="text/css">
+		html{height: 100%;}
+		body{height: 100%;overflow:hidden;}
+		#box{min-height: 600px;height:100%;}
+		.navbar-header img{width: 40px;height: auto;margin-top: -10px;}
+		#content{height: 90%;border: 0px;min-height: 250px;}
+		.content{scroll-x:none;height: 100%;}
+	</style>
+</head>
+<script src="js/initialize.js"></script>
+<body>
+	<div class="container" id="box">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="#" class="navbar-brand"><img src="images/leon.png" alt="Brand"></a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="index.html">首页 <span class="sr-only">(Current)</span></a></li>
+						<li><a href="resume.html">简历</a></li>
+						<li><a href="LeonShop.html">Leon购物</a></li>
+						<li><a href="learn.html">前端技能</a></li>
+						<li class="active"><a href="algorithm.html">算法</a></li>
+						<!-- <li><a href="NodeJsLearn.html">NodeJs学习</a></li> -->	
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="ture" aria-expanded="false">实例展示<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="demo/scrollWindow.html">视频滚动窗口</a></li>
+								<li><a href="demo/form.html">表单功能</a></li>
+								<li><a href="demo/AJAX.html">AJAX</a></li>
+								<li><a href="demo/plugins.html">jQuery插件的编写</a></li>
+							</ul>
+						</li>
+						
+					</ul>
+					<p class="nav navbar-nav navbar-right navbar-text">Leon的生活</p>					
+				</div>			
+			</div>
+		</nav>
+		<div class="container content">
+			<div id="index" class="col-lg-2">
+				<ul class="nav nav-pills">
+					<li role="presentation" class="active" onclick="iframeJump('algorithm/merge-sort.html');"><a href="#">分治排序</a></li>
+					<li role="presentation"><a href="#">0-1背包</a></li>
+					<li role="presentation"><a href="#">最短路径</a></li>
+				</ul>
+			</div>
+			<iframe src="algorithm/merge-sort.html" id="content" class="col-lg-10"></iframe>
+		</div>
+	</div>
+<script src="js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	var iframeJump=function(url){
+		//兼容360极速和IE8+
+		if(window.parent.frames['content'].location){
+			window.parent.frames['content'].location.href=url;
+		}else{
+			//兼容Firefox和Chrome
+			window.parent.frames['content'].src=url;
+		}
+	}
+	$(document).ready(function(){
+		var EventUtil={
+			addHandler:function(element,type,handler){
+				if(element.addEventListener){
+					element.addEventListener(type,handler,false);
+				}else{
+					element.attachEvent("on"+type,handler);
+				}
+			}
+		}
+	});
+</script>
+</body>
+</html>

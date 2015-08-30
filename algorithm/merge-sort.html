@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>归并排序 </title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of merge-sort in algorithm." />
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		tr{text-align: center;}
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+		.sort-btn{margin: 10px;float: right;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">算法</a></li>
+		<li class="active">归并排序</li>
+	</ol>
+	<h1><strong>merge-sort</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">分治法:</div>
+		<div class="panel-body">
+			<p>许多有用的算法在结构上是递归的:为了解决一个给定的问题,算法一次或多次递归地调用其自身以解决紧密相关的若干子问题.这些算法典型地遵循分治法的思想:将原问题分解为几个规模较小但类似于原问题的子问题,递归地求解这些子问题,然后再合并这些子问题的接来建立原问题的解.</p>
+			<p>分治模式在每层递归时都有三个步骤:</p>
+			<ul>
+				<li><strong>分解</strong>原问题为若干子问题,这些子问题是原问题的规模较小的实例.</li>
+				<li><strong>解决</strong>这些子问题,递归地求解各子问题.然而,若子问题的规模足够小,则直接求解.</li>
+				<li><strong>合并</strong>这些子问题的解成原问题的解.</li>
+			</ul>
+		</div>
+		<div class="panel-footer">
+			关于本章节分治思想的内容,主要参考于书籍<strong>&lt;&lt;算法导论(原书第3版)&gt;&gt;</strong>.
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			归并排序
+		</div>
+		<div class="panel-body">
+			<p>归并排序算法完全遵循分治模式.直观上其操作如下:</p>
+			<ul>
+				<li><strong>分解</strong>待排序的n个元素的序列形成各具n/2个元素的两个子序列.</li>
+				<li><strong>解决</strong>使用归并排序递归地排序两个子序列.</li>
+				<li><strong>合并</strong>两个已经排序的子序列以产生已排序的答案.</li>
+			</ul>
+			<p>当待排序的序列长度为1时,递归开始回溯,在这种情况下不用做任何工作,因为长度为1的每个序列都已排好序.</p>
+			<p>归并排序算法的关键操作是合并步骤中两个已经排序序列的合并.我们通过调用一个辅助过程merge(Array,start,middle,end)来完成合并,其中Array是一个数组,start,middle,end是数组下标,满足start&lt;=middle&lt;end.该过程假设子数组Array[start ~ middle]和Array[middle+1 ~ end]都已经排好序.它合并这两个子数组形成单一的已排好序的子数组并代替当前的子数组Array[start ~ end].</p>
+			<p>过程merge需要Θ(n)的时间,其中n=end-start+1是待合并元素的个数.它将两个数组的末尾添加一张哨兵牌,它包含一个特殊的值,用于简化代码,这里使用∞作为哨兵值.然后将数组的首项进行比较,将更小项移入输出数组,持续比较直至所有的元素移到输出数组.</p>
+			<p>现在我们可以把过程merge作为归并排序算法中的一个子程序来用,而merge-sort(Array,start,end)排序子数组Array[start ~ end]中的元素.若start&gt;=end,则该数组最多有一个元素,所以已经拍好序.否则,分解步骤简单地计算一个下标Middle,将其分成大致相等的两个数组进行递归.</p>
+			<pre class="sortFunc">
+//归并排序算法实现--javascript
+//合并函数负责自下向上的进行合并并组成已排序数组.
+function merge(array,left,middle,right){
+	//将数组均分为两个子数组
+	var leftArray=new Array();
+	var rightArray=new Array();
+	for(var i=left;i&lt;=middle;i++){
+		leftArray.push(array[i]);
+	}
+	for(var i=middle+1;i&lt;=right;i++){
+		rightArray.push(array[i]);
+	}
+	//并将数组末尾添加哨兵(即无限大)
+	leftArray.push(Infinity);
+	rightArray.push(Infinity);
+	//迭代将数组最顶层元素比较并将较小者移入数组
+	for(var i=0,j=0,k=left;k&lt;=right;k++){
+		if(leftArray[i]&lt;=rightArray[j]){
+			array[k]=leftArray[i++];
+		}else{
+			array[k]=rightArray[j++];
+		}
+	}
+}
+//归并排序采取先分后治的方法,即分治法
+function mergeSort(num,left,right){		
+	if(left&lt;right){
+		//将数组均分为两个子数组
+		var middle=Math.floor((left+right)/2);
+		mergeSort(num,left,middle);
+		mergeSort(num,middle+1,right);
+		//当分解为最小时,开始向上归并
+		merge(num,left,middle,right);	
+	}
+}</pre>
+			<label for="sortArray" class="control-label">待排序数组(可修改):</label>
+			<input type="text" id="sortArray" class="form-control" value="1,5,9,6,3,5,7,2,4,8,6,100,75" />
+			<button type="button" class="btn btn-primary sort-btn">排序</button>
+			<input type="text" id="sortedArray" class="form-control" placeholder="这里将显示排序后数组" />
+		</div>
+	</div>
+<script src="../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var $sortBtn=$('.sort-btn')
+			,$text=$('#sortArray')
+			,$sortFunc=$('.sortFunc')
+			,$sortedArray=$('#sortedArray');
+		$sortBtn.on("click",function(){
+			var sortArray=$text.val().split(",")
+				,i=0;
+			while(i<sortArray.length){
+				sortArray[i]=parseFloat(sortArray[i]);
+				i++;
+			}
+			eval($sortFunc.text());
+			mergeSort(sortArray,0,sortArray.length-1);
+			$sortedArray.val(sortArray.toString());
+		});
+	});
+</script>
+</body>
+</html>
