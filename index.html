@@ -64,19 +64,25 @@
 	$(function(){
 		var $cors=$('.cors');
 		$cors.on('click',function(){
+			/*var xdr=new XDomainRequest();
+			xdr.onload=function(){
+				alert(xdr.responseText);
+			};
+			xdr.onerror=function(){
+				alert("An error occured.");
+			};
+			xdr.open('get',"http://localhost:1337/../someJson.txt");
+			xdr.send(null);*/
 			var xhr=new XMLHttpRequest();
-			xhr.onreadystatechange=function(){
-				if(xhr.readyState==4){
-					if(xhr.status>=200&&xhr.status<300||xhr.status==304){
-						console.log(xhr.responseText);
-					}else{
-						console.log("Request was unsuccessful: "+xhr.status);
-					}
+			xhr.onload=function(){
+				if(xhr.status>=200&xhr.status<300||xhr.status==304){
+					alert(xhr.responseText);
+				}else{
+					alert("Request was unsuccessful: "+xhr.status);
 				}
-			}
-			xhr.open("get","../someJson.txt",true);
+			};
+			xhr.open("get","http://localhost:1337/../someJson.txt",true);
 			xhr.send(null);
-			
 		})
 	})	
 </script>

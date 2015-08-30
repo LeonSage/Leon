@@ -78,6 +78,7 @@
 							<li onclick="iframeJump('cssSection/box-shadow.html');"><a href="#">box-shadow</a></li>
 							<li onclick="iframeJump('cssSection/border/border-image.html');"><a href="#">border-image</a></li>
 							<li onclick="iframeJump('cssSection/transform/transform.html');"><a href="#">transform</a></li>
+							<li onclick="iframeJump('cssSection/layout/height.html');"><a href="#">百分比高度</a></li>
 						</ul>
 					</div>
 					<div class="btn-group" roloe="group">
@@ -137,9 +138,6 @@
 			window.parent.frames['content'].src=url;
 		}
 	}
-	function handleResponse(response){
-		alert("You`re at IP address "+response.ip+" ,which is in "+response.city+" , "+response.region_name);
-	}
 	$(document).ready(function(){
 		var EventUtil={
 			addHandler:function(element,type,handler){
@@ -150,14 +148,6 @@
 				}
 			}
 		}
-
-		var obj={
-			"name":"NICO",
-			"age":29
-		};
-		var str=JSON.stringify(obj);
-		console.log(new Date().toJSON());
-		console.log(obj.toString())
 	});
 </script>
 </body>

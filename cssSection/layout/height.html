@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title> 如何让height:100%起作用</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of height:100% in the layout of css." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		tr{text-align: center;}
+		textarea{width: 80%;min-height: 250px;}
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+		.height{width:80%;background-color:rgba(0,180,50,0.5);}
+		.pixel-height{height:40px;}
+		.percent-height-outer{height: 100px;}
+		.percent-height{height: 50%;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">CSS</a></li>
+		<li><a href="#">layout</a></li>
+		<li class="active">height:100%</li>
+	</ol>
+	<h1><strong>height:100%;</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<div id="progress"></div>
+			<p>当我们设置一个页面元素的高度为100%时,期望元素能够撑满整个浏览器的窗口,但大多数情况下这样做却没有任何效果.下面让我们来看一下height:100%;不起作用的原因</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">height属性</div>
+		<div class="panel-body">
+			<p>当我们CSS定义一个元素的高度时,它应该按照设定在浏览器的纵向高度上扩展相应的距离.</p>
+			<pre>.pixel-height{height:40px;}</pre>
+			<div class="height pixel-height">高度为固定40px的元素.</div>
+			<p>根据W3C的规范,百分比的高度在设定时需要根据这个元素的父元素容器的高度.所以当我们设定height:50%;时,而他的父元素高度为100px,那么这个元素的高度应该是50px;</p>
+			<pre>.percent-height{height:50%;}</pre>
+			<div class="height percent-height-outer">
+				<p>这是外层父元素,高度为100px;</p>
+				<div class="height percent-height"><p>这是高度设置为50%的子元素.</p></div>
+			</div>
+			<p>当设计一个元素时,你会在里面放置一个div元素,设置高度和宽度均为100%,那么这个元素的宽度会立刻铺满屏幕,那么高度会吗?</p>
+			<p>答案是:No!</p>
+			<p>Web浏览器在计算有效宽度时会考虑到浏览器的打开宽度.如果不给当前宽度设置任何的缺省值,那么浏览器会自动将页面平铺填满整个横向宽度.但高度是完全不一样的,事实上,浏览器根本就不计算内容的高度,除非内容超过了视口范围(导致滚动条出现),或者你设置了一个固定高度.否则浏览器就会将内容向下堆砌,而不考虑页面高度.</p>
+			<p>因为页面并没有缺省的高度值,所以当一个元素的高度设置为百分比高度时,无法获取父元素的高度,也就无法计算自己的高度值.换句话说,父元素高度的缺省值为height:auto;当你要求浏览器根据这样的一个缺省值来计算百分比高度时,只能得到undefined的结果,也就是null值,这就是浏览器不会对此有任何反应的原因.</p>
+			<p>如果想要一个元素的height:100%;起作用,你需要给这个元素的父元素设定一个有效值.</p>
+			<pre>
+&lt;html&gt;
+	&lt;body&gt;
+		&lt;div style="height:100%;"&gt;
+			我们想让这个div的高度为整个浏览器屏幕.
+		&lt;/div&gt;
+	&lt;/body&gt;
+&lt;/body&gt;</pre>
+			<p>现在这个div有两层父元素html和body,为了让百分比高度起作用,你必须设定父元素的高度也为100%;然后你就会发现height:100%;起作用了.</p>
+			<p class="alert alert-info">margin和padding会让你的页面出现滚动条,这也许并不是你希望的.<br />如果你的元素实际高度大于你设定的百分比高度,那么元素的高度会自动扩展.</p>
+		</div>		
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

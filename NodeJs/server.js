@@ -63,7 +63,7 @@ function start(handles){
 						case ".css": contentType="text/css";break;
 					}
 					//response.setHeader('Content-Type','text/html;charset=utf-8');
-					response.writeHead(200,{"Content-Type":contentType});
+					response.writeHead(200,{"Content-Type":contentType,"Access-Control-Allow-Origin":"http://localhost:1338"});
 					response.write(file,"binary");
 					response.end();
 					console.log("Request for "+filename+" : 200 OK.");
@@ -90,14 +90,15 @@ function client(handles){
 				response.end();
 				return;
 			}else{
-				fs.stat(filename,function(err,stats){
+				//输出文件的状态信息
+				/*fs.stat(filename,function(err,stats){
 					if(err) throw err;
 					console.log(stats);
-				})
+				})*/
 				fs.readFile(filename,'binary',function(err,file){
 					if(err){
 						console.error("Request for "+filename+" : 500 "+err);
-						response.writeHead(500,{"Content-Type":"text/plain"});
+						response.writeHead(500,{"Content-Type":"text/plain","Access-Control-Allow-Origin":"http://localhost:1338/"});
 						response.write(err);
 						response.end();
 						return;
