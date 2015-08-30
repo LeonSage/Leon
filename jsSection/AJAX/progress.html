@@ -124,8 +124,8 @@ xhr.onprogress=function(event){
 		<textarea cols="" rows="15" class="progress-code">
 //点击运行执行下面代码
 var xhr=new XMLHttpRequest()
-	,$progressLoaded=$('.progressLoaded')
-	,$progressBorder=$('.progressBorder')
+	,$progressLoaded=$('.progress-loaded')
+	,$progressBorder=$('.progress-border')
 	,length
 	,percentage;
 xhr.onload=function(){
@@ -139,17 +139,17 @@ xhr.onprogress=function(event){
 	length=xhr.getResponseHeader("Content-Length");
 	percentage=event.loaded/length;
 	percentage>1.0?1.0:percentage;
-	$progressLoaded.width(pencentage*$progressBorder.width());
+	$progressLoaded.width(percentage*$progressBorder.width());
 	percentage=parseInt(percentage*100);
 	percentage>100?100:percentage;
 	$progressLoaded.text(percentage+"%");
 }
-xhr.open("get","../../someJson.txt",true);
+xhr.open("get","../../english.zip",true);
 xhr.send(null);
 		</textarea>
 		<button class="btn btn-primary copy"><abbr title="当前只有IE可用">复制</abbr></button>
 		<div></div>
-		<div class="progress-border"><div class="progress-loaded">0%</div></div>
+		<div class="progress-border" id="border"><div class="progress-loaded" id="loaded">0%</div></div>
 		<!-- 如何让别人下载服务上的东西而不只是XHR获取? -->
 		<div class="alert alert-info">这个地方会下载一个6M的文件,可以详细的看到下载进度条的实现,如果因为流量的限制或者网速过慢,可以点击模拟进度条的按钮来本地模拟进度条效果,而不用下载资源文件.</div>
 		<button class="btn btn-primary download-progress">下载进度条</button>
@@ -161,14 +161,14 @@ xhr.send(null);
 	$(function(){
 		var $copy=$('.copyBtn')
 			,$copy=$('.copy')
-			,$textarea=$('textarea')
+			,$progressCode=$('.progress-code')
 			,$progressLoaded=$('.progress-loaded')
 			,$progressBorder=$('.progress-border')
 			,$staticProgress=$('.static-progress')
 			,$downloadProgress=$('.download-progress')
 			,progressTimer
 			,percentage;
-		function progress(){
+		function progress(){			
 			percentage=$progressLoaded.width()/$progressBorder.width();
 			var random=Math.random()/10+percentage;	
 			random>=1.0?1.0:random;
@@ -182,9 +182,13 @@ xhr.send(null);
 				clearTimeout(progressTimer);
 			}			
 		}
-		$staticProgress.on("click",progress);
+		$staticProgress.on("click",function(){
+			$progressLoaded.width("0px");
+			progress();
+		});
 		$downloadProgress.on("click",function(){
-			eval($('.progress-code').val());
+			$progressLoaded.width("0px");
+			eval($progressCode.val());
 		});
 		$copy.on('click',function(){
 			$textarea.select();			
