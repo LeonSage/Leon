@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>下载文件 </title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of download files with js." />
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		pre{overflow-x:hidden; }
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+		iframe{width: 100%;height: 250px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">JS</a></li>
+		<li><a href="#">download</a></li>
+		<li class="active">下载文件</li>
+	</ol>
+	<h1><strong>下载文件</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>如果在网上有需要下载的附件的话,可以直接使用window.open()来进行下载文件.</p>
+			<pre>window.open("../english.zip")</pre>
+			<p>这样会直接弹出下载界面,还可以选择自己保存的路径.</p>
+			<button class="btn btn-primary" onclick="window.open('../english.zip');">下载一个6M文件</button>
+			<p>window.open()下载文件的原理是将文件打开,如果是.html,.txt格式的就会在页面中直接打开,如果不能,就会自动选择下载.</p>
+		</div>
+		<div class="panel-footer">
+			关于本章节window.open()内容,主要参考于书籍<strong>&lt;&lt;JavaScript 高级程序设计(第3版)&gt;&gt;</strong>.
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			导航和打开窗口
+		</div>
+		<div class="panel-body">
+			<p>使用window.popen()方法既可以导航到一个特定的URL,也可以打开一个新的浏览器窗口.这个方法接收4个参数:要加载的URL,窗口目标,一个特性字符串以及一个表示新页面是否取代浏览器历史记录中当前加载页面的布尔值.通常只需传递第一个参数,最后一个参数只在不打开新窗口的情况下使用.</p>
+			<p>如果为window.open()传递了第二个参数,而且该参数是已有窗口或框架的名称,那么就会在具有该名称的窗口或框架中加载第一个参数指定的URL.</p>
+			<pre>
+//在新的页面中打开主页
+window.open("../index.html");
+
+//在框架iframe中打开主页
+//等同于&lt;a href="../index.html" target="indexFrame"&gt;&lt;/a&gt;
+window.open("../index.html","topFrame");
+
+//在一个未定义的iframe中打开主页
+window.open("../index.html","undefinedIframe");</pre>
+			<p>调用这行代码,就如同用户单击了href属性为http://www.wrox.com/,target属性为"topFrame"的链接.如果有一个名叫"topFrame"的窗口或者框架,就会在该窗口或框架加载这个URL;否则,就会创建一个新窗口并将其命名为"topFrame".此外,第二个参数也可以是下列任何一个特殊的窗口名称:_self,_parent,_top或_blank.</p>
+			<iframe src="../resume.html" name="frame"></iframe>
+			<button class="btn btn-primary open-iframe">在框架中打开</button>
+			<button class="btn btn-primary open-in-window">在未定义框架中打开新窗口</button>			
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			弹出窗口
+		</div>
+		<div class="panel-body">
+			<p>如果给window.open()传递的第二个参数并不是一个已经存在的窗口或框架,那么该方法就会根据在第三个参数位置上传入的字符串创建一个新窗口或新标签页.如果没有传入第三个参数,那么就会打开一个带有默认设置(工具栏,地址栏和状态栏等)的新浏览器窗口(或者打开一个新标签页--根据浏览器设置选项).在不打开新窗口的情况下,会忽略第三个参数.</p>
+			<p>在第三个参数是一个逗号分割的设置字符串,表示在新窗口中都显示哪些特性.下表列出了可以出现在这个字符串中的设置选项.</p>
+			<table class="table table-bordered table-striped">
+				<tr class="success">
+					<th>设置</th>
+					<th>值</th>
+					<th>说明</th>
+				</tr>
+				<tr>
+					<td>fullscreen</td>
+					<td>yes或no</td>
+					<td>表示浏览器窗口是否最大化.仅限IE</td>
+				</tr>
+				<tr>
+					<td>height&&width</td>
+					<td>数值</td>
+					<td>表示新窗口的高度和宽度,不能小于100.</td>
+				</tr>
+				<tr>
+					<td>left&&top</td>
+					<td>数值</td>
+					<td>表示新窗口的左坐标和上坐标,不能是负值.</td>
+				</tr>
+				<tr>
+					<td>location</td>
+					<td>yes或no</td>
+					<td>表示是否在浏览器窗口中显示地址栏(不同浏览器缺省值不同).</td>
+				</tr>
+				<tr>
+					<td>menubar</td>
+					<td>yes或no</td>
+					<td>表示是否在浏览器窗口中显示菜单栏(默认为no).</td>
+				</tr>
+				<tr>
+					<td>resizeable</td>
+					<td>yes或no</td>
+					<td>表示是否可以通过拖动浏览器的边框改变其大小(默认为no).</td>
+				</tr>
+				<tr>
+					<td>scrollbars</td>
+					<td>yes或no</td>
+					<td>表示如果内容在视口中显示不下,是否允许滚动(默认为no).</td>
+				</tr>
+				<tr>
+					<td>status</td>
+					<td>yes或no</td>
+					<td>表示是否在浏览器窗口中显示状态栏(默认为no).</td>
+				</tr>
+				<tr>
+					<td>toolbar</td>
+					<td>yes或no</td>
+					<td>表示是否在浏览器窗口中显示工具栏(默认为no).</td>
+				</tr>
+			</table>
+			<p>表中所列的部分或全部设置选项,都可以通过逗号分割的名值对列表来指定.其中,名值对以等号表示(注意,整个特性字符串中不允许出现空格).</p>
+			<pre>
+window.open("../index.html","undefined-iframe","height=400,width=400,top=10,left=10,resizable=yes");</pre>
+			<p>window.open()方法会返回一个指向新窗口的引用.引用的对象与其他window对象大致相似,但我们可以对其进行更多控制.例如,有些浏览器在默认情况下可能不允许我们针对主流览器窗口调整大小或移动位置,但却允许我们针对通过window.open()创建的窗口调整大小或移动位置.通过这个返回的对象,可以像操作其他窗口一样操作新打开的窗口.</p>
+			<pre>
+var indexWin=window.open('../index.html',"undefined-iframe","height=400,width=400,top=10,left=10,resizeable=yes");
+indexWin.resizeTo(500,500);
+indexWin.moveTo(100,100);
+//调用close()方法还可以关闭新打开的窗口.
+indexWin.close();</pre>
+			<p>colse()方法仅适用于通过window.open()打开的弹出窗口.对于浏览器的主窗口,如果没有得到用户的允许是不能关闭它的.不过,弹出窗口倒是可以调用top.close()在不经用户允许的情况下关闭自己.弹出窗口关闭后,窗口的引用依然还在,但除了检测其closed属性之外,已经没有其他用处了.</p>
+			<pre>console.log(indexWin.closed);	//true</pre>
+			<p>新创建的window对象有一个opener属性,其中保存着打开它的原始窗口对象.这个属性只在弹出窗口的最外层window对象(top)中有定义,而且指向调用window.open()的窗口或框架.</p>
+			<pre>console.log(indexFrame.opener==window);	//true</pre>
+			<button class="btn btn-primary" id="alert-undefined-window">弹出窗口</button>
+			<button class="btn btn-primary" id="resize-undefined-window">调整窗口大小和位置</button>
+			<button class="btn btn-primary" id="confirm-undefined-window">确定窗口引用</button>
+			<button class="btn btn-primary" id="close-undefined-window">关闭窗口</button>
+			<p>虽然弹出窗口中有一个指针指向打开它的原始窗口,但原始窗口中并没有这样的指针指向弹出窗口.窗口并不跟踪记录他们打开的弹出窗口,因此我们只能在必要的时候自己来手动实现跟踪.</p>
+			<p>虽然有些浏览器(如IE8和Chrome)会在独立的进程中运行每个标签页.当一个标签页打开另一个标签页时,如果两个window对象之间需要彼此通信,那么新标签页就不能运行在独立的进程中.在Chrome中,将新创建的标签页的opener属性设置为null,即表示在单独的进程中运行新的标签页.</p>
+			<pre>indexWin.opener=null;</pre>
+			<p class="alert alert-info">将opener属性设置为null就是告诉浏览器新创建的标签页不需要与打开它的标签页通信,因此可以在独立的进程中运行.标签页之间的联系一旦切断,将没有办法恢复.</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			安全限制
+		</div>
+		<div class="panel-body">
+			<p>曾经有一段时间,广告商在网上使用弹出窗口达到了肆无忌惮的程度.他们经常把窗口打扮成系统对话框的样子,引诱用户去点击其中的广告.由于看起来像系统对话框,一般用户很难分辨是真是假.为了解决这个问题,有些浏览器开始在弹出窗口配置方面增加限制.</p>
+			<p>Windows XP SP2中的IE6对弹出窗口施加了多方面的安全限制,包括不允许在屏幕之外创建弹出窗口,不允许将弹出窗口移动到屏幕以外,不允许关闭状态栏等.IE7则增加了更多的安全限制,如不允许关闭地址栏,默认情况下不允许移动窗口或调整其大小.Firefox1从一开始就不支持修改状态栏,因此无论给window.open()传入什么样的特性字符串,弹出窗口中都会无一例外的显示状态栏.后来的Firefox3又强制始终在弹出窗口中显示地址栏.Opera只会在主流览器窗口中打开弹出窗口,但不允许他们出现在可能与系统对话框混淆的地方.</p>
+			<p>此外,有的浏览器只根据用户操作来创建弹出窗口,这样一来,在页面尚未加载完成时调用window.open()的语句根本就不会执行,而且还可能将错误消息显示给用户.换句话说,只能通过单击或者击键来打开弹出窗口.</p>
+			<p>对于那些不是用户有意打开的弹出窗口,Chrome采取了不同的处理方式.它不会像其他浏览器那样简单的屏蔽这些弹出窗口,而是只显示他们的标题栏,并把他们放在浏览器的右下角.</p>
+			<p class="alert alert-info">在打开计算机本地中的网页时,IE会解除对弹出窗口的某些限制.但在服务器上执行这些代码时会受到对弹出窗口的限制.</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			弹出窗口屏蔽程序
+		</div>
+		<div class="panel-body">
+			<p>大多数浏览器都内置有弹出窗口屏蔽程序,而没有内置此类程序的浏览器,也可以安装Yahoo! Toolbar等带有内置屏蔽程序的实用工具.结果就是用户可以将绝大多数不想看到弹出窗口屏蔽掉.于是,在弹出窗口被屏蔽时,就应该考虑两种可能性.如果是浏览器内置的屏蔽程序阻止的弹出窗口,那么window.open()很可能会返回null.此时,只要检测这个返回的值就可以确定弹出窗口是否被屏蔽了.</p>
+			<pre>
+var indexWin=window.open("../index.html","_blank");
+if(indexWin==null){
+	alert('The popup was blocked!');
+}</pre>
+			<p>如果是浏览器扩展或其他程序阻止的弹出窗口,那么window.open()通常会抛出一个错误.因此,要想准确地检测出弹出窗口是否被屏蔽,必须在检测返回值的同时,对window.open()的调用封装在一个try-catch块中.</p>
+			<pre>
+//通用检测调用window.open()打开的弹出窗口是否被屏蔽
+var blocked=false;
+try{
+	var indexWin=window.open("../index.html","_blank");
+	if(indexWin==null){
+	    blocked=true;
+	}
+}catch(ex){
+	blocked=true;
+}
+if(blocked){
+	alert("The popup was blocked!");
+}</pre>
+			<p class="alert alert-info">要注意的是,检测弹出窗口是否被屏蔽只是一方面,它并不会阻止浏览器显示与被屏蔽窗口有关的消息.</p>
+		</div>
+	</div>
+<script src="../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		//在框架中打开主页
+		var $openIframe=$('.open-iframe');
+		$openIframe.on("click",function(){
+			window.open("../index.html","frame");
+		})
+		//在新的页面中打开主页
+		var $openInWindow=$('.open-in-window');
+		$openInWindow.on("click",function(){
+			window.open("../index.html","undefinedIframe");
+		})
+		//对未定义的窗口进行参数操作
+		var alertIframe
+			,$alertUndefinedWindow=$('#alert-undefined-window')
+			,$resizeUndefinedWindow=$('#resize-undefined-window')
+			,$confirmUndefinedWindw=$('#confirm-undefined-window')
+			,$closeUndefinedWindow=$('#close-undefined-window');
+		$alertUndefinedWindow.on('click',function(){
+			alertIframe=window.open("../index.html","undefinedWindow","height=400,width=400,top=10,left=10,resizable=yes");
+		});
+		$resizeUndefinedWindow.on('click',function(){
+			if(alertIframe.opener==window){
+				alertIframe.close();
+			}
+			alertIframe=window.open("../index.html","undefinedWindow","height=400,width=400,top=10,left=10,resizable=yes");
+			alertIframe.resizeTo(600,600);
+			alertIframe.moveTo(100,100);
+		});
+		$confirmUndefinedWindw.on('click',function(){
+			alert(alertIframe.opener==window);
+		});
+		$closeUndefinedWindow.on('click',function(){
+			alertIframe.close();
+		})
+	});
+</script>
+</body>
+</html>
