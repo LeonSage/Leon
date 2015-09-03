@@ -62,7 +62,7 @@ var pattern4=/\.at/gi;</pre>
 			<p>前面举的这些例子都是以字面量形式来定义的正则表达式.另一种创建正则表达式的方式是使用RegExp构造函数,它接收两个参数:一个是要匹配的字符串模式,另一个是可选的标志字符串.可以使用字面量定义的任何表达式,都可以使用构造函数来定义.</p>
 			<pre>var pattern=new RegExp("[bc]at","i");		//匹配第一个"bat"或"cat",不区分大小写</pre>
 			<p>要注意的是,传递给RegExp构造函数的两个参数都是字符串(不能把正则表达式字面量传递给RegExp构造函数).由于RegExp构造函数的模式参数是字符串,所以在某些情况下要对字符进行双重转义.所有元字符都必须双重转义,那些已经转义过的字符也是如此,例如\n(字符\在字符串中通常被转义为\\,而在正则表达式字符串中就会变成\\\\).下面给出一些模式,左边是这些模式的字面量形式,右边是使用RegExp构造函数定义相同模式时使用的字符串.</p>
-			<table class="table table-border table-striped">
+			<table class="table table-bordered table-striped">
 				<tr>
 					<th>字面量模式</th>
 					<th>等价的字符串</th>
@@ -102,7 +102,7 @@ for(i=0;i&lt;5;i++){
 			<p>在第一循环中,即使循环体中指定,但实际上只为/cat/创建了一个RegExp实例.由于实例属性不会重置,所以在循环中再次调用test()方法会失败.这是因为第一次调用test()找到了"cat",但第二次调用是从索引为3的字符(上一次匹配的末尾)开始的,所以就找不到它了.由于会测试到字符串末尾,所以下一次再调用test()就又从头开始了.</p>
 			<p>第二个循环使用RegExp构造函数在每次循环中创建正则表达式.因为每次迭代都会创建一个新的RegExp实例,所以每次调用test()都会返回true.</p>
 			<p class="alert alert-info">ECMAScript 5明确规定,使用正则表达式字面量必须像直接调用RegExp构造函数一样,每次都创建新的RegExp实例.IE9+,Firefox4+,Chrome都据此做出了修改.</p>
-			<p class="alert alert-error">在写者进行测验时,IE8下依然可以每次输出true而不会失败.不知道是否是re.test()的返回值总是true.</p>
+			<p class="alert alert-danger">在写者进行测验时,IE8下依然可以每次输出true而不会失败.不知道是否是re.test()的返回值总是true.</p>
 		</div>
 		<div class="panel-footer">
 			关于本章节RegExp类型的内容,主要参考于书籍<strong>&lt;&lt;算法导论(原书第3版)&gt;&gt;</strong>.
@@ -184,205 +184,103 @@ if(pattern.test(text)){
 			RegExp构造函数属性
 		</div>
 		<div class="panel-body">
-			<p>ECMAScript数组也提供了一种让数组的行为类似于其他数据结构的方法.具体说来,数组可以表现的就像栈一样,后者是一种可以限制插入和删除项的数据结构.栈是一种LIFO(Last-In-First-Out,后进先出)的数据结构,也就是最新添加的项最早被移除.而栈中项的插入(叫做推入)和移除(叫做弹出),只发送在一个位置--栈的顶部.ECMAScript为数组专门提供了push()和pop()方法,以便实现类似栈的行为.</p>
-			<p>push()方法可以接收任意数量的参数,把他们逐个添加到数组末尾,并返回修改后数组的长度.而pop()方法则从数组末尾移除最后一项,减少数组的length值,然后移除返回的项.</p>
+			<p>RegExp构造函数包含一些属性(这些属性在其他语言中被看成是静态属性).这些属性适用于作用域中的所有正则表达式,并且基于所执行的最近一次正则表达式操作而变化.关于这些属性的另一个独特之处,就是可以通过两种方式访问他们.换句话说,这些属性分别有一个长属性名和一个短属性名(Opera是例外,它不支持短属性名).下表列出了RegExp构造函数的属性.</p>
+			<table class="table table-bordered table-striped">
+				<tr>
+					<th>长属性名</th>
+					<th>短属性名</th>
+					<th>说明</th>
+				</tr>
+				<tr>
+					<td>input</td>
+					<td>$_</td>
+					<td>最近一次要匹配的字符串.Opera未实现此属性.</td>
+				</tr>
+				<tr>
+					<td>lastMatch</td>
+					<td>$&</td>
+					<td>最近一次的匹配项.Opera未实现此属性.</td>
+				</tr>
+				<tr>
+					<td>lastParen</td>
+					<td>$+</td>
+					<td>最近一次匹配的捕获组.Opera未实现此属性.</td>
+				</tr>
+				<tr>
+					<td>leftContext</td>
+					<td>$`</td>
+					<td>input字符串中lastMatch之前的文本.</td>
+				</tr>
+				<tr>
+					<td>multiline</td>
+					<td>$*</td>
+					<td>布尔值,表示是否所有表达式都使用多行模式.IE和Opera未实现此属性.</td>
+				</tr>
+				<tr>
+					<td>rightContext</td>
+					<td>$'</td>
+					<td>input字符串中lastMatch之后的文本.</td>
+				</tr>
+			</table>
+			<p>使用这些属性可以藏exec()或test()执行的操作中提取出更具体的信息.</p>
 			<pre>
-console.log(colors.push("balck","pink"));		//输出5
-console.log(colors.pop());		//输出pink</pre>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">
-			队列方法
-		</div>
-		<div class="panel-body">
-			<p>队列数据结构的访问规则是FIFO(First-In-First-Out,先进先出).队列在列表的末端添加项,从列表的前端移除项.由于push()是向数组末端添加项的方法,因此要模拟队列只需一个从数组前端取得项的方法.实现这一操作的数组方法就是shift(),它能够移除数组中的第一个项并返回该项,同时将数组长度减1.综合使用shift()和push()方法,可以像使用队列一样使用数组.</p>
+var text="this has been a short summer";
+var pattern=/(.)hort/g;
+
+//注意下面的属性并不为所有浏览器支持
+if(pattern.test(text)){
+	console.log(RegExp.input);		//输出 this has been a short summer
+	console.log(RegExp.leftContext);		//输出 this has been a 
+	console.log(RegExp.rightContext);		//输出  summer
+	console.log(RegExp.lastMatch);		//输出 short
+	console.log(RegExp.lastParen);		//输出 s
+	console.log(RegExp.multiline);		//输出 false
+}</pre>
+			<p>例子中使用的长属性名都可以用相应的短属性名来代替.只不过,由于这些短属性名大都不是有效的ECMAScript标识符,因此必须通过方括号语法来访问他们.</p>
 			<pre>
-console.log(colors.push("balck","pink"));		//输出5
-console.log(colors.shift());		//输出red</pre>
-			<p>ECMAScript还为数组提供了一个unshift()方法.顾名思义,unshift()与shift()的用途相反:他能在数组前端添加任意个项并返回新数组的长度.因此,同时使用unshift()和pop()方法,可以从相反的方向来模拟队列,即在数组的前端添加项,从数组末端移除项.</p>
+if(pattern.test(text)){
+	console.log(RegExp.$_);		//输出 this has been a short summer
+	console.log(RegExp["$`"]);		//输出 this has been a 
+	console.log(RegExp["$'"]);		//输出  summer
+	console.log(RegExp["$&"]);		//输出 short
+	console.log(RegExp["$+"]);		//输出 s
+	console.log(RegExp["$*"]);		//输出 false
+}</pre>
+			<p>除了上面介绍的几个属性之外,还有多达9个用于存储捕获组的构造函数属性.访问这些属性的语法是RegExp.$1,RegExp.$2 ~~~ RegExp.$9,分别用于存储第一,第二 ~~~ 第九个匹配的捕获组.再调用exec()或test()方法时,这些属性会被自动填充.</p>
 			<pre>
-console.log(colors.unshift("balck","pink"));		//输出5
-console.log(colors.unshift("purple"));		//输出6
-console.log(colors.toString());		//输出purple,black,pink,red,blue,green
-console.log(colors.shift());		//输出purple</pre>
-			<p class="alert alert-info">IE7及更早版本对JavaScript的实现中存在一个偏差,其unshift()方法总是返回undefined而不是数组的新长度.IE8在非兼容模式下会返回正确的长度.</p>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">
-			重排序方法
-		</div>
-		<div class="panel-body">
-			<p>数组中已经存在两个可以直接用来重排序的方法:reverse()和sort(),他们的返回值是排序后的数组.</p>
-			<pre>
-//reverse()方法可以反转数组项的顺序
-var values=[1,5,7,14,25];
-console.log(values.reverse());		//输出[25,14,7,5,1]
-//sort()方法会调用每个数组项的toString()方法,然后比较字符串决定排序,默认升序
-console.log(values.sort());		//输出[1,14,25,5,7]
-//sort()方法可以接收一个比较函数作为参数用来指定排序
-//比较函数接收两个参数,如果第一个参数应该位于第二个之前则返回一个负数,相等返回1,之后返回一个正数
-function compare(value1,value2){
-	if(value1&lt;value2){
-	    return -1;
-	}else if(value1&gt;value2){
-	    return 1;
-	}else{
-	    return 0;
-	}
-}
-console.log(values.sort(compare));		//输出[1,5,7,14,25]
-//如果需要降序输出,则交换return值即可
-compare=function (value1,value2){
-	if(value&lt;value2)	return 1;
-	else if(value&gt;value2)	return -1;
-	else return 0;
-}
-console.log(values.sort(compare));		//输出[25,14,7,5,1]
-//如果是数据类型或者其valueOf()方法会返回数值类型的对象类型,可以使用简化的比较函数
-compare=function (value1,value2){
-	return value1-value2;		//升序输出
+var text="this has been a short summer";
+var pattern=/(..)or(.)/g;
+if(pattern.test(text)){
+	console.log(RegExp.$1);		//输出sh
+	console.log(RegExp.$2);		//输出t
 }</pre>
 		</div>
 	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			操作方法
+			模式的局限性
 		</div>
 		<div class="panel-body">
-			<p>ECMAScript为操作已经包含在数组中的项提供了很多方法.其中,concat()方法可以基于当前数组中的所有项创建一个新数组.具体来说,这个方法会先创建一个当前数组的副本,然后将接收到的参数添加到这个副本的末尾,最后返回新构建的数组.如果没有传递参数,复制并返回当前数组的副本.如果传递的是一个或多个数组,则会将数组中的每一项都添加到结果数组中去,如果不是数组,则将值简单添加到结果数组的末尾.</p>
-			<pre>console.log(colors.concat('yellow',["black","brown"]));		//输出[red,green,blue,yellow,black,brown],原数组不变</pre>
-			<p>slice()方法,它能够基于当前数组的一个或多个项创建一个新数组.slice()方法可以接收一或两个参数,即要返回项的起始和结束位置.在只有一个参数的情况下,slice()方法返回从该参数指定位置开始到当前数组末尾的所有项.如果有两个参数,该方法返回起始和结束位置之间的项(但不包括结束位置的项).如果参数中的数字为负值,则用数组长度加上该数来确定相应的位置.例如包含5项的数组上调用slice(-2,-1)与调用slice(3,4)得到的结果是相同的,如果结束位置小于起始位置,则返回空数组.同样,slice()方法不影响原始数组.</p>
-			<pre>
-var colors=["red","green","blue","yellow","purple"];
-console.log(colors.slice(1));		//输出["green","blue","yellow","purple"]
-console.log(colors.slice(1,4));		//输出["green","blue","yellow"]
-console.log(colors.slice(1,-1));	//输出["green","blue","yellow"]
-console.log(colors.slice(-1,-2));		//输出[]</pre>
-			<p>splice()方法恐怕算是最强大的数组方法了,它的主要用途是向数组的中部插入项,但使用这种方法的方式则只有3种:</p>
+			<p>尽管ECMAScript中的正则表达式功能还是比较完备的,但仍然缺少某些语言(特别是Perl)所支持的高级正则表达式特性.下面列出了ECMAScript正则表达式不支持的特性.</p>
 			<ul>
-				<li><strong>删除 : </strong>可以删除任意数量的项,只需指定两个参数:要删除的第一项的位置和要删除的项数.例如,splice(0,2)会删除数组的前两项.</li>
-				<li><strong>插入 : </strong>可以向指定位置插入任意数量的项,只需提供三个参数:起始位置,0(要删除的项数)和要插入的项数.例如,splice(2,0,"red","green")会从位置2开始插入字符串"red"和"green".</li>
-				<li><strong>替换 : </strong>可以向指定位置插入任意数量的项,且同时删除任意数量的项,只需指定3个参数:起始位置,要删除的项数和要插入的任意数量的项.插入项不必等于删除项.</li>
+				<li>匹配字符串开始和结尾的\A和\Z锚.(但支持以插入符号(^)和$来匹配字符串的开始和结尾).</li>
+				<li>向后查找--lookbehind(但完全支持向前查找--lookahead).</li>
+				<li>并集和交集类.</li>
+				<li>原子组(atomic grouping).</li>
+				<li>Unicode支持(单个字符除外,如\uFFFF).</li>
+				<li>命名的捕获组(但支持编号的捕获组).</li>
+				<li>条件匹配.</li>
+				<li>正则表达式注释.</li>
+				<li>s(single,单行)和x(free-spacing,无间隔)匹配模式.</li>
 			</ul>
-			<p>splice()方法始终返回一个数组,该数组包含从原数组中删除的项,如果没有删除任何项,则返回一个空数组.</p>
-			<pre>
-var colors=["red","green","blue"];
-
-//删除项
-console.log(colors.splice(0,1));		//输出["red"]
-console.log(colors);		//输出["green","blue"]
-
-//插入项
-console.log(colors.splice(1,0,"yellow","orange"));		//输出[]
-console.log(colors);		//输出["green","yellow","orange","blue"]
-
-//替换项
-console.log(colors.splice(1,1,"red","purple"));		//输出["yellow"]
-console.log(colors);		//输出["green","red","purple","orange","blue"]</pre>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">
-			位置方法
-		</div>
-		<div class="panel-body">
-			<p>ECMAScript 5为数组实例添加了两个位置方法:indexOf()和lastIndexOf().这两个方法都接收两个参数:要查找的项和(可选的)表示查找起点位置的索引.其中,indexOf()方法从数组的开头(位置0)开始向后查找,lastIndexOf()方法则从数组的末尾开始向前查找.这两个方法都返回要查找的项在数组中的位置,如果没找到则返回-1.在比较第一个参数与数组中的每一项时,会使用全等操作符.</p>
-			<pre>
-var numbers=[1,2,3,4,5,4,3,2,1];
-console.log(numbers.indexOf(4));		//输出3
-console.log(numbers.lastIndexOf(4));		//输出5
-console.log(numbers.indexOf(4,4));		//输出5
-console.log(numbers.lastIndexOf(4,4));		//输出3</pre>
-			<p class="alert alert-info">支持它们的浏览器包括IE 9+,Firefox 2+,Safari 3+,Opera 9.5+和Chrome.</p>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">
-			迭代方法
-		</div>
-		<div class="panel-body">
-			<p>ECMAScript 5为数组定义了5个迭代方法.每个方法都接收两个参数:要在每一项上运行的函数和(可选的)运行该函数的作用域对象--影响this的值.传入这些方法中的函数会接收三个参数:数值项的值,该项在数组中的位置和数组对象本身.根据使用的方法不同,这个函数执行后的返回值可能会也可能不会影响方法的返回值.以下是这5个迭代方法的作用.</p>
-			<dl class="dl-horizontal">
-				<dt><code>every()</code> : </dt>
-				<dd><pre>对数组中的每一项运行给定函数,如果该函数对每一项都返回true,则返回true.</pre></dd>
-				<dt><code>some()</code> : </dt>
-				<dd><pre>对数组中的每一项运行给定函数,如果该函数对每一项返回true,则返回true.</pre></dd>
-				<dt><code>forEach()</code> : </dt>
-				<dd><pre>对数组中的每一项运行给定函数,这个方法没有返回值.</pre></dd>
-				<dt><code>filter()</code> : </dt>
-				<dd><pre>对数组中的每一项运行给定函数,返回该函数会返回true的项组成的数组.</pre></dd>				
-				<dt><code>map()</code> : </dt>
-				<dd><pre>对数组中的每一项运行给定函数,返回每次函数调用的结果组成的数组.</pre></dd>				
-			</dl>
-			<pre>
-var numbers=[1,2,3,4,5,4,3,2,1];
-
-//判断数组中是否所有元素都大于2
-console.log(numbers.every(function(item,index,array){
-	return (item&gt;2);
-}));		//输出false
-
-//判断数组中是否有元素大于2
-console.log(numbers.some(function(item,index,array){
-	return (item&gt;2);
-}));		//输出true
-
-//输出每一项的信息
-console.log(numbers.forEach(function(item,index,array){
-	console.log("第"+index+"个元素的值为:"+item);		//每一行输出相应元素的值
-}));		//没有返回值,输出undefined
-
-//返回数组中大于2的元素
-console.log(numbers.filter(function(item,index,array){
-	return (item&gt;2);
-}));		//输出[3,4,5,4,3]
-
-//将每一个元素*2
-console.log(numbers.map(function(item,index,array){
-	return (item&gt;2);
-}));		//输出[2,4,6,8,10,8,6,4,2]</pre>
-			<p class="alert alert-info">支持它们的浏览器包括IE 9+,Firefox 2+,Safari 3+,Opera 9.5+和Chrome.</p>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">
-			归并方法
-		</div>
-		<div class="panel-body">
-			<p>ECMAScript 5还新增了两个归并数组的方法:reduce()和reduceRight().这两个方法都会迭代数组的所有项,然后构建一个最终返回的值.其中,reduce()方法从数组的第一项开始,逐个遍历到最后.而reduceRight()则逆序遍历.这两个方法都接收两个参数:一个在每一项上调用的函数和(可选的)作为归并基础的初始值.传入的函数接收4个参数:前一个值,当前值,项的索引和数组对象.这个函数返回的任何值都会作为第一个参数自动传给下一项.第一次迭代发生在数组的第二项上,因此第一个参数是数组的第一项,第二个参数就是第二项.</p>
-			<pre>
-var values=[1,2,3,4,5];
-
-//数组元素求和
-console.log(values.reduce(function(prev,cur,index,array){
-	return prev+cur;
-}));		//输出15
-
-//数组元素求和(除了遍历方向之外,两者没有其他差别)
-console.log(values.reduceRight(function(prev,cur,index,array){
-	return prev+cur;
-}));		//输出15</pre>
-			<p>第一次执行回调函数,prev是1,cur是2.第二次,prev是3(1+2的结果),cur是3(数组的第三项).</p>
-			<p class="alert alert-info">支持它们的浏览器包括IE 9+,Firefox 2+,Safari 3+,Opera 9.5+和Chrome.</p>
+			<p>即使存在这些限制,ECMAScript正则表达式仍然是非常强大的,能够帮我们完成绝大多数模式匹配任务.</p>
 		</div>
 	</div>
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
 	$(function(){
-		var text="cat, bat, sat, fat"
-	,pattern=/.at/g
-	,matches=pattern.exec(text);
-console.log(matches.index);		//输出0
-console.log(matches[0]);		//输出 cat
-console.log(pattern.lastIndex);		//输出 3
 
-matches=pattern.exec(text);
-console.log(matches.index);		//输出5
-console.log(matches[0]);		//输出 bat
-console.log(pattern.lastIndex);		//输出 8
 	});
 </script>
 </body>
