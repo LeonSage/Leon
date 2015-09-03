@@ -2,9 +2,9 @@
 <html lang="zh-cmn-Hans">
 <head>
 	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
-	<title>Array类型 </title>
+	<title>RegExp类型 </title>
 	<meta name="author" content="Leon" />
-	<meta name="description" content="The page describes the usage of the reference of Array in js operation." />
+	<meta name="description" content="The page describes the usage of the reference of RegExp in js operation." />
 	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
 		body,xmp{padding: 0px;margin: 0px;}
@@ -18,81 +18,170 @@
 	<ol class="breadcrumb">
 		<li><a href="#">JS</a></li>
 		<li><a href="#">引用类型</a></li>
-		<li class="active">Array类型</li>
+		<li class="active">RegExp类型</li>
 	</ol>
-	<h1><strong>Array</strong></h1>
+	<h1><strong>RegExp</strong></h1>
 	<div class="panel panel-info">
 		<div class="panel-heading">说明:</div>
 		<div class="panel-body">
-			<p>Array类型是除了Object类型之外ECMAScript中最常用的类型了.而且,ECMAScript中的数组与其他多数语言中的数组有着相当大的区别.虽然ECMAScript数组与其他任何语言中的数组都是数据的有序列表,但与其他语言不同的是,ECMAScript数组的每一项可以保存任何类型的数据.也就是说,可以用数组的第一个位置来保存字符串,用第二外置来保存数值,打三个位置来保存对象.而且,ECMAScript数组的大小是可以动态调整的,即可以随着数据的添加来自动增长以容纳新增数据.</p>
-			<p>创建数组的基本方式有两种.第一种是使用Array构造函数:</p>
-			<pre>var colors=new Array();</pre>
-			<p>如果预先知道数组要保存的项目数量,也可以给构造函数传递该数量,而该数量会自动变成length属性的值.</p>
+			<p>ECMAScript通过RegExp类型来支持正则表达式.使用下面类似Perl的语法,就可以创建一个正则表达式.</p>
+			<pre>var expression=/pattern/flags;</pre>
+			<p>其中的模式(pattern)部分可以是任何简单或复杂的正则表达式,可以包含字符类,限定符,分组,向前查找以及反向引用.每个正则表达式都可带有一或多个标志(flags),用以标明正则表达式的行为.正则表达式的匹配模式支持下列3个标志.</p>
+			<dl class="dl-horizontal">
+				<dt><code>g</code> : </dt>
+				<dd><pre>表示全局(global)模式,即模式将被应用于所有字符串,而非在发现第一个匹配项时立即停止.</pre></dd>
+				<dt><code>i</code> : </dt>
+				<dd><pre>表示不区分大小写(case-insensitive)模式,即在确定匹配项时忽略模式与字符串的大小写.</pre></dd>
+				<dt><code>m</code> : </dt>
+				<dd><pre>表示多行(multiline)模式,即在到达一行文本末尾时还会继续查找下一行中是否存在与模式匹配的项.</pre></dd>				
+			</dl>
+			<p>因此,一个正则表达式就是一个模式与上述3个标志的组合体.</p>
 			<pre>
-//创建length为20的数组
-var colors=new Array(20);</pre>
-			<p>也可以向Array构造函数传递数组中应该包含的项.</p>
-			<pre>var colors=new Array("red","blue","green");</pre>
-			<p>另外,在使用Array的构造函数创建数组时也可以省略new操作符.</p>
-			<pre>var colors=Array(3);</pre>
-			<p>创建数组的第二种基本方式是使用数组字面量表示法.数组字面量由一对包含数组项的方括号表示,多个数组项之间以逗号隔开.</p>
+//匹配字符串中所有"at"的实例
+var pattern1=/at/g;
+
+//匹配第一个"bat"或"cat",不区分大小写
+var pattern2=/[bc]at/i;
+
+//匹配所有以"at"结尾的3个字符的组合,不区分大小写
+var pattern3=/.at/gi;</pre>
+			<p>与其他语言中的正则表达式类似,模式中使用的所有元字符都必须转义.正则表达式中的元字符包括:<code> ( [ { \ ^ & | ) ? * + . ] } </code></p>
+			<p>这些元字符在正则表达式中都有一或多种特殊用途,因此如果想要匹配字符串中包含的这些字符,就必须对它们进行转义.</p>
 			<pre>
-var colors=["red","blue","green"];        //创建一个包含3个字符串的数组
-var names=[];        //创建一个空数组
-var values=[1,2,];        //不要这样!会创建一个包含2项或者3项的数组
-var options=[,,,,,];        //不要这样!会创建一个包含5或6项的数组
-			</pre>
-			<p class="alert alert-info">在数组字面量的最后一项添加逗号的结果:在IE8及之前版本中的ECMAScript实现在数组字面量方面存在bug.由于这个bug,在IE8-中会创建包含6项的数组,而其他浏览器会创建5项的数组(其中每一项都是undefined).由于兼容性,建议读者不要使用这种语法.与对象一样,在使用数组字面量表示法时,也不会调用Array构造函数.</p>
-			<p>在访问和设置值时,使用方括号并提供索引即可.如果设置某个值的索引超过了数组的现有项数,数组就会自动增加项并重新计算长度.数组的length属性很有特点:他不是只读的.因此可以设置长度来向数组末尾移除项或添加项.</p>
+//匹配第一个"bat"或"cat",不区分大小写
+var pattern1=/[bc]at/i;
+
+//匹配第一个"[bc]at",不区分大小写
+var pattern2=/\[bc\]at/i;
+
+//匹配所有以"at"结尾的3个字符的组合,不区分大小写
+var pattern3=/.at/gi;
+
+//匹配所有".at",不区分大小写
+var pattern4=/\.at/gi;</pre>
+			<p>前面举的这些例子都是以字面量形式来定义的正则表达式.另一种创建正则表达式的方式是使用RegExp构造函数,它接收两个参数:一个是要匹配的字符串模式,另一个是可选的标志字符串.可以使用字面量定义的任何表达式,都可以使用构造函数来定义.</p>
+			<pre>var pattern=new RegExp("[bc]at","i");		//匹配第一个"bat"或"cat",不区分大小写</pre>
+			<p>要注意的是,传递给RegExp构造函数的两个参数都是字符串(不能把正则表达式字面量传递给RegExp构造函数).由于RegExp构造函数的模式参数是字符串,所以在某些情况下要对字符进行双重转义.所有元字符都必须双重转义,那些已经转义过的字符也是如此,例如\n(字符\在字符串中通常被转义为\\,而在正则表达式字符串中就会变成\\\\).下面给出一些模式,左边是这些模式的字面量形式,右边是使用RegExp构造函数定义相同模式时使用的字符串.</p>
+			<table class="table table-border table-striped">
+				<tr>
+					<th>字面量模式</th>
+					<th>等价的字符串</th>
+				</tr>
+				<tr>
+					<td>/\[bc\]at/</td>
+					<td>"\\[bc\\]at"</td>
+				</tr>
+				<tr>
+					<td>/\.at/</td>
+					<td>"\\.at"</td>
+				</tr>
+				<tr>
+					<td>/name\/age/</td>
+					<td>"name\\/age"</td>
+				</tr>
+				<tr>
+					<td>/\d.\d{1,2}/</td>
+					<td>"\\d.\\d{1,2}"</td>
+				</tr>
+				<tr>
+					<td>/\w\\hello\\123/</td>
+					<td>"\\w\\\\hello\\\\123"</td>
+				</tr>
+			</table>
+			<p>使用正则表达式字面量和使用RegExp构造函数创建的正则表达式不一样.在ECMAScript3中,正则表达式字面量始终会共享同一个RegExp实例,而使用构造函数创建的每一个新RegExp实例都是一个新实例.</p>
 			<pre>
-var colors=["red","blue","green"];
-console.log(colors.length);		//3
-colors.length=2;
-console.log(colors[2]);		//undefined
-colors[5]="black";
-console.log(colors.length);		//6
-console.log(colors[4]);		//undefined
-//利用length属性可以方便的在数组末尾添加新项
-colors[colors.length]="black";
-colors[colors.length]="brown";
-console.log(colors.length);		//8</pre>
-			<p class="alert alert-info">数组最多可以包含4,294,967,295个项,这几乎已经可以满足任何编程要求了.如果想添加的项数超过这个上限值,就会发生异常.而创建一个初始大小与这个上限值接近的数组,则可能会导致运行时间超长的脚本错误.</p>
+var re=null,i;
+for(i=0;i&lt;5;i++){
+	re=/cat/g;
+	console.log(re.test("catastrophe"));		//输出true
+}
+for(i=0;i&lt;5;i++){
+	re=new RegExp("cat","g");
+	console.log(re.test("catastrophe"));		//输出true
+}</pre>
+			<p>在第一循环中,即使循环体中指定,但实际上只为/cat/创建了一个RegExp实例.由于实例属性不会重置,所以在循环中再次调用test()方法会失败.这是因为第一次调用test()找到了"cat",但第二次调用是从索引为3的字符(上一次匹配的末尾)开始的,所以就找不到它了.由于会测试到字符串末尾,所以下一次再调用test()就又从头开始了.</p>
+			<p>第二个循环使用RegExp构造函数在每次循环中创建正则表达式.因为每次迭代都会创建一个新的RegExp实例,所以每次调用test()都会返回true.</p>
+			<p class="alert alert-info">ECMAScript 5明确规定,使用正则表达式字面量必须像直接调用RegExp构造函数一样,每次都创建新的RegExp实例.IE9+,Firefox4+,Chrome都据此做出了修改.</p>
+			<p class="alert alert-error">在写者进行测验时,IE8下依然可以每次输出true而不会失败.不知道是否是re.test()的返回值总是true.</p>
 		</div>
 		<div class="panel-footer">
-			关于本章节Array类型的内容,主要参考于书籍<strong>&lt;&lt;算法导论(原书第3版)&gt;&gt;</strong>.
+			关于本章节RegExp类型的内容,主要参考于书籍<strong>&lt;&lt;算法导论(原书第3版)&gt;&gt;</strong>.
 		</div>
 	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			检测数组
+			RegExp实例属性
 		</div>
 		<div class="panel-body">
-			<p>自从ECMAScript3做出规定之后,就出现了确定某个对象是不是数组的经典问题.对于一个网页,或者一个全局作用域而言,使用instanceof操作符就能得到满意的结果:</p>
-			<pre>console.log(colors instanceof Array);</pre>
-			<p class="alert alert-info">instanceof操作符的问题在于,它假定只有一个全局执行环境.如果网页包含多个框架,那实际上就存在两个以上不同的全局执行环境,从而存在两个以上不同版本的Array构造函数.如果你从一个框架向另一个框架传入一个数组,那么传入的数组与在第二个框架中原生创建的数组分别具有各自不同的构造函数.</p>
-			<p>为了解决这个问题,ECMAScript5新增了Array.isArray()方法.这个方法的目的是最终确认某个值到底是不是数组,而不管它是在哪个全局执行环境中创建的.</p>
-			<pre>cosole.log(Array.isArray(colors);</pre>
-			<p>支持Array.isArray()方法的浏览器有IE 9+,Firefox 4+,Safari 5+,Opera 10.5+和Chrome.</p>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">
-			转换方法
-		</div>
-		<div class="panel-body">
-			<p>如前所述,所有对象都具有toLocaleString(),toString()和valueOf()方法.其中,调用数组的toString()方法会返回由数组中每个值的字符串形式拼接而成的一个以逗号分割的字符串.而调用valueOf()返回的还是数组.实际上,为了创建这个字符串会调用数组每一项的toString()方法.toLocaleString()类似,也是调用每一项的toLocaleString()方法.</p>
+			<p>RegExp的每个实例都具有下列属性,通过这些属性可以取得有关模式的各种信息.</p>
+			<dl class="dl-horizontal">
+				<dt><code>global</code> : </dt>
+				<dd><pre>布尔值,表示是否设置了g标志.</pre></dd>
+				<dt><code>ignoreCase</code> : </dt>
+				<dd><pre>布尔值,表示是否设置了i标志.</pre></dd>
+				<dt><code>lastIndex</code> : </dt>
+				<dd><pre>整数,表示开始搜索下一个匹配项的字符位置,从0算起.</pre></dd>
+				<dt><code>multiline</code> : </dt>
+				<dd><pre>布尔值,表示是否设置了m标志.</pre></dd>
+				<dt><code>source</code> : </dt>
+				<dd><pre>正则表达式的字符串表示,按照字面量形式而非传入构造函数中的字符串模式返回.</pre></dd>				
+			</dl>
+			<p>通过这些属性可以获知一个正则表达式的各方面信息,但却没多大用处,因为这些信息全都包含在模式声明中.</p>
 			<pre>
-console.log(colors.valueOf());		//输出["red","blue","green"]
-console.log(colors.toString());		//输出red,blue,green</pre>
-			<p>使用join()方法,则可以使用不同的分隔符来构建这个字符串.join()方法只接收一个参数,即用作分隔符的字符串,然后返回包含所有数组项的字符串.</p>
-			<pre>console.log(colors.join("||"));		//输出red||blue||green||</pre>
-			<p>如果不给join()方法传入任何的值,或者传入undefinded,则使用逗号作为分隔符,IE7及更早版本会错误的使用字符串"undefined"作为分隔符.</p>
-			<p class="alert alert-info">如果数组中的某一项是null,或者undefined,那么该值在上述方法中返回的结果以空字符串表示.</p>
+var pattern=new RegExp("\\[bc\\]at","i");
+console.log(pattern.global);		//输出false
+console.log(pattern.ignoreCase);		//输出true
+console.log(pattern.multiline);		//输出false
+console.log(pattern.lastIndex);		//输出0
+console.log(pattern.source);		//输出  \[bc\]at</pre>
+			<p class="alert alert-info">使用字面量模式输出结果一样.</p>
 		</div>
 	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			栈方法
+			RegExp实例方法
+		</div>
+		<div class="panel-body">
+			<p>RegExp对象的主要方法是exec(),该方法是专门为捕获组设计的.exec()接收一个参数,即要应用模式的字符串,然后返回包含第一个匹配项信息的数组;或者在没有匹配项的情况下返回null.返回的数组虽然是Array的实例,但包含两个额外的属性:index和input.其中,index表示匹配项在字符串中的位置,而input表示应用正则表达式的字符串.在数组中,第一项是与整个模式匹配的字符串,其他项是与模式中的捕获组匹配的字符串(如果模式中没有捕获组,则该数组只包含一项).</p>
+			<pre>
+var text="mom and dad and baby"
+	,pattern=/mom( and dad( and baby)?)?/gi
+	,matches=pattern.exec(text);
+console.log(matches.index);		//输出0
+console.log(matches.input);		//输出 mom and dad and baby
+console.log(matches[0]);		//输出 mom and dad and baby
+console.log(matches[1]);		//输出  and dad and baby
+console.log(matches[2]);		//输出  and baby</pre>
+			<p>这个例子中的模式中包含两个捕获组.最内部的捕获组匹配"and baby",而包含它的捕获组匹配"and dad"或者"and dad and baby".当把字符串传入exec()方法中之后,发现了一个匹配项.因为整个字符串本身与模式匹配,所以返回的数组matches的index属性值为0.数组中的第一项是匹配的整个字符串,第二项包含与第一个捕获组匹配的内容,第三项包含与第二个捕获组匹配的内容.</p>
+			<p>对于exec()方法而言,即使在模式中设置了全局标志(g),它每次也只会返回一个匹配项.在不设置全局标志的情况下,在同一个字符串上多次调用exec()将始终返回第一个匹配项的信息.而在设置全局标志的情况下,每次调用exec()则都会在字符串中继续查找新匹配项.在全局匹配模式下,lastIndex的值在每次调用exec()后都会增加,而在非全局模式下则始终保持不变.</p>
+			<pre>
+var text="cat, bat, sat, fat"
+	,pattern=/.at/g
+	,matches=pattern.exec(text);
+console.log(matches.index);		//输出0
+console.log(matches[0]);		//输出 cat
+console.log(pattern.lastIndex);		//输出 3
+
+matches=pattern.exec(text);
+console.log(matches.index);		//输出5
+console.log(matches[0]);		//输出 bat
+console.log(pattern.lastIndex);		//输出 8</pre>
+			<p class="alert alert-info">IE的JavaScript实现在lastIndex属性上存在偏差,即使在非全局模式下,lastIndex属性每次也会变化.</p>
+			<p>正则表达式的第二个用法是test(),它接收一个字符串参数.在模式与该参数匹配的情况下返回true,否则返回false.在只想知道目标字符串与摸个模式是否匹配,但不需要知道其文本内容的情况下,使用这个方法非常方便.因此,test()方法经常出现在if语句中.</p>
+			<pre>
+var text="000-00-0000";
+var pattern=/\d{3}-\d{2}-\d{4}/;
+if(pattern.test(text)){
+	console.log("The pattern was matched.");
+}</pre>
+			<p>这种用法经常出现在验证用户输入的情况下,因为我们指向知道输入是否有效.</p>
+			<p>RegExp实例继承的toLocaleString()和toString()方法都会返回正则表达式的字面量,与创建表达式的方式无关.valueOf()方法返回正则表达式本身.</p>
+			<pre>console.log((new RegExp("\\[bc\\]at","gi")).toString());		//输出 /\[bc\]at/gi</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			RegExp构造函数属性
 		</div>
 		<div class="panel-body">
 			<p>ECMAScript数组也提供了一种让数组的行为类似于其他数据结构的方法.具体说来,数组可以表现的就像栈一样,后者是一种可以限制插入和删除项的数据结构.栈是一种LIFO(Last-In-First-Out,后进先出)的数据结构,也就是最新添加的项最早被移除.而栈中项的插入(叫做推入)和移除(叫做弹出),只发送在一个位置--栈的顶部.ECMAScript为数组专门提供了push()和pop()方法,以便实现类似栈的行为.</p>
@@ -283,7 +372,17 @@ console.log(values.reduceRight(function(prev,cur,index,array){
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
 	$(function(){
+		var text="cat, bat, sat, fat"
+	,pattern=/.at/g
+	,matches=pattern.exec(text);
+console.log(matches.index);		//输出0
+console.log(matches[0]);		//输出 cat
+console.log(pattern.lastIndex);		//输出 3
 
+matches=pattern.exec(text);
+console.log(matches.index);		//输出5
+console.log(matches[0]);		//输出 bat
+console.log(pattern.lastIndex);		//输出 8
 	});
 </script>
 </body>
