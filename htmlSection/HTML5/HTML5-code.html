@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>HTML脚本编程 </title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of the script-code with HTML5." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		pre{overflow-x:hidden; }
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">HTML</a></li>
+		<li><a href="#">HTML5新属性</a></li>
+		<li class="active">脚本编程</li>
+	</ol>
+	<h1><strong>HTML5脚本编程</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>HTML5规范定义了很多新HTML标记.为了配合这些标记的变化,HTML5规范也显著篇幅定义了很多JavaScript API.定义这些API的用意就是简化此前实现起来困难重重的任务,最终简化创建动态Web界面的工作.</p>
+		</div>
+		<div class="panel-footer">
+			关于本章节HTML5脚本编程的内容,主要参考于书籍<strong>&lt;&lt;算法导论(原书第3版)&gt;&gt;</strong>.
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			跨文档消息传递
+		</div>
+		<div class="panel-body">
+			<p>跨文档消息传送(cross-document messaging),有时候简称为XDM,指的是在来自不同域的页面间传递消息.例如,www.wrox.com域中的页面与位于一个内嵌框架中的p2p.wrox.com域中的页面通信.在XDM机制出现之前,要稳妥地实现这种通信需要花费很多工夫.XDM把这种机制规范化,让我们既稳妥又简单地实现跨文档通信.</p>
+			<p>XDM的核心是postMessage()方法.在HTML5规范中,除了XDM部分之外的其他部分也会提到这个方法名,但都是为了同一个目的:向另一个地方传递数据.对于XDM而言,"另一个地方"指的是包含在当前页面中的&lt;iframe&gt;元素,或者由当前页面弹出的窗口.</p>
+			<p>postMessage()方法接收两个参数:一条消息和一个表示消息接收方来自哪个域的字符串.第二个参数对保障安全通信非常重要,可以防止浏览器把消息发送到不安全的地方.</p>
+			<pre>
+//注意:所有支持XDM的浏览器也支持iframe的contentWindow属性
+var iframeWindow=document.getElementById("myframe").contentWindow;
+iframeWindow.postMessage("A secret","http://www.wrox.com");</pre>
+			<p>最后一行代码尝试向内嵌框架中发送一条消息,并指定框架中的文档必须来源于"http://www.wrox.com"域.如果来源匹配,消息会传递到内嵌框架中;否则,postMessage()什么也不做.这一限制可以避免窗口中的消息在你不知情的情况下发生改变.如果传给postMessage()的第二个参数是"*",则表示可以把消息发送给来自任何域的文档,但我们不建议这么做.</p>
+			<p>接收到XDM消息时,会触发window对象的message事件.这个事件是以异步形式触发的,因此从发送消息到接收消息(触发接收窗口的message事件)可能要经过一段时间的延迟.触发message事件后,传递给onmessage处理程序的事件对象包含以下三个方面的重要信息.</p>
+			<dl class="dl-horizontal">
+				<dt><code>data</code> : </dt>
+				<dd><pre>作为postMessage()第一个参数传入的字符串数据.</pre></dd>
+				<dt><code>origin</code> : </dt>
+				<dd><pre>发送消息的文档所在域,例如"http://www.wrox.com".</pre></dd>
+				<dt><code>source</code> : </dt>
+				<dd><pre>发送消息的文档的window对象的代理.这个代理对象主要用于在发送上一条消息的窗口中调用postMessage()方法.如果发送消息的窗口来自同一个域,那这个对象就是window.</pre></dd>				
+			</dl>
+			<p>接收到消息后验证发送窗口的来源是至关重要的.就想给postMessage()方法指定第二个参数,以确保浏览器不会把消息发送给未知页面一样,在onmessage处理程序中检测消息来源可以确保传入的消息来自已知的页面.基本的检测模式如下:</p>
+			<pre>
+EventUtil.addHandler(window,"message",function(event){
+	//确保发送消息的域是已知的域
+	if(event.origin=="http://www.wrox.com"){
+	    //处理接收到的数据
+	    processMessage(event.data);
+	    //可选:向来源窗口发送回执
+	    event.source.postMessage("Received!","http://p2p.wrox.com");
+	}
+});</pre>
+			<p>还是要提醒大家,event.source大多数情况下只是window对象的代理,并非实际的window对象.换句话说,不能通过这个代理对象访问window对象的其他任何信息.记住,只通过这个代理调用postMessage()就好,这个方法永远存在,永远可以调用.</p>
+			<p>XDM还有一些怪异之处.首先,postMessage()的第一个参数是最早作为"永远都是字符串"来实现的.但后来之歌参数的定义改了,改成允许传入任何数据结构.可是,并非所有浏览器都实现了这变化.为保险起见,使用postMessage()时,最好还是只传字符串.如果你想传入结构化的数据,最佳选择是先在要传入的数据上调用JSON.stringify(),通过postMessage()传入得到的字符串,然后再在onmessage事件处理程序中调用JSON.parse().</p>
+			<p>在通过内嵌框架加载其他域的内容时,使用XDM是非常方便的.因此,在混搭(mashup)和社交网络应用中,这种传递消息的方法极为常用.有了XDM,包含&lt;iframe&gt;的页面可以确保自身不受恶意内容的侵扰,因为它只通过XDM与嵌入的框架通信.而XDM也可以在来自相同域的页面间使用.</p>
+			<p class="alert alert-info">支持XDM的浏览器有IE 8+,Firefox 3.5+,Safari 4+,Opera,Chrome,iOS版Safari及Android版WebKit.XDM已经作为一个规范独立出来,现在它的名字叫Web Messaging.</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			RegExp实例方法
+		</div>
+		<div class="panel-body">
+			<p>RegExp对象的主要方法是exec(),该方法是专门为捕获组设计的.exec()接收一个参数,即要应用模式的字符串,然后返回包含第一个匹配项信息的数组;或者在没有匹配项的情况下返回null.返回的数组虽然是Array的实例,但包含两个额外的属性:index和input.其中,index表示匹配项在字符串中的位置,而input表示应用正则表达式的字符串.在数组中,第一项是与整个模式匹配的字符串,其他项是与模式中的捕获组匹配的字符串(如果模式中没有捕获组,则该数组只包含一项).</p>
+			<pre>
+var text="mom and dad and baby"
+	,pattern=/mom( and dad( and baby)?)?/gi
+	,matches=pattern.exec(text);
+console.log(matches.index);		//输出0
+console.log(matches.input);		//输出 mom and dad and baby
+console.log(matches[0]);		//输出 mom and dad and baby
+console.log(matches[1]);		//输出  and dad and baby
+console.log(matches[2]);		//输出  and baby</pre>
+			<p>这个例子中的模式中包含两个捕获组.最内部的捕获组匹配"and baby",而包含它的捕获组匹配"and dad"或者"and dad and baby".当把字符串传入exec()方法中之后,发现了一个匹配项.因为整个字符串本身与模式匹配,所以返回的数组matches的index属性值为0.数组中的第一项是匹配的整个字符串,第二项包含与第一个捕获组匹配的内容,第三项包含与第二个捕获组匹配的内容.</p>
+			<p>对于exec()方法而言,即使在模式中设置了全局标志(g),它每次也只会返回一个匹配项.在不设置全局标志的情况下,在同一个字符串上多次调用exec()将始终返回第一个匹配项的信息.而在设置全局标志的情况下,每次调用exec()则都会在字符串中继续查找新匹配项.在全局匹配模式下,lastIndex的值在每次调用exec()后都会增加,而在非全局模式下则始终保持不变.</p>
+			<pre>
+var text="cat, bat, sat, fat"
+	,pattern=/.at/g
+	,matches=pattern.exec(text);
+console.log(matches.index);		//输出0
+console.log(matches[0]);		//输出 cat
+console.log(pattern.lastIndex);		//输出 3
+
+matches=pattern.exec(text);
+console.log(matches.index);		//输出5
+console.log(matches[0]);		//输出 bat
+console.log(pattern.lastIndex);		//输出 8</pre>
+			<p class="alert alert-info">IE的JavaScript实现在lastIndex属性上存在偏差,即使在非全局模式下,lastIndex属性每次也会变化.</p>
+			<p>正则表达式的第二个用法是test(),它接收一个字符串参数.在模式与该参数匹配的情况下返回true,否则返回false.在只想知道目标字符串与摸个模式是否匹配,但不需要知道其文本内容的情况下,使用这个方法非常方便.因此,test()方法经常出现在if语句中.</p>
+			<pre>
+var text="000-00-0000";
+var pattern=/\d{3}-\d{2}-\d{4}/;
+if(pattern.test(text)){
+	console.log("The pattern was matched.");
+}</pre>
+			<p>这种用法经常出现在验证用户输入的情况下,因为我们指向知道输入是否有效.</p>
+			<p>RegExp实例继承的toLocaleString()和toString()方法都会返回正则表达式的字面量,与创建表达式的方式无关.valueOf()方法返回正则表达式本身.</p>
+			<pre>console.log((new RegExp("\\[bc\\]at","gi")).toString());		//输出 /\[bc\]at/gi</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			RegExp构造函数属性
+		</div>
+		<div class="panel-body">
+			<p>RegExp构造函数包含一些属性(这些属性在其他语言中被看成是静态属性).这些属性适用于作用域中的所有正则表达式,并且基于所执行的最近一次正则表达式操作而变化.关于这些属性的另一个独特之处,就是可以通过两种方式访问他们.换句话说,这些属性分别有一个长属性名和一个短属性名(Opera是例外,它不支持短属性名).下表列出了RegExp构造函数的属性.</p>
+			<table class="table table-bordered table-striped">
+				<tr>
+					<th>长属性名</th>
+					<th>短属性名</th>
+					<th>说明</th>
+				</tr>
+				<tr>
+					<td>input</td>
+					<td>$_</td>
+					<td>最近一次要匹配的字符串.Opera未实现此属性.</td>
+				</tr>
+				<tr>
+					<td>lastMatch</td>
+					<td>$&</td>
+					<td>最近一次的匹配项.Opera未实现此属性.</td>
+				</tr>
+				<tr>
+					<td>lastParen</td>
+					<td>$+</td>
+					<td>最近一次匹配的捕获组.Opera未实现此属性.</td>
+				</tr>
+				<tr>
+					<td>leftContext</td>
+					<td>$`</td>
+					<td>input字符串中lastMatch之前的文本.</td>
+				</tr>
+				<tr>
+					<td>multiline</td>
+					<td>$*</td>
+					<td>布尔值,表示是否所有表达式都使用多行模式.IE和Opera未实现此属性.</td>
+				</tr>
+				<tr>
+					<td>rightContext</td>
+					<td>$'</td>
+					<td>input字符串中lastMatch之后的文本.</td>
+				</tr>
+			</table>
+			<p>使用这些属性可以藏exec()或test()执行的操作中提取出更具体的信息.</p>
+			<pre>
+var text="this has been a short summer";
+var pattern=/(.)hort/g;
+
+//注意下面的属性并不为所有浏览器支持
+if(pattern.test(text)){
+	console.log(RegExp.input);		//输出 this has been a short summer
+	console.log(RegExp.leftContext);		//输出 this has been a 
+	console.log(RegExp.rightContext);		//输出  summer
+	console.log(RegExp.lastMatch);		//输出 short
+	console.log(RegExp.lastParen);		//输出 s
+	console.log(RegExp.multiline);		//输出 false
+}</pre>
+			<p>例子中使用的长属性名都可以用相应的短属性名来代替.只不过,由于这些短属性名大都不是有效的ECMAScript标识符,因此必须通过方括号语法来访问他们.</p>
+			<pre>
+if(pattern.test(text)){
+	console.log(RegExp.$_);		//输出 this has been a short summer
+	console.log(RegExp["$`"]);		//输出 this has been a 
+	console.log(RegExp["$'"]);		//输出  summer
+	console.log(RegExp["$&"]);		//输出 short
+	console.log(RegExp["$+"]);		//输出 s
+	console.log(RegExp["$*"]);		//输出 false
+}</pre>
+			<p>除了上面介绍的几个属性之外,还有多达9个用于存储捕获组的构造函数属性.访问这些属性的语法是RegExp.$1,RegExp.$2 ~~~ RegExp.$9,分别用于存储第一,第二 ~~~ 第九个匹配的捕获组.再调用exec()或test()方法时,这些属性会被自动填充.</p>
+			<pre>
+var text="this has been a short summer";
+var pattern=/(..)or(.)/g;
+if(pattern.test(text)){
+	console.log(RegExp.$1);		//输出sh
+	console.log(RegExp.$2);		//输出t
+}</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			模式的局限性
+		</div>
+		<div class="panel-body">
+			<p>尽管ECMAScript中的正则表达式功能还是比较完备的,但仍然缺少某些语言(特别是Perl)所支持的高级正则表达式特性.下面列出了ECMAScript正则表达式不支持的特性.</p>
+			<ul>
+				<li>匹配字符串开始和结尾的\A和\Z锚.(但支持以插入符号(^)和$来匹配字符串的开始和结尾).</li>
+				<li>向后查找--lookbehind(但完全支持向前查找--lookahead).</li>
+				<li>并集和交集类.</li>
+				<li>原子组(atomic grouping).</li>
+				<li>Unicode支持(单个字符除外,如\uFFFF).</li>
+				<li>命名的捕获组(但支持编号的捕获组).</li>
+				<li>条件匹配.</li>
+				<li>正则表达式注释.</li>
+				<li>s(single,单行)和x(free-spacing,无间隔)匹配模式.</li>
+			</ul>
+			<p>即使存在这些限制,ECMAScript正则表达式仍然是非常强大的,能够帮我们完成绝大多数模式匹配任务.</p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+
+	});
+</script>
+</body>
+</html>
