@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>Function类型 </title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of the reference of Function in js operation." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		pre{overflow-x:hidden; }
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">JS</a></li>
+		<li><a href="#">引用类型</a></li>
+		<li class="active">Function类型</li>
+	</ol>
+	<h1><strong>Function</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>每个函数都是Function类型的实例，而且都与其他引用类型一样具有属性和方法。由于函数是对象，因此函数名实际上也是一个指向函数对象的指针，不会与某个函数绑定。函数通常是使用函数声明语法定义的。</p>
+			<pre>
+//使用函数声明
+function sum(num1,num2){
+	return num1+num2;
+}
+
+//使用函数表达式(注意最后有一个分号)
+var sum=function(sum1,sum2){
+	return num1+num2;
+};
+
+//使用Function构造函数定义函数(不推荐)
+//使用Function构造函数可以接收任意数量的参数，但最后一个参数始终都被看成函数体，而前面的参数则枚举出新函数的参数。
+var sum=new Function("num1","num2","return num1+num2");</pre>
+			<p class="alert alert-info">从技术角度讲，使用Function构造函数是一个函数表达式，但是，我们不推荐读者使用这种方法定义函数，因为这种语法会导致解析两次代码（第一次是解析常规ECMAScript代码，第二次是解析传入构造函数中的字符串），从而影响性能。不过，这种语法对于理解函数是对象，函数名是指针的概念倒是非常直观的。</p>
+			<p>由于函数名仅仅是指向函数的指针，因此函数名与包含对象指针的其他变量没有什么不同。换句话说，一个函数可能会有多个名字。</p>
+			<pre>
+console.log(sum(10,10));		//输出20
+
+//使用不带圆括号的函数名是访问函数指针,而非调用函数.
+var anotherSum=sum;
+console.log(anotherSum(10,10));		//输出20
+
+//删除sum对函数的引用,证明anotherSum是对函数本身的一个引用
+sum=null;
+console.log(anotherSum(10,10));		//输出20</pre>
+		</div>
+		<div class="panel-footer">
+			关于本章节Function类型的内容,主要参考于书籍<strong>&lt;&lt;JavaScript高级程序设计(原书第3版)&gt;&gt;</strong>.
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			没有重载(深入理解)
+		</div>
+		<div class="panel-body">
+			<p>把函数名想象成指针,有助于理解为什么ECMAScript中没有函数重载的概念.</p>
+			<pre>
+var add=function(num){
+	return num+100;
+};
+add=function(num){
+	return num+200;
+};
+console.log(add(100));		//输出300
+			</pre>
+			<p class="alert alert-info">这个例子中声明了两个同名函数,而结果则是后面的函数覆盖了前面的函数.</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			函数声明与函数表达式
+		</div>
+		<div class="panel-body">
+			<p>实际上,解析器在向执行环境中加载数据时,对函数声明和函数表达式并非一视同仁.解析器会率先读取函数声明,并使其在执行任何代码之前可用(可以访问);至于函数表达式,则必须等到解析器执行到它所在的代码行,才会真正被解释执行.</p>
+			<pre>
+//在声明函数之前执行函数体			
+console.log(sum(10,10));		//输出20
+
+//函数声明
+function sum(num1,num2){
+	return num1+num2;
+}</pre>
+			<p>以上代码完全可以正常运行,因为在代码开始执行之前,解析器就已经通过一个名为函数声明提升(function declaration hoisting)的过程,读取并将函数声明添加到执行环境中.对代码求值时,JavaScript引擎在第一遍会声明函数并将它们放到源代码树的顶部.所以,即使声明函数的代码在调用它的代码后面,JavaScript引擎也能把函数声明提升到顶部.如果把函数声明改为等价的函数表达式,就会在执行期间导致错误.</p>
+			<pre>
+//在函数表达式之前执行函数体
+console.log(sum(10,10));		//Uncaught TypeError: sum is not a function
+
+//函数表达式
+var sum=function(num1,num2){
+	return num1+num2;
+}</pre>
+			<p>以上代码之所以会在运行期间产生错误,原因在于函数位于一个初始化语句中,而不是一个函数声明.换句话说,在执行到函数所在的语句之前,变量sum中不会保存对函数的引用;而且,由于第一行代码就会"unexpected identifier"(意外标识符)错误,实际上也不会执行到下一行.</p>
+			<p>除了什么时候可以通过变量访问函数这一点区别之外,函数声明与函数表达式的语法其实是等价的.</p>
+			<p class="alert alert-info">也可以同时使用函数声明和函数表达式,例如<code>var sum=function sum(){ }</code>.不过,这种语法在Safari中会导致错误.</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			作为值的函数
+		</div>
+		<div class="panel-body">
+			<p>因为ECMAScript中的函数名本身就是变量,所以函数也可以作为值来使用.也就是说,不仅可以像传递参数一样把一个参数传递给另一个函数,而且可以将一个函数作为另一个函数的结果返回.</p>
+			<pre>
+//这个函数接受两个参数.第一个参数应该是一个函数,第二个参数应该是要传递给该函数的一个值.
+function callSomeFunction(someFunction,someArgument){
+	return someFunction(someArgument);
+}
+
+function add10(num){
+	return num+10;
+}
+
+console.log(callSomeFunction(add10,10));		//输出20</pre>
+			<p>当然,可以从一个函数中返回另一个函数,而且这也是极为有用的一种技术.例如,假设有一个对象数组,我们想要根据某个对象属性对数组进行排序.而传递给数组sort()方法的比较函数要接收两个参数,即要比较的值.可是,我们需要一种方式来指明按照哪个属性来排序.要解决这个问题,可以定义一个函数,它接收一个属性名,然后根据这个属性名来创建一个比较函数.</p>
+			<pre>
+function createComparisonFunction(propertyName){
+	//根据比较参数返回比较函数
+	return function(object1,object2){
+	    var value1=object1[propertyName];
+	    var value2=object2[propertyName];
+	    if(value1&lt;value2){
+	        return -1;
+	    }else if(value1&gt;value2){
+	        return 1;
+	    }else{
+	        return 0;
+	    }
+	};
+}
+
+//进行比较的json数组
+var data=[{name:"Zachary",age:28},{name:"Nicholas",age:29}];
+
+//根据不同属性值进行排序
+data.sort(createComparisonFunction("name"));
+console.log(data[0].name);		//输出Nicholas
+
+data.sort(createComparisonFunction("age"));
+console.log(data[0].name);		//输出Zachary</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			函数内部属性
+		</div>
+		<div class="panel-body">
+			<p>在函数内部,有两个特殊的对象:arguments和this.其中,arguments是一个类数组对象,包含着传入函数中的所有参数.虽然arguments的主要用途是保存函数参数,但这个对象还有一个名叫callee的属性,该属性是一个指针,指向拥有这个arguments对象的函数.</p>
+			<pre>
+//一个非常经典的阶乘函数
+function factorial(num){
+	if(num&lt;=1){
+	    return -1;
+	}else{
+	    return num*factorial(num-1);
+	}
+}
+
+//重写后的阶乘函数,函数内部没有引用函数名factorial.可以保证阶乘函数更名后依然能够正常完成递归调用.
+function factorial(num){
+	if(num&lt;=1){
+	    return 1;
+	}else{
+	    return num*arguments.callee(num-1);
+	}
+}
+
+//使用trueFactorial引用阶乘函数
+var trueFactorial=factorial;
+
+//更改阶乘函数的函数体
+factorial=function(){
+	return 0;
+};
+console.log(factorial(5));		//输出0
+console.log(trueFactorial(5));		//输出120</pre>
+			<p>函数内部的另一个特殊对象是this,其行为与Java和C#中的this大致类似.换句话说,this引用的是函数执行的环境对象--或者也可以说是this值(当在网页的全局作用域中调用函数时,this对象引用的就是window).</p>
+			<pre>
+window.color="red";
+var o={color:"blue"};
+
+function sayColor(){
+	console.log(this.color);
+}
+
+sayColor();		//输出"red"
+
+o.sayColor=sayColor;
+o.sayColor();		//输出"blue"
+			</pre>
+			<p class="alert alert-info">函数的名字仅仅是一个包含指针的变量而已.因此,即使是在不同的环境中执行,全局的sayColor()函数与o.sayColor()指向的依然是同一个函数.</p>
+			<p>ECMAScript 5也规范化了另一个函数对象的属性:caller.除了Opera的早期版本不支持,其他浏览器都支持这个ECMAScript 3 并没有定义的属性.这个属性中保存着调用当前函数的函数的引用,如果是在全局作用域中调用当前函数,她的值为null.</p>
+			<pre>
+function outer(){
+	inner();
+}			
+function inner(){
+	console.log(inner.caller);
+	//为了实现更松散的耦合,也可以使用callee来访问相同的信息
+	//console.log(arguments.callee.caller);
+}
+outer();		//输出outer的源代码</pre>
+			<p>当函数在严格模式下运行时,访问arguments.callee会导致错误.ECMAScript 5 还定义了arguments.caller属性,但在严格模式下访问它也会导致错误,而在非严格模式下这个属性始终是undefined.定义这个属性是为了分清arguments.caller和函数的caller属性.以上变化都是为了加强这门语言的安全性,这样第三方代码就不能在相同的环境里窥视其他代码了.</p>
+			<p>严格模式还有一个限制:不能为函数的caller属性赋值,否则会导致错误.</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			函数属性和方法
+		</div>
+		<div class="panel-body">
+			<p>每个函数都包含两个属性:length和prototype.其中,length属性表示函数希望接收的命名参数的个数.</p>
+			<pre>
+function sayName(name){
+	console.log(name);
+}
+
+function sum(num1,num2){
+	return num1+num2;
+}
+
+function sayHi(){
+	console.log("Hi");
+}
+
+console.log(sayName.length);		//输出1
+console.log(sum.length);		//输出2
+console.log(sayHi.length);		//输出0</pre>
+			<p>在ECMAScript核心所定义的全部属性中,最耐人寻味的就要数prototype属性了.对于ECMAScript中的引用类型而言,prototype是保存他们所有实例方法的真正所在.换句话说,诸如toString()和valueOf()等方法实际上都保存在prototype名下,只不过是通过各自对象的实例访问罢了.在创建自定义引用类型以及实现继承时,prototype属性的作用是极其重要的.在ECMAScript 5 中,prototype属性是不可枚举的,因此使用for-in 无法发现.</p>
+			<p>每个函数都包含两个非继承而来的方法:apply()和call().这两个方法的用途都是在特定的作用域中调用函数,实际上等于设置函数体内this对象的值.首先,apply()方法接收两个参数:一个是在其中运行函数的作用域,另一个是参数数组.其中,第二个参数可以是Array的实例,也可以是arguments对象.</p>
+			<pre>
+function sum(num1,num2){
+	return num1+num2;
+}
+
+function callSum1(num1,num2){
+	return sum.apply(this,arguments);		//传入arguments对象
+}
+
+function callSum2(num1,num2){
+	return sum.applay(this,[num1,num2]);		//传入数组
+}
+
+console.log(callSum1(10,10));		//输出20
+console.log(callSum2(10,10));		//输出20</pre>
+			<p class="alert alert-info">在严格模式下,未指定环境对象而调用函数,则this值不会转型为window.除非明确把函数添加到某些对象或者调用apply()或者call(),否则,this值将是undefined.</p>
+			<p>call()方法与apply()方法的作用相同,区别仅在于接收参数的方式不同.对于call()方法而言,第一个参数是this值没有变化,变化的是其余参数都直接传递给参数.换句话说,在使用call()方法是,传递给函数的参数必须诸葛列举出来.</p>
+			<pre>
+function sum(num1,num2){
+	return num1+num2;
+}
+
+function callSum(num1,num2){
+	return sum.call(this,num1,num2);
+}
+console.log(callSum(10,10));		//输出20</pre>
+			<p>在使用call()方法的情况下,callSum()必须明确地传入每一个参数.结果与使用apply()没有什么不同.至于是使用apply()还是call(),完全取决于你采用哪种给函数传递参数的方式最为方便.如果打算直接传入arguments对象,或者包含函数中先接收到的也是一个数组,那么使用apply()肯定更方便;否则,选择call()可能更合适.</p>
+			<p>事实上,传递参数并非apply()和call()真正的用武之地;他们真正强大的地方是能够扩充函数赖以运行的作用域.</p>
+			<pre>
+window.color="red";
+var o={color:"blue"};
+
+function sayColor(){
+	console.log(this.color);
+}
+
+sayColor();		//输出red
+sayColor.call(this);		//输出red
+sayColor.call(window);		//输出red
+sayColor.call(o);		//输出blue</pre>
+			<p>当运行sayColor.call(o)时,函数的执行环境就不一样了,因此此时函数体内的this对象指向了o,于是结果显示的是"blue".</p>
+			<p>使用call()或apply()来扩充作用域的最大好处就是对象不需要与方法有任何耦合关系.在前面例子的第一个版本中,我们先是将sayColor()函数放到了对象o中,然后在通过o来调用它的.而在这里重写的例子中,就不需要先前的那个多余的步骤了.</p>
+			<p>ECMAScript 5 还定义了一个方法:bind().这个方法会创建一个函数的实例,其this值会被绑定到传给bind()函数的值.</p>
+			<pre>
+var objectSayColor=sayColor.bind(o);
+objectSayColor();		//输出blue</pre>
+			<p class="alert alert-info">支持bind()方法的浏览器有IE 9+,Firefox 4+,Safari 5.1+,Opera 12+和Chrome.</p>
+			<p>每个函数继承的toLocalString()和toString()方法始终都是返回函数的代码.返回代码的格式因浏览器而异--有的返回的代码与源代码中的函数代码一样,而有的则返回函数代码的内部表示,即有解析器删除了注释并对某些代码做了改动后的代码.由于存在这些差异,我们无法根据这两个方法返回的结果来实现任何重要功能;不过,这些信息在调试代码中倒是很有作用.另外一个继承的valueOf()方法同样只是返回函数代码.</p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var add=function(num){
+	return num+100;
+};
+add=function(num){
+	return num+200;
+};
+console.log(add(100));
+		var x=0;
+		f();
+		console.log(x);
+		var f=function(){
+			x=1;
+		};
+		f();
+		console.log(x);
+		function f(){
+			x=2;
+		}
+		f();
+		console.log(x);
+		f=function(){
+			x=2;
+		};
+		f();
+		console.log(x);
+});
+
+</script>
+</body>
+</html>
