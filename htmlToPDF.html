@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+	<meta charset='utf-8'>
+	<meta name="author" content="Leon">
+	<meta name="description" content="Leon的个人主页,在这里记录着他前端开发过程中学习到的技术以及实践,其中也包含着各种各样的喜怒哀乐.">
+	<link rel="shortcut icon" type="image/x-icon" href="./images/leon.ico">
+	<title>Github by Leon</title>
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		.navbar-brand img{width: 40px;height: auto;margin-top: -10px;}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="#" class="navbar-brand"><img src="images/leon.png" alt="Brand"></a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="index.html">首页 <span class="sr-only">(Current)</span></a></li>
+						<li><a href="resume.html">简历</a></li>
+						<!-- <li><a href="resumePrint.html">简历实例</a></li> -->
+						<!-- <li><a href="js/Nodejs/index.html">NodeJs表单提交</a></li> -->
+						<li><a href="LeonShop.html">Leon购物</a></li>
+						<li><a href="learn.html">前端技能</a></li>
+						<li><a href="algorithm.html">算法</a></li>
+						<!-- <li><a href="NodeJsLearn.html">NodeJs学习</a></li>	 -->						
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="ture" aria-expanded="false">实例展示<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="demo/scrollWindow.html">视频滚动窗口</a></li>
+								<li><a href="demo/form.html">表单功能</a></li>
+								<li><a href="demo/AJAX.html">AJAX</a></li>
+								<li><a href="demo/plugins.html">jQuery插件的编写</a></li>
+
+							</ul>
+						</li>
+					</ul>
+					<p class="nav navbar-nav navbar-right navbar-text">Leon的生活</p>
+				</div>
+			</div>
+		</nav>
+		<div class="jumbotron">
+			<div class="container">
+				<h1>Hello,world!</h1>
+				<button class="btn btn-primary"><a href="http://www.htm2pdf.co.uk/display">Save this page as PDF</a></button>
+				<!-- <button class="btn btn-primary cors">Get 1337</button> -->
+			</div>			
+		</div>		
+	</div>
+<!--引入bootstrap和后面DOM操作所必须的jQuery库-->
+<script src="js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	//等待DOM树加载完成
+	$(function(){
+		var $cors=$('.cors');
+		$cors.on('click',function(){
+			/*var xdr=new XDomainRequest();
+			xdr.onload=function(){
+				alert(xdr.responseText);
+			};
+			xdr.onerror=function(){
+				alert("An error occured.");
+			};
+			xdr.open('get',"http://localhost:1337/../someJson.txt");
+			xdr.send(null);*/
+			var xhr=new XMLHttpRequest();
+			xhr.onload=function(){
+				if(xhr.status>=200&xhr.status<300||xhr.status==304){
+					alert(xhr.responseText);
+				}else{
+					alert("Request was unsuccessful: "+xhr.status);
+				}
+			};
+			xhr.open("get","http://localhost:1337/../someJson.txt",true);
+			xhr.send(null);
+		})
+	})	
+</script>
+</body>
+</html>
