@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-notes</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the notes in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}	
+		.alert{height: 30px;line-height: 20px;font-size: 15px;padding: 5px;}
+		.alert-danger{height: auto;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">practice</a></li>
+		<li class="active">聊天室</li>
+	</ol>
+	<h1><strong>创建一个聊天室</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p> Node 是专注于创建网络应用的，网络应用就需要许多 I/O（输入 / 输出）操作。让我们一起创建几个 I/O 应用，来看看使用Node有多么简单，并且还能轻松扩展规模。我们生活在一个实时的世界里，有什么比聊天更加实时吗？那就让我们先写一个基于 TCP 的聊天服务器吧，并且支持 Telnet 连接。这很容易，而且能够完全用 Node 来编写。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">开发过程</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>创建新的TCP服务器</span>				
+				<p>首先，我们需要在 Node 中包含 TCP 模块，并创建一个新的 TCP 服务器.</p>
+				<pre>
+var net=require('net');
+var chatServer=net.createServer();
+chatServer.on('connection',function(client){
+	client.write("Hi!\n");
+	client.write("Bye!\n");
+	client.end();
+});
+chatServer.listen(9000);
+				</pre>
+				<p>代码第一行，我们加载了 net 模块。这个模块包含了 Node 需要的所有 TCP 功能。 接着，我们调用 net.createServer() 方法来创建一个新的 TCP 服务器。有了这 个服务器，我们需要用它做点儿事。这里调用 on() 方法来添加一个事件监听器。 每当有新的客户端通过网络连接接入服务器，就会触发 connection 事件，事件监 听器就会调用我们指定的函数。</p>
+				<p>连接事件在调用回调函数时，会传给我们新客户端所对应的 TCP socket 对象的引 用。我们把此引用命名为 client。调用 client.write()，就能发送信息给该客 户端。目前，我们只是简单地发送“Hi!” 和“Bye!”，然后调用 client.end() 方 法来关闭连接。就这么简单，我们的聊天服务器已经初露端倪了。最后，需要调用 listen() 函数，好让 Node 知道监听哪个端口。让我们马上测试一下吧。</p>
+			</section>
+			<section>
+				<span class="label label-info" title>用Telnet连接Node TCP服务器</span>
+				<p>我们可以使用 Telnet（大多数操作系统都自带此程序）来连接新服务器进行测 试。首先，调用 node 命令并带上文件名来启动服务器。然后，打开 Telnet 连接到 localhost 的 9000 端口（这是我们在 Node 程序中指定的端口）。
+				<pre>telnet 127.0.0.1 9000</pre></p>
+				<p>然后我们就可以在telnet里看到发送的消息。到目前为止，我们创建了一个服务器，它能够接受客户端的连接，并且在断开连接 前发送了一小段内容。但这还不能称为聊天服务器，我们再来添加几个功能吧。首 先，需要能收到客户端发送的消息</p>
+				<pre>
+var net=require('net');
+var chatServer=net.createServer();
+chatServer.on('connection',function(client){
+	client.write("Hi!\n");
+	client.on('data',function(data){
+		console.log(data);
+	})	
+});
+chatServer.listen(9000);
+				</pre>
+				<p>这里添加了另外一个事件监听器，调用的是 client.on()。注意，我们是在 connection 回调函数的作用域中添加的这个事件监听器，这样就可以访问到连接 事件所对应的 client 对象。新监听器关注的是 data 事件，每当 client 发送数据 给服务器时，这一事件都会被触发。接着要删掉 client.end() 这一行。现在，无论我们发任何数据给服务器，它都会在终端打印出来。</p>
+				<p>当你向服务器的Hi回复"hello ,youself"时，却会收到
+					<pre>&lt;Buffer 48 65 6c 6c 6f 2c 20 79 6f 75 72 73 65 6c 66 0d 0a&gt;</pre>
+				</p>
+				<p>Node 吐出了一堆你从来没有见过的看似无用的数据。原来，因为 JavaScript 无法很好地处理二进制数据，所以 Node 特地 增加了一个 Buffer 库来帮助服务器。Node 并不知道 Telnet 发送的是什么类型的 数据，所以在我们告诉它该用什么编码前，Node 只能保存原始的二进制格式。打 印的字符信息实际是十六进制字节数据。每个字节对应着字符串 “Hello, yourself”中的一个字母或字符。如果需要，可以调用 toString() 方法来 把 Buffer 数据翻译为可读的字符串格式；
+				<pre>console.log(data.toString());</pre>不需要的话，也可以保持二进制格式， 因为 TCP 和 Telnet 都能处理它。</p>
+			</section>
+			<section>
+				<span class="label label-info" title>客户端之间的通讯</span>
+				<p>现在我们能够接收客户端发送的消息了，接下来要做的事情是让它们互相发送消息。 要完成此功能，需要让它们互相通信。之前我们采用的是 client.write() 方法， 可惜它只能和一个客户端通信，而我们需要照顾到所有客户端。为此可以创建一个 列表，然后把希望与之通信的客户端都添加进去。当一个新的客户端出现时，就把 它添加到列表中，然后利用此列表实现客户端之间的通信。</p>
+				<pre>
+var net=require('net');
+var chatServer=net.createServer()
+	,clientList=[];
+chatServer.on('connection',function(client){
+	clientList.push(client);
+	client.write("Hi!\n");
+	client.on('data',function(data){
+		//将消息发送给所有用户
+		for(var count=0;count&lt;clientList.length;count++){
+			clientList[count].write(data);
+		}		
+	})	
+});
+chatServer.listen(9000);
+				</pre>
+				<p>这时你就可以收到其他用户发送的消息了，但是你发送的却变成了<pre>wwhhaatt''ss  yyoouurr  nnaammee??</pre></p>
+				<p>这是因为我们在发送 消息的时候，并没有检查发送者是谁，只是简单地把消息转发给所有客户端。而且 Telnet 客户端也无法区分哪些消息是自己发送的，哪些消息是别人发送的。我们需要改进一下。</p>
+				<pre>
+var net=require('net');
+var chatServer=net.createServer()
+	,clientList=[];
+chatServer.on('connection',function(client){
+	client.name=client.remoteAddress+":"+client.remotePort;
+	clientList.push(client);
+	client.write('Hi,'+client.name+'!\n');
+	client.on('data',function(data){
+		broadcast(data,client);		
+	})	
+});
+//封装广播函数（匹配非己客户端）
+function broadcast(data,client){
+	for (var count=0;count&lt;clientList.length;count++){
+		if(clientList[count]!=client){
+			clientList[count].write(client+"says:"+data);
+		}
+	}
+}
+chatServer.listen(9000);
+				</pre>
+				<p>首先，在 connection 事件监听器上为每个 client 对象增加 name 属性。为什么 我们能为 client 对象添加属性呢？因为闭包绑定了每个 client 对象和相应的请 求。于是，在闭包内就可以利用 client.remoteAddress 和 client.remotePort 来创建 client 的 name 属性，其中 client.remoteAddress 是客户端所在的 IP 地址，client.remotePort 是客户端接收从服务器返回数据的 TCP 端口。当不同的客户端从同一个 IP 发起连接时，它们各自会有唯一的 remotePort。以后再向 client 发送消息时，我们就能用此唯一标识来找到它。</p>
+				<div class="alert alert-danger">在这里有几个问题存在：1.客户端会显示Hi,::ffff:127.0.0.1:53071!这个::ffff:是什么并不清楚。
+				2.在这里每输入一个字母，另外一个客户端就会输出一个字母，而不是成段显示。</div>
+			</section>
+			<section>
+				<span class="label label-info" title>一个客户端断开连接后会导致服务器出错</span>
+				<p>现在它已经能够更加友好地提供服务了，但是也许你已经发现了，我们的服务器有一个致命的缺陷。如果其中一个客户端断开了，服务器就会出大问题。</p>
+				<pre>
+events.js:141
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: This socket has been ended by the other party
+    at Socket.writeAfterFIN [as write] (net.js:268:12)
+    at broadcast (D:\NodeJs\TestCode\chatClient.js:16:22)
+    at Socket.&lt;anonymous&gt; (D:\NodeJs\TestCode\chatClient.js:9:3)
+    at emitOne (events.js:77:13)
+    at Socket.emit (events.js:169:7)
+    at readableAddChunk (_stream_readable.js:146:16)
+    at Socket.Readable.push (_stream_readable.js:110:10)
+    at TCP.onread (net.js:523:20)
+				</pre>
+				<p>我们和之前一样先启动服务器 ，然后连接几个客户端 ，但是当终端 2 中的客户端断开连接时 ，麻烦就来了。如果终端 3 再发送消息 ，即调用 broadcast() 的时候，服务器会往一个已经断开的客户端写入数据 。当终端 2 的 客户端断开的时候 ，它对应的 socket 已经无法写入或读取了。而对已经关闭的 socket 进行 write() 操作时，Node 程序会抛出异常。这将导致其他所有客户端掉线 。显然，这么脆弱的程序是不能作为服务器的。</p>
+				<p>这个问题应该从两方面来解决。首先必须保证在一个客户端断开的时候，要把它从客户端列表中移除，防止它再调用 write() 方法。V8 引擎也会把相应的 socket 对象作为垃圾回收，并释放相应的内存。其次，要采用更保险的方式调用 write() 方 法。我们要确保 socket 从上次被写入到现在，没有发生任何阻碍我们调用 write() 方法的事情。好在用 Node 很容易做到这两点。</p>
+				<pre>
+var net=require('net');
+var chatServer=net.createServer()
+	,clientList=[];
+chatServer.on('connection',function(client){
+	client.name=client.remoteAddress+":"+client.remotePort;
+	clientList.push(client);
+	client.write('Hi,'+client.name+'!\n');
+	client.on('data',function(data){
+		broadcast(data,client);		
+	});
+	//断开连接时移除出在线列表
+	client.on('end',function(){
+		clientList.splice(clientList.indexOf(client),1);
+	})
+});
+function broadcast(data,client){
+	for (var count=0;count&lt;clientList.length;count++){
+		if(clientList[count]!=client){
+			clientList[count].write(client.name+"says:"+data);
+		}
+	}
+}
+chatServer.listen(9000);
+				</pre>
+				<p>我们先处理断开连接的客户端。当一个客户端断开时，要把它从客户端列表中移除。 这可以利用 end 事件来完成。一个 socket 断开连接时会触发 end 事件，表示它要关 闭。此时，调用 Array.splice() 将客户端从 clientList 列表中移除。Array. indexOf() 方法用于找到客户端在列表中的位置，然后 splice() 把它从列表中移 除。在此之后，下一个客户端调用 broadcast 方法时，已经断开的客户端将不会再出现在列表中了。</p>
+			</section>
+			<section>
+				<span class="label label-info" title>检查socket的可写状态</span>
+				<p>此外，我们还能做得更加保险，检查 socket 的可写状态.</p>
+				<pre>
+function broadcast(data,client){
+	var cleanUpList=[];
+	for (var count=0;count&lt;clientList.length;count++){
+		if(clientList[count]!=client){
+			if(clientList[count].writable){
+				clientList[count].write(client.name+"says:"+data);
+			}else{
+				cleanUpList.push(clientList[count]);
+				clientList[i].destroy();
+			}			
+		}
+	}
+	// 在写入循环中删除死节点，消除垃圾索引
+	for(count=0;count&lt;cleanUpList.length;count++){
+		clientList.splice(clientList.indexOf(cleanUpList[count]),1);
+	}
+}
+				</pre>
+				<p>调用 broadcast 函数的时候，检查一下 socket 是否可写，以确保不会因为任何 一个不可写的 socket 导致异常。不仅如此，发现任何不可写的 socket 后，还要 通过 Socket.destroy() 方法将其关闭并从 clientList 中移除。注意，遍历 clientList 的过程中并没有移除 socket，因为我们不想在遍历过程中出现任何未 知的副作用。现在我们的服务器更加健壮了。
+				</p>
+			</section>
+			<section>
+				<span class="label label-info" title>记录错误日志</span>
+				<p>在真正部署之前，还有一件事情要处理，那就是记录这些错误。</p>
+				<pre>
+var net=require('net');
+var chatServer=net.createServer()
+	,clientList=[];
+chatServer.on('connection',function(client){
+
+	client.name=client.remoteAddress+":"+client.remotePort;
+	console.log(client.name+' joined.');
+	clientList.push(client);
+	client.write('Hi,'+client.name+'!\n');
+	client.on('data',function(data){
+		broadcast(data,client);		
+	});
+	client.on('end',function(){
+		clientList.splice(clientList.indexOf(client),1);
+	})
+	client.on('error',function(e){
+		console.log(e);
+	})
+});
+				</pre>
+				<p>为 client 对象的 error 事件添加了 console.log()调用后，可以确保客户端发生的任何错误都会被记录下来。而之前增加的代码，则能够确保在客户端抛出错误的时候，不会因为异常而导致服务器停止。</p>
+			</section>
+			<section>
+				<span class="label label-info" title>完成聊天室</span>
+				<p>现在你就拥有了一个可以真正使用的聊天室了，也真正展示了用 Node 编写一个实时应用有多么容易。</p>
+				<pre>
+var net=require('net');
+var chatServer=net.createServer()
+	,clientList=[];
+chatServer.on('connection',function(client){
+
+	client.name=client.remoteAddress+":"+client.remotePort;
+	console.log(client.name+' joined.');
+	clientList.push(client);
+	client.write('Hi,'+client.name+'!\n');
+	client.on('data',function(data){
+		broadcast(data,client);		
+	});
+	client.on('end',function(){
+		clientList.splice(clientList.indexOf(client),1);
+	})
+	client.on('error',function(e){
+		console.log(e);
+	})
+});
+
+function broadcast(data,client){
+	var cleanUpList=[];
+	for (var count=0;count&lt;clientList.length;count++){
+		if(clientList[count]!=client){
+			if(clientList[count].writable){
+				clientList[count].write(client.name+"says:"+data);
+			}else{
+				cleanUpList.push(clientList[count]);
+				clientList[i].destroy();
+			}			
+		}
+	}
+	for(count=0;count&lt;cleanUpList.length;count++){
+		clientList.splice(clientList.indexOf(cleanUpList[count]),1);
+	}
+}
+chatServer.listen(9000);
+				</pre>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-notes</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the notes in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}	
+		.alert{height: 30px;line-height: 20px;font-size: 15px;padding: 5px;}
+		.alert-danger{height: auto;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">module</a></li>
+		<li class="active">零散知识点</li>
+	</ol>
+	<h1><strong>Notes</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<pre></pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			名词解释
+		</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>REPL模式</span>
+				<p>了解 Node.js 的最佳方法是使用其提供的 REPL 模式（Read-Evaluate-Print-Loop，输入 - 求值 - 输出 - 循环），即交互式命令行解析器，它非常适合检验 和学习 Node.js。</p>				
+			</section>			
+
+			<section>
+				<span class="label label-info" title>http模块和第一个helloworld程序</span>
+				<p>Node 除了用 V8 引擎来解析 JavaScript 外，还提供了高度优化的应用库，用来提高服务器效率。比如说，HTTP 模块是专为快速非阻塞式 HTTP 服务器而用 C 重新编写的。</p>
+				<pre>
+var http = require('http');
+http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello World\n'); 
+}).listen(8124, "127.0.0.1");
+console.log('Server running at http://127.0.0.1:8124/');
+				</pre>
+				<p>这个示例代码首先通过 require 方法把 HTTP 库包含到程序中来,HTTP 库所具有的功能已经赋给了 http 对象。有许多语言都有包含其他库这一方法，Node 用的是 CommonJS 模块风格。</p>
+				<p>下一步，我们需要一个 HTTP 服务器。PHP 等其他语言需要在类似 Apache 这样的 服务器中运行，而 Node 和它们不同，因为 Node 本身就是 Web 服务器。但这同样 意味着我们需要先创建该服务器。下一行代码调用 HTTP 模块的一个工厂模式方法 （createServer）来创建新的 HTTP 服务器。新创建的HTTP服务器并没有赋值给任何变量，它只会成为存活在全局范围内的匿名对象。我们可以通过链式调用来初 始化服务器，并告诉它监听在 8124 端口。</p>
+				<p>当调用 createServer 的时候，我们传了一个匿名函数作为参数。此函数绑定在 新创建服务器的事件监听器上进行 request 事件处理。消息事件是 JavaScript 和 Node 的核心。在这个例子中，每当一个新的访问请求到达 Web 服务器，它都将调 用我们指定的函数方法来处理。我们称这类方法为回调（callback）。因为每当一个 事件发生时，我们将回调监听此事件的所有函数.</p>
+				<p>例子中的回调函数有两个参数，一个是请求的对象（req），一个是响应的对象 （res）。在回调函数中，我们调用了 res 对象的几个方法，这将修改响应结果。例子中没有使用 req 对象，但你通常会需要同时使用请求和响应对象。</p>
+				<p>首先我们必须调用 res.writeHead 方法来设置 HTTP 响应头，否则就不能返回真实内容给客户端。我们设置状态代码为 200（表示 HTTP 状态代码“200 OK”），并且传入一段 HTTP 头描述。在本例中，我们只指定了 Content-type。</p>
+				<p>在完成了 HTTP 头后，我们可以写入 HTTP 正文。在本例中，我们用一个方法来同 时完成写入正文及关闭连接。end 方法将会关闭 HTTP 连接。但因为我们同时还传 入了一个字符串，end 方法将在把此内容发送给客户端后才关闭连接。</p>
+				<p>例子的最后一行调用了 console.log 方法。就像 Firebug 和 Web Inspector 支持的 浏览器对应方法那样，它将在标准输出 stdout 上打印信息。</p>
+				<p>然后我们运行系统的命令行，进入到文件存储的位置，然后使用命令
+				<pre>node helloworld.js</pre>
+				就会在屏幕上出现<pre>Server running at http://127.0.0.1:8124/</pre>
+				这个时候我们在浏览器地址栏里打开localhost：8124就可以访问本地后台服务器了，结果会在页面上打印出你的第一个helloworld.</p>
+			</section>
+
+			<section>
+				<span class="label label-info" title>事件驱动编程</span>
+				<p>Node 给 Web 服务器程序开发领域引进了事件驱动编程，来尝试解决这一问题。实 践证明，虽然 Node 不是第一个尝试此方法的平台，但它是目前为止最为成功的平台。想象一下，你现在需要连接到一台 Web 服务器 上获取一个网页，这在正常的 DSL 连接速度下通常需要花费 100 毫秒左右。如果连 接的是一台普通的 Web 服务器，它会在服务器上为你的请求创建一个新的程序运行 实例。该程序自顶向下运行（按顺序运行所有的函数）来响应请求并生成网页返回 给你。这意味着该服务器在请求被满足前需要一直占用固定大小的内存，其中包括 了把数据返回给你所要等待的 100 多毫秒。Node 则不是采用此方式，而是在同一个 程序内服务所有的用户。每当 Node 需要等待一些费时的操作，比如等待确认你已 经收到返回的数据时（好让它标记此请求已经完成），它就继续处理下一个用户的请 求去了。这些特性意味着 Node 在内存处理上比 传统服务器程序高效得多，也就是能够同时快速地服务更多的用户。这是个巨大的 成就，人们也为此而热爱 Node。 </p>
+				
+			</section>
+
+			<section>
+				<span class="label label-info" title>创建一个聊天服务器</span>
+				
+			</section>
+
+			<section>
+				<span class="label label-info" title>描述对象</span>
+				<pre>
+//util.inspect(object [,showHidden] [,depath] [,color]);
+
+//以字符串类型返回对Object的描述,对debugging有所帮助
+console.log(util.inspect(util));
+
+//如果showHidden=true,那么object的非枚举属性也会被显示,默认为false
+console.log(util.inspect(util,true));
+
+//如果depath确定了,则inspect方法就会进行几次递归.在处理成员复杂的object时很有用,默认递归两次
+console.log(util.inspect(util,true,null));
+
+//如果color=true,输出数据将带颜色.默认为false.
+console.log(util.inspect(util,true,null,true));</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>判断对象格式</span>
+				<pre>
+//判断对象是否为数组
+console.log(util.isArray([]))		//输出true
+console.log(util.isArray(new Array))		//输出true
+console.log(util.isArray({}))		//输出true
+
+//判断对象是否为正则对象
+console.log(util.isRegExp(/some regexp/));		//输出true
+console.log(util.isRegExp(new RegExp('another regexp')));		//输出true
+console.log(util.isRegExp({}))		//输出false
+
+//判断对象是否为日期
+console.log(util.isDate(new Date()));		//输出true
+console.log(util.isDate(Date()));		//输出false,无new返回的是字符串
+console.log(util.isDate({}));		//输出false
+
+//判断对象是否为错误对象
+console.log(util.isError(new Error()));		//输出true
+console.log(util.isError(new TypeError()));		//输出true
+console.log(util.isError({"name":"Error","message":"an error occured."}));		//输出false</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>读写数据</span>
+				<p>从readableStream读数据,并将数据写入到writeableStream,当writeableStream.write(data)写数据时函数返回false时readableStream将停止工作,知道writeableStream的drain方法被调用.</p>
+				<p>callback只有一个error参数,当writeableStream关闭或者出错时该方法才会调用.</p>
+				<pre>util.pump(readableStream,writeableStream [,callback]);</pre>
+			</section>
+
+			<section>
+				<span class="label label-info" title>父类继承</span>
+				<pre>
+//util.inherits(constructor,superConstructor);
+
+var events=require('events');
+function MyStream(){
+	events.EventEmitter.call(this);
+}
+util.inherits(MyStream,events.EventEmitter);
+MyStream.prototype.write=function(data){
+	this.emit('data',data);
+}
+var stream=new MyStream();
+console.log(stream instanceof events.EventEmitter);		//输出true
+console.log(MyStream.super_===events.EventEmitter);		//super_得到父类,输出true
+stream.on('data':function(data){
+	console.log('Recieved data: '+data);
+})
+stream.write('It works!');</pre>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

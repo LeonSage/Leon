@@ -5,8 +5,8 @@
 	<meta name="description" content="">
 	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<!-- <meta http-equiv="Refresh" content="10;url=index.html" /> -->
-	<link rel="shotcut icon" type="image/x-icon" href="./images/leon.ico">
-	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
+	<link rel="shotcut icon" type="image/x-icon" href="../images/leon.ico">
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
 	<title>前端开发 </title>
 	<style type="text/css">
 		html{height: 100%;}
@@ -39,15 +39,16 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="#" class="navbar-brand"><img src="images/leon.png" alt="Brand"></a>
+					<a href="#" class="navbar-brand"><img src="../images/leon.png" alt="Brand"></a>
 				</div>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li><a href="index.html">首页 <span class="sr-only">(Current)</span></a></li>
-						<li><a href="resume.html">简历</a></li>
-						<li><a href="LeonShop.html">Leon购物</a></li>
-						<li class="active"><a href="learn.html">前端技能</a></li>
-						<li><a href="algorithm.html">算法</a></li>
+						<li><a href="../index.html">首页 <span class="sr-only">(Current)</span></a></li>
+						<li><a href="../resume.html">简历</a></li>
+						<li><a href="../LeonShop.html">Leon购物</a></li>
+						<li><a href="../learn.html">前端技能</a></li>
+						<li><a href="../algorithm.html">算法</a></li>
+						<li class="active"><a href="PHPLearn.html">PHP学习</a></li>
 						<!-- <li><a href="NodeJsLearn.html">NodeJs学习</a></li> -->	
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="ture" aria-expanded="false">实例展示<span class="caret"></span></a>
@@ -70,13 +71,13 @@
 					<div class="panel panel-default">
 						<div class="panel-heading" role="tab" id="headingOne">
 							<h4 class="panel-title">
-								<a href="#collapseOne" data-parent="#accordion" data-toggle="collapse" aira-expanded="true" aira-controls="collapseOne">HTML</a>
+								<a href="#collapseOne" data-parent="#accordion" data-toggle="collapse" aira-expanded="true" aira-controls="collapseOne">基础知识</a>
 							</h4>
 						</div>
 						<div class="panel-collapse collapse in" role="tabpanel" id="collapseOne" aria-labelledby="headingOne">
 							<div class="panel-body">
 								<ul class="nav nav-pills">
-									<li role="presentation" onclick="iframeJump('htmlSection/Canvas/canvas.html');" class="active"><a href="#">Canvas</a></li>
+									<li role="presentation" onclick="iframeJump('../back-end_learn/PHP/baseLearn.html');" class="active"><a href="#">基础理论</a></li>
 									<li role="presentation" onclick="iframeJump('htmlSection/HTML5/HTML5-code.html');"><a href="#">HTML5新特性</a></li>
 									<li role="presentation"><a href="#">meta</a></li>
 								</ul> 
@@ -191,29 +192,17 @@
 									<li role="presentation" onclick="iframeJump('NodeJsSection/module/path.html');"><a href="#">path模块</a></li>
 									<li role="presentation" onclick="iframeJump('NodeJsSection/module/fs.html');"><a href="#">fs模块</a></li>
 									<li role="presentation" onclick="iframeJump('NodeJsSection/module/util.html');"><a href="#">util模块</a></li>
-									<li role="presentation" onclick="iframeJump('NodeJsSection/module/notes.html');"><a href="#">零碎知识点</a></li>
-									<li role="presentation">
-										<div class="panel">
-											<div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> 实践</a></div>
-											<div class="panel-body">
-												<ul class="nav nav-pills">
-													<li role="presentation" onclick="iframeJump('NodeJsSection/practice/chatRoom.html');"><a href="#">在线聊天室</a></li>
-													<li role="presentation" onclick="iframeJump('NodeJsSection/practice/twitter.html');"><a href="#">Twitter</a></li>
-												</ul>
-											</div>
-										</div>
-									</li>
 								</ul>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<iframe src="htmlSection/Canvas/canvas.html" id="content" class="col-lg-10"></iframe>
+			<iframe src="../back-end_learn/PHP/baseLearn.html" id="content" class="col-lg-10"></iframe>
 		</div>
 	</div>
-<script src="js/jQuery/jquery-1.11.3.min.js"></script>
-<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
 	var iframeJump=function(url){
 		//兼容360极速和IE8+
