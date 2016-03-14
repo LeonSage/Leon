@@ -12,6 +12,8 @@
 		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
 		pre{overflow-x:hidden; }
 		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+		#interactive{width: 100%;height: 300px;}
+		#message{width: 80%;line-height: 25px;}
 	</style>
 </head>
 <body>
@@ -64,11 +66,14 @@ EventUtil.addHandler(window,"message",function(event){
 	}
 });</pre>
 			<p>还是要提醒大家,event.source大多数情况下只是window对象的代理,并非实际的window对象.换句话说,不能通过这个代理对象访问window对象的其他任何信息.记住,只通过这个代理调用postMessage()就好,这个方法永远存在,永远可以调用.</p>
-			<p>XDM还有一些怪异之处.首先,postMessage()的第一个参数是最早作为"永远都是字符串"来实现的.但后来之歌参数的定义改了,改成允许传入任何数据结构.可是,并非所有浏览器都实现了这变化.为保险起见,使用postMessage()时,最好还是只传字符串.如果你想传入结构化的数据,最佳选择是先在要传入的数据上调用JSON.stringify(),通过postMessage()传入得到的字符串,然后再在onmessage事件处理程序中调用JSON.parse().</p>
+			<p>XDM还有一些怪异之处.首先,postMessage()的第一个参数是最早作为"永远都是字符串"来实现的.但后来这个参数的定义改了,改成允许传入任何数据结构.可是,并非所有浏览器都实现了这变化.为保险起见,使用postMessage()时,最好还是只传字符串.如果你想传入结构化的数据,最佳选择是先在要传入的数据上调用JSON.stringify(),通过postMessage()传入得到的字符串,然后再在onmessage事件处理程序中调用JSON.parse().</p>
 			<p>在通过内嵌框架加载其他域的内容时,使用XDM是非常方便的.因此,在混搭(mashup)和社交网络应用中,这种传递消息的方法极为常用.有了XDM,包含&lt;iframe&gt;的页面可以确保自身不受恶意内容的侵扰,因为它只通过XDM与嵌入的框架通信.而XDM也可以在来自相同域的页面间使用.</p>
 			<p class="alert alert-info">支持XDM的浏览器有IE 8+,Firefox 3.5+,Safari 4+,Opera,Chrome,iOS版Safari及Android版WebKit.XDM已经作为一个规范独立出来,现在它的名字叫Web Messaging.</p>
 		</div>
 	</div>
+	<iframe src="iframe.html" name="interactive" id="interactive"></iframe>
+	<input type="text" id="message" placeholder="在这里输入要发送的消息." />
+	<button class="sendMessage btn btn-primary">发送</button>
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			RegExp实例方法
@@ -212,7 +217,13 @@ if(pattern.test(text)){
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
 	$(function(){
-
+		var $message=$("#message");
+		var $sendMessage=$(".sendMessage");
+		var line=readline();
+		var iframeWindow=document.getElementById("interactive").contentWindow;
+		$sendMessage.on("click",function(){
+			iframeWindow.postMessage($message.val(),"http://localhost:1337");
+		})
 	});
 </script>
 </body>
