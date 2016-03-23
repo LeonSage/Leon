@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta name="author" content="Leon">
+	<meta name="description" content="">
+	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<!-- <meta http-equiv="Refresh" content="10;url=index.html" /> -->
+	<link rel="shotcut icon" type="image/x-icon" href="./images/leon.ico">
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
+	<title>前端开发 </title>
+	<style type="text/css">
+		html{height: 100%;}
+		body{height: 100%;}
+		#content{height: 88%;border: 0px;min-height: 250px;}
+		#index{overflow: ;height: ;}
+		.nav-pills li{width: 100%;}
+		.subnav{padding: 5px;border-radius: 2px;width: 100%;background-color: rgba(86,190,190,0.5);}	
+		.subnav+div{border:1px solid gray;padding: 0px;display: none;}
+		.subnav+div a{margin: 0px;padding: 2px;background: ;}
+		.subnav+div li{width: 100%;height: 20px;}
+	</style>
+</head>
+<script type="text/javascript">
+	var HtmlTagname=["header","footer",'article','nav'],count;
+	for(count=0;count<HtmlTagname.length;count++){
+		document.createElement(HtmlTagname[count]);
+	}
+</script>
+<body>
+	<div id="index">
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingOne">
+					<h4 class="panel-title">
+						<a href="#collapseOne" data-parent="#accordion" data-toggle="collapse" aira-expanded="true" aira-controls="collapseOne">HTML</a>
+					</h4>
+				</div>
+				<div class="panel-collapse collapse in" role="tabpanel" id="collapseOne" aria-labelledby="headingOne">
+					<div class="panel-body">
+						<ul class="nav nav-pills">
+							<li role="presentation" onclick="iframeJump('htmlSection/Canvas/canvas.html');" class="active"><a href="#">Canvas</a></li>
+							<li role="presentation" onclick="iframeJump('htmlSection/HTML5/HTML5-code.html');"><a href="#">HTML5新特性</a></li>
+							<li role="presentation"><a href="#">meta</a></li>
+						</ul> 
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingTwo">
+					<h4 class="panel-title">
+						<a href="#collapseTwo" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">CSS</a>
+					</h4>
+				</div>
+				<div class="panel-collapse collapse" role="tabpannel" id="collapseTwo" aria-labelledby="headingTwo">
+					<div class="panel-body">
+						<ul class="nav nav-pills">
+							<li role="presentation" onclick="iframeJump('cssSection/box-shadow.html');"><a href="#">box-shadow</a></li>
+							<li role="presentation" onclick="iframeJump('cssSection/border/border-image.html');"><a href="#">border-image</a></li>
+							<li role="presentation" onclick="iframeJump('cssSection/transform/transform.html');"><a href="#">transform</a></li>
+							<li role="presentation" onclick="iframeJump('cssSection/layout/height.html');"><a href="#">百分比高度</a></li>
+						</ul> 
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingThree">
+					<h4 class="panel-title">
+						<a href="#collapseThree" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseThree">JavaScript</a>
+					</h4>
+				</div>
+				<div class="panel-collapse collapse" role="tabpannel" id="collapseThree" aria-labelledby="headingThree">
+					<div class="panel-body">
+						<ul class="nav nav-pills">
+							<li role="presentation">
+								<div class="panel">
+									<div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> 引用类型</a></div>
+									<div class="panel-body">
+										<ul class="nav nav-pills">
+											<li role="presentation" onclick="iframeJump('jsSection/referenceType/array.html');"><a href="#">Array类型</a></li>
+											<li role="presentation" onclick="iframeJump('jsSection/referenceType/RegExp.html');"><a href="#">RegExp类型</a></li>
+											<li role="presentation" onclick="iframeJump('jsSection/referenceType/Function.html');"><a href="#">Function类型</a></li>
+										</ul>
+									</div>
+								</div>
+							</li>
+							<li role="presentation">
+								<div class="panel">
+									<div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> AJAX </a></div>
+									<div class="panel-body">
+										<ul class="nav nav-pills">														
+											<li role="presentation" onclick="iframeJump('jsSection/AJAX/xhr.html');"><a href="#">XHR</a></li>
+											<li role="presentation" onclick="iframeJump('jsSection/AJAX/xhr2.html');"><a href="#">XHR2级</a></li>
+											<li role="presentation" onclick="iframeJump('jsSection/AJAX/progress.html');"><a href="#">进度事件</a></li>
+										</ul>
+									</div>
+								</div>
+							</li>
+							<li role="presentation">
+								<div class="panel">
+									<div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> CORS</a></div>
+									<div class="panel-body">
+										<ul class="nav nav-pills">
+											<li role="presentation" onclick="iframeJump('jsSection/CORS/CORS.html');"><a href="#">CORS</a></li>
+										</ul>
+									</div>
+								</div>
+							</li>
+							<li role="presentation" onclick="iframeJump('jsSection/getStyle/getComputedStyle.html');"><a href="#">获取当前样式</a></li>
+							<li role="presentation" onclick="iframeJump('jsSection/download.html');"><a href="#">下载文件</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingJQuery">
+					<h4 class="panel-title">
+						<a href="#collapseJQuery" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseJQuery">jQuery</a>
+					</h4>
+				</div>
+				<div class="panel-collapse collapse" role="tabpannel" id="collapseJQuery" aria-labelledby="headingJQuery">
+					<div class="panel-body">
+						<ul class="nav nav-pills">
+							<li role="presentation" onclick=""><a href="#">未定义</a></li>	
+							<li role="presentation" onclick=""><a href="#">未定义</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingBootstrap">
+					<h4 class="panel-title">
+						<a href="#collapseBootstrap" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseBootstrap">Bootstrap</a>
+					</h4>
+				</div>
+				<div class="panel-collapse collapse" role="tabpannel" id="collapseBootstrap" aria-labelledby="headingBootstrap">
+					<div class="panel-body">
+						<ul class="nav nav-pills">
+							<li role="presentation" onclick=""><a href="#">未定义</a></li>	
+							<li role="presentation" onclick=""><a href="#">未定义</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingNodeJs">
+					<h4 class="panel-title">
+						<a href="#collapseNodeJs" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseNodeJs">NodeJs</a>
+					</h4>
+				</div>
+				<div class="panel-collapse collapse" role="tabpannel" id="collapseNodeJs" aria-labelledby="headingNodeJs">
+					<div class="panel-body">
+						<ul class="nav nav-pills">
+							<li role="presentation" onclick="iframeJump('NodeJsSection/module/globalAttr.html');"><a href="#">全局变量</a></li>	
+							<li role="presentation" onclick="iframeJump('NodeJsSection/module/path.html');"><a href="#">path模块</a></li>
+							<li role="presentation" onclick="iframeJump('NodeJsSection/module/fs.html');"><a href="#">fs模块</a></li>
+							<li role="presentation" onclick="iframeJump('NodeJsSection/module/util.html');"><a href="#">util模块</a></li>
+							<li role="presentation" onclick="iframeJump('NodeJsSection/module/notes.html');"><a href="#">零碎知识点</a></li>
+							<li role="presentation">
+								<div class="panel">
+									<div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> 实践</a></div>
+									<div class="panel-body">
+										<ul class="nav nav-pills">
+											<li role="presentation" onclick="iframeJump('NodeJsSection/practice/chatRoom.html');"><a href="#">在线聊天室</a></li>
+											<li role="presentation" onclick="iframeJump('NodeJsSection/practice/twitter.html');"><a href="#">Twitter</a></li>
+											<li role="presentation" onclick="iframeJump('NodeJsSection/practice/eventLoop.html');"><a href="#">事件循环</a></li>
+											<li role="presentation" onclick="iframeJump('NodeJsSection/practice/multiProcess.html');"><a href="#">多进程</a></li>
+										</ul>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	var iframeJump=function(url){
+		//兼容360极速和IE8+
+		if(window.parent.frames['content'].location){
+			window.parent.frames['content'].location.href=url;
+			return false;
+		}else{
+			//兼容Firefox和Chrome
+			window.parent.frames['content'].src=url;
+			return false;
+		}
+	}
+	$(document).ready(function(){
+		var EventUtil={
+			addHandler:function(element,type,handler){
+				if(element.addEventListener){
+					element.addEventListener(type,handler,false);
+				}else{
+					element.attachEvent("on"+type,handler);
+				}
+			}
+		}
+	});
+	$(function(){
+		//控制索引树上active类的添加与删除,改善用户体验
+		var $presentation=$("li[role='presentation']");
+		$presentation.on('click',function(){
+			$presentation.filter(".active").removeClass("active");
+			$(this).addClass("active");
+		})
+		//二级索引树
+		var $subnav=$('.subnav');
+		$subnav.on("click",function(){
+			$subnav.find('span').removeClass("glyphicon-minus").addClass("glyphicon-plus");
+			if($(this).next().css("display")=="block"){
+				$(this).find('span').removeClass("glyphicon-minus").addClass("glyphicon-plus");
+				$subnav.next().slideUp();
+			}else{
+				$(this).find('span').removeClass("glyphicon-plus").addClass("glyphicon-minus");
+				$subnav.next().slideUp();
+				$(this).next().slideDown();
+			}			
+		})
+	});
+
+</script>
+</body>
+</html>

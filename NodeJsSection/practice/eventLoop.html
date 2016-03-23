@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-notes</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the notes in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		.alert{height: 30px;line-height: 20px;font-size: 15px;padding: 5px;}
+		.alert-danger{height: auto;}
+		img{margin-bottom: 10px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">practice</a></li>
+		<li class="active">聊天室</li>
+	</ol>
+	<h1><strong>创建一个聊天室</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p> Node 是专注于创建网络应用的，网络应用就需要许多 I/O（输入 / 输出）操作。让我们一起创建几个 I/O 应用，来看看使用Node有多么简单，并且还能轻松扩展规模。我们生活在一个实时的世界里，有什么比聊天更加实时吗？那就让我们先写一个基于 TCP 的聊天服务器吧，并且支持 Telnet 连接。这很容易，而且能够完全用 Node 来编写。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">开发过程</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>事件循环</span>				
+				<p>Node 的一个核心功能就是事件循环，这一概念也多用于 JavaScript 底层行为及许多交 互系统中。在许多语言中，事件模型是在外层的，但 JavaScript 事件一直是其语言的 核心模块，这是因为 JavaScript 在很多情景下都需要处理与用户交互的事件。用过现 代网页浏览器的人都习惯在网页上通过 onclick、onmouseover 等事件来进行操作。 这些事件是那么常见，我们在开发网页交互的时候甚至会忘记它们的存在，但在语言 内部支持事件模型是何等强大的功能！在服务器端，没有了网页 DOM 对应的那些有 限的用户驱动型交互事件，而是在服务器程序上对应发生的各种不同的事件，比如 HTTP 服务器模块在用户发送请求给 Web 服务器时会触发 request 事件。</p>
+				<p>JavaScript 利用事件循环来合理地处理系统各部分的请求。在计算领域，人们可以用若干不同的方法来处理实时或并行运算，但大多数方法都太过复杂，甚至让人头 疼。JavaScript 采用了很简易的方法，使得处理过程更容易理解，但是它需要有一 些限制条件。当你把握了事件循环的工作原理后，就能充分地扬长避短了。</p>
+				<p>Node 采用的方式是，所有的 I/O 事件都应该是非阻塞的。这意 味着需要让程序暂停操作的 HTTP 请求、数据库查询、文件读写，以及其他事情在 数据返回之前并不暂停执行。这些事件都将独立运行，然后在数据准备好以后触发 一个事件。也就是说，用 Node.js 编程会用到很多回调函数，来处理各种 I/O。回调 函数往往以级联的方式嵌在其他回调函数中，这与浏览器编程有所不同。除了用顺 序的方式设置好启动项外，大部分代码都是在处理回调函数。</p>
+				<p>针对这种少见的编程风格，我们需要寻找适合服务器编程的处理模式。先从事件循 环开始吧。我们认为大部分人直觉上是理解事件驱动编程的，因为这和日常生活很 像。假设你在烧饭，正在切青椒的时候锅里的东西开始沸溢了，你会暂停 切菜，把炉火关小。你不会在切青椒的同时把炉火关小，而是会采用更加安全的方 式，通过快速切换工作对象来达到同样的目的。事件驱动编程也是同样的道理。通 过让程序员一次只能为一个回调函数编写处理代码，可以让代码可读性更强，而且 能够快速地处理多个任务。</p>
+				<p>能让事件来驱动操作很棒，但它只能以“单线程”的方式 运行，即同一时间只能处理一件事情。单线程的概念非常重要。常有人批评 Node.js 缺少并发，也就是它没有利用机器上 的所有 CPU 来运行 JavaScript。但是，同时在多个 CPU 上运行程序也有它的问题，是需要协调多个执行线程的。要让多个 CPU 有效地拆分任务，它们之间需要不停地 交换信息，比如当前执行状态，以及各自完成了哪些工作。虽然这不是不可能，但 这么复杂的模型给程序员和系统带来了很大的工作量。JavaScript 的方式很简单：同 一时刻只有一件事情在操作。Node 做的每一件事情都是非阻塞的，所以事件触发与 Node 对其操作的时间间隔是很短的，因为 Node 不需要等待如磁盘 I/O 这样的操作。</p>
+				<p>再举个邮递员投递的例子，帮助你理解事件循环。邮递员的每封信都是一个事件， 他有一堆事件等着要按顺序处理，每封信（事件）都要走到相应的路径进行投递 。路径就是对此事件的回调函数（通常不止一条路径）。可怜的是，我们的 邮递员只有一双腿，每次只能走其中一条路径。</p>
+				<p>偶尔，当邮递员在路上行走时，有人会给他另外一封信件，这就像是投递途中的回 调函数。这种情况下，邮递员会马上去派送新的信件（因为路人不去邮局而是直接 交给他的信件，一定是十万火急的）。此时邮递员会立刻切换到新的路径去投递新邮 件，完成后，再回到之前的路径上继续工作。</p>
+				<p>让我们从简单情形入手，对比一下邮递员的行为和一般程序的做法。假设我们的 Web 服务器（HTTP）被请求要从数据库中读取一些数据，然后返回给用户。在这 种情况下，我们只要处理很少的事件。首先，用户的请求多是要 Web 服务器返回一 个网页。处理这个初始请求的回调函数（我们称之为回调函数 A）会先从请求的对 象中确定它要从数据库读取什么内容，然后向数据库发起具体的请求，并传入一个 函数（回调函数 B）供请求完成时使用。处理完请求后，回调函数 A 结束并返回。 当数据库找到需要的内容后，再触发相应事件。事件循环队列则调用回调函数 B， 让它把数据发送给用户。</p>
+				<p>这似乎非常直观。这里需要特别注意的是代码“隔断”的地方，这也是过程式的程 序不会遇到的情况。因为 Node.js 是一个非阻塞的系统，所以当调用需要阻塞等待 的数据库函数时，我们会采用回调函数替代闲置等待。这就是说，由另外一些函数 来接管这个请求，并在数据准备好返回时把它处理掉。所以我们需要确认回调函数 所要用到的数据能够有办法取得。JavaScript 编程通常是利用闭包来实现这个功能 的。稍后，我们会进一步介绍闭包。</p>
+				<p>为什么 Node 更加高效呢？想象一下在一家快餐店点餐。你在柜台排队时，服务员 有两种方法来处理你的点单，一种是事件驱动的，另一种则不是。我们先采用 PHP 等许多 Web 平台所使用的方法。你点餐时，服务员先招待你，待你点完后才服务 下一个客人。他输入完你的单子后，可以做以下几件事情：收款、为你倒饮料等。 但是，服务员还不知道要等多久厨房才能够把你要的汉堡做好（如果你们中有一人 是素食主义者，可能还要等更长时间）。在传统的 Web 服务框架下，每个服务程序 （线程）每次只能服务一个请求。唯一增加处理能力的方法就是加入更多的线程。很 显然这样的做法并不是那么地高效，服务员在等待厨房做菜时浪费了很多时间。</p>
+				<p>显然，现实生活中的餐馆使用的是更加高效的模式。你点完菜后，服务员会给你一 个号码，在菜做好时通知你，你可以称这个为回调号码。Node 也是这样工作的。当 I/O 一类的费时操作开始时，Node 会给它们一个回调引用，然后继续处理其他已 经就绪的工作。比如说服务员可以服务下一个客人（对 Node 来说，则是下一个事 件）。需要重点关注的是，与邮递员的例子一样，餐厅服务员也绝不会在同一时间服 务两个客人。当呼叫某位客人来取食物的时候，他们不会处理新客人的需求，反之 也是一样。通过事件驱动的运作方式，服务员能够最大程度地提高产出。</p>
+				<p>下面这个例子展示了在什么样的情况下使用 Node 最合适，以及什么情况下它不合 适。在一些小餐馆，厨师和服务员是同一个人，这种情况下采用事件驱动并不能提 高效率，因为所有的工作都由同一个人完成，事件驱动的架构并不能增加价值。如 果服务器的全部（或大部分）工作是进行运算，Node 并非最理想的模型。</p>
+				<p>同时，我们也能发现这个架构在什么时候合适。假设在餐馆中有两名服务员和四位 客人。如果服务员一次只服务一位客人，那么头两位客人可以最快地拿到 食物，而第三和第四位客人的体验会很糟糕。前两位客人之所以能够快速地获得食 品，是因为服务员在全力满足他们的要求，这占用了另外两位客人的时间。在事件 驱动模型下，头两位客人可能需要稍微等待一下才能拿到食物，因为服务员需要先 处理一下后面两位客人的点单，但系统的平均等待时间（延迟）将大大降低。 </p>
+				<p>现在我们看看另外一个例子。我们给事件循环模式的邮递员一封信去投递，但投递 这封信需要经过一扇门。他到达了目的地，而门却关闭着，所以他只能等待并不停 地尝试进入。他等待门打开就像进入了死循环模式。如果在信件队列里有 另外一封信能够通知某人来打开门，让邮递员进去，这不就解决问题了吗？不幸的 是，邮递员正在无休止地等待打开门，无法抽身去投递那封信，这是因为打开门的 事件是在当前回调事件的外部。如果在回调函数内发起事件，我们知道邮递员会优 先把这封信给投递掉，但是当事件是在当前执行代码的外部发生时，它必须等待正 在执行的代码完成之后才会被调用。</p>
+				<p>我们再做一下算术。当 CPU 进行一次运算的时候（不是一行 JavaScript 代码，而是 单一的机器码运算）大概需要 1/3 纳秒（ns）。一个 3Ghz 的处理器每秒运行 3×109 个指令，所以每个指令花费 10-9/3 秒。主流的 CPU 内部有两种内存，L1 和 L2 cache，访问速度大概为 2~5 纳秒。如果我们从内存（RAM）读取数，需要花费大 概 80 纳秒，比运行指令要慢两个数量级。但这些操作都是在同一个场景下的。从更 慢的 I/O 途径中读取内容则太糟糕了。如果把从 RAM 中读取数据比作一只猫的重 量，那么从硬盘上读数据就比得上一头鲸了，而从网络上等数据就像是 100 头鲸的 重量。假设拿运行 var foo = "bar" 与一个数据库查询对比，简直就是一只猫和 100 头鲸比重量。阻塞式 I/O 并非真的在事件循环的邮递员前面放了一扇真实的门， 它只是把邮递员送到遥远的非洲大陆后再回来投递信件。</p>
+				<p>有了事件循环的基本认识后，我们看看常用的 Node.js 代码是如何创建 HTTP 服务 器的。</p>
+				<pre>
+var http = require('http');
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});  
+  res.end('Hello World\n'); 
+}).listen(8124, "127.0.0.1"); 
+console.log('Server running at http://127.0.0.1:8124/'); 
+				</pre>
+				<p>这是 Node.js 网站上展示的最简单例子（但稍后我们会说明这并非编码的理想方 式）。在例子里，通过调用 http 库的一个工厂方法来创建 HTTP 服务器。工厂方法在创建新的 HTTP 服务器的同时，为 request 事件绑定了一个回调函数，后者作 为 createServer 的一个参数传递进去。当代码运行的时候会发生什么有趣的事情 呢？ Node.js 运行的第一件事情是把例子中的代码从头到尾运行一遍，这可以认为 是 Node 编程的“设置”阶段。因为我们绑定了一些事件监听器，所以 Node.js 不会 退出，而是等待这些事件被触发。如果我们没有绑定任何事件，Node.js 在运行完代 码后就会立刻退出。</p>
+				<p>这意味着你在编写 Node.js 服务器程序的时候需要遵循以下两个策略。</p>
+				<ul>
+					<li>在设置完成以后，所有的操作都是事件驱动的.</li>
+					<li>如果 Node.js 需要长时间处理数据，就需要考虑把它分配给 web worker 去处理.</li>
+				</ul>
+				<p>事件驱动方法配合事件循环工作起来非常高效（正如它的名字所暗示的），但编写容 易阅读和理解的事件驱动代码也同样重要。在前面的例子里，我们用匿名函数作为 事件回调，这会导致几点不便。首先，我们无法控制代码在哪里使用。匿名函数只 有在被使用的地方才存活，而不是在绑定事件回调时存活，这会影响调试。如果所 有东西都是匿名事件，当异常发生时，就很难分辨出是哪个回调函数导致了问题。</p>
+			</section>
+			<section>
+				<span class="label label-info" title>无序并行I/O模式</span>
+				<p>Node 中所有的 I/O 操作默认都是无序并行的，因为 Node 的所有 I/O 都是异步 非阻塞的。我们操作 I/O 时，只要扔出请求然后等待结果就行了。所有请求可能按我们操作的顺序执行，也可能不是。我们指的无序，并不是指乱序，而是指顺序没 有保证。</p>
+				<span class="label label-info" title>顺序串行I/O模式</span>
+				<p>在这个模式里，我们希望按顺序执行一些 I/O（无限延时）任务。每一个任务都必 须在上一个任务完成后才能开始。在 Node 里，这意味着使用嵌套回调，这样可以 在每个任务的回调函数里发起下一个任务。</p>
+				<pre>
+server.on('request',function(req,res){
+	//从memcached获取session信息
+	memcached.getSession(req,function(session){
+		//从db获取信息
+		db.get(session.user,function(userData){
+			//从其他web服务调用
+			ws.get(req,function(wsData){
+				//渲染页面
+				page=pageRender(req,session,userData,wsData);
+				//输出响应内容
+				res.write(page);
+			})
+		})
+	})
+})
+				</pre>
+				<p>虽然嵌入回调函数很容易创建顺序串行 I/O，但它的代码看起来很像“金字塔”。这样的代码很难阅读和理解，也难以维护。。要让代码可读又不会破坏顺序串行模式，有几种方法。</p>
+				<p>第一，我们可以继续用内联函数声明，但要给它们增加名字。这样容易调试，而且还表明了该回调函数的目的。</p>
+				<pre>
+server.on('request',getMemcached(req,res){
+	memcached.getSession(req,getDbInfo(session){
+		db.get(session.user,getWsInfo(userData){
+			ws.get(req,render(wsData){
+				page=pageRender(req,session,userData,wsData);
+				res.write(page);
+			})
+		})
+	})
+})
+				</pre>
+				<p>另一种方法需要改变代码风格，用提前声明的函数代替匿名函数或命名函数。这会把金字塔拆散，改为按执行顺序展示，并且代码被拆分成更加可控的小块。</p>
+				<pre>
+var render=function(wsData){
+	page=pageRender(req,session,userData,wsData);
+};
+var getWsInfo=function(userData){
+	ws.get(req,render);
+};
+var getDbInfo=function(session){
+	db.get(session.user,getWsInfo);
+};
+var getMemcached=function(req,res){
+	memcached.getSession(req,getDbInfo);
+};					
+				</pre>
+				<p>例子中的代码并不能真的工作。原本的嵌套代码利用闭包封装了一些变量，使得内 嵌函数能够访问这些变量。所以，当状态不需要在 3 个以上回调函数间共享时，声 明式函数比较适合。如果下一个函数只需要从上一个回调函数中获取信息，声明式 函数就能很好地工作（特别是加上文档的话），而且比多层嵌套函数可读性更好。</p>
+				<p>当然，让数据在函数间传递有多种方法。大多数情况下，我们还是采用 JavaScript 语言本身的特性。JavaScript 有函数作用域，意思是当你在函数内部定义变量时， 这个变量在函数内本地可见。但是，简单的使用 { 和 } 并不会限制一个变量的作用 域。这就允许我们在内嵌的回调函数中可以访问外部回调函数内定义的变量，即使 外部函数已经返回并关闭了也依然能够访问。当嵌套回调函数时，我们隐式地把所 有之前回调函数中的变量都绑定到最新定义的回调函数内了，这也让许多嵌套变得复杂。</p>
+				<p>我们依然可以采用展开的重构方法，但需要创建一个把原始请求都包含的共享作用 域，用一个闭包把所有的回调函数都包含进去。这样，所有与初始请求相关的回调 函数都被封装起来，并通过闭包内的变量共享状态。</p>				
+				<pre>
+server.on('request',function(req,res){
+	var render=function(wsData){
+		page=pageRender(req,session,userData,wsData);
+	}
+	...
+})
+				</pre>
+				<p>采用这一做法，不但代码组织更有逻辑性，而且利用展开的方法避免了多层嵌套的 困绕。</p>
+				<span class="label label-info" title>中间件</span>
+				<p>其他创新的组织方式也是存在的。有时候你可以把代码重用到许多函数中，此时就 有了中间件的用武之地了。中间件有许多实现方法，其实现背后的思想是，在传递过程中，不单把状态传递过去，还包括了跟状态交互的方法。在 JavaScript 中，对象是以引用的方式传递的。意思是，当你调用我的 Function (someObject) 时，对 someObject 的任何修改，都会影响你当前函数作用域中所 有对 someObject 的引用。这存在着潜在风险，但只要你小心处理可能出现的副作 用，就会收获巨大的能力。副作用在异步代码中是非常危险的。如果回调函数使用 的对象被别人修改了，它难以确定是什么时候被修改的，因为运行的次序是非线性 的。如果你对参数传递进来的对象进行修改的话，需要仔细考虑这些对象将来会在 什么地方使用。</p>
+			</section>
+			<section>
+				<span class="label label-info" title>差错处理</span>
+				<p>前端服务器有更多的 CPU、更大的 RAM，硬盘空间却小得多。Node 现在有一些 限制，比如规定了最大的 JavaScript 堆栈大小。这会影响你的部署方式，因为在使 用 Node 的易编程、单线程模型来部署时，需要考虑如何充分地利用机器的 CPU 和 内存。</p>
+				<p>JavaScript 包含了 try/catch 功能，但这个方法只有当错误发 生在内联位置时才有用。使用 Node 的非阻塞 I/O 时，你给函数传递了一个回调函 数，这意味着回调函数被事件触发调用时，是不在 try/catch 代码块中的。我们需要 为异步运行情景提供差错处理的方法.</p>
+				<pre>
+//通过error事件捕捉I/O错误
+var http=require('http');
+var opts={
+	//这里需要提前打开本地服务器程序，端口为9000
+	host:'localhost',
+	port:8000,
+	path:'/'
+}
+try{
+	http.get(opts,function(res){
+		console.log('Get called?');
+	})
+}
+catch(e){
+	console.log("Catch an error");
+}
+				</pre>
+				<p>当调用 http.get() 时，实际会发生什么呢？我们传入了一些参数让 I/O 进行指定 的操作，同时还绑定了回调函数。当 I/O 操作完成时，回调函数会被调用，但是， http.get() 在设置好回调函数后，就直接完成并继续运行下去了。</p>
+				<img src="../../images/nodeJsSection/trySuccess.png">
+				<p>如果在 GET 过程中发生错误，将不会被 try/catch 捕获。这时将端口改变为8000.</p>
+				<img src="../../images/nodeJsSection/catchError.png">
+				<p>I/O 错误的隔离在 Node 命令行解析器中更为明显，因为变量返回时如果没有赋值， 命令行会打印出这个变量。我们可以看到 http.get() 函数的返回变量是新创建的 http.ClientRequest 对象，这就表示 try/catch 完成了它的工作，保证了特定的 代码返回时没有发生错误。但是，因为 port 是不存在的，将会在 I/O 请求时出 错，也就是回调函数不会成功调用。try/catch 并不能解决此问题，因为错误发生在 这个 JavaScript 代码外面。当 Node 遇到错误想要报告时，我们早已不在那个栈上 了。我们已经在处理另一个事件。</p>
+				<span class="label label-info" title>error事件捕获I/O错误</span>
+				<p>在 Node 中，我们利用 error 事件来处理此问题。这是一个特殊的事件，当错误发 生时它就会触发。这让参与 I/O 的模块触发另外一个事件给负责处理错误的回调函 数。error 事件让我们能够处理所有使用的模块中可能出现的问题。让我们以正确方式写一下前面的例子。</p>
+				<pre>
+var http=require('http');
+var opts={
+	host:'localhost',
+	port:8000,
+	path:'/'
+}
+var req=http.get(opts,function(res){
+	console.log("Get called.");
+})
+req.on('error',function(e){
+	console.log("Got error.");
+})
+				</pre>
+				<p>通过使用 error 事件，我们可以处理对应的错误（在本例中是忽略错误）。最重要 的是，我们的程序存活下来了。就像 JavaScript 的 try/catch 那样，error 事件捕获 了所有类型的异常。一种更好的常用异常处理方法是，对已知的错误条件设置好检 查条件，并尽可能处理它们。此外，捕获剩余的错误，记录下来，并保持你的服务 器继续运行也许是最佳的方法。</p>
+			</section>
+			<section>
+				<span class="label label-info" title>多处理器</span>
+				<p>Node 是单线程的，这意味着 Node 只能利用一个处理器来工作。但是， 多数服务器都有多个“多核”处理器，一个多核处理器就包含了几个处理器。有两 个物理 CPU 插槽的服务器可能有 24 个逻辑核，也就是说操作系统看起来有 24 个处 理器。要充分发挥 Node 的作用，需要把这些处理器都利用起来。但如果没有多线 程，该如何做呢？</p>
+				<p>Node 提供了一个 cluster 模块，可以把任务分配给子进程，就是说 Node 把当前程 序复制了一份给另一个进程（在 Windows 上，它其实是另外一个线程）。每个子进 程有些特殊的能力，比如能够与其他子进程共享 socket 连接。这样我们就可以写一 个 Node 程序，让它创建许多其他 Node 程序，并把任务分配给它们。需要重点理解的是，当你用 cluster 把工作共享到一组复制的 Node 程序时，主 进程不会参与到每个具体的事务中。主进程管理所有的子进程，但当子进程与 I/O 操作交互时，它们是直接进行操作的，不需要通过主进程。这意味着，如果你用 cluster 来创建一个 Web 服务器，请求将不会通过你的主进程，而是直接连接到子 进程。而且，调度这些请求并不会导致系统出现瓶颈. 通过 cluster API，你可以把工作分配给 Node 进程，并分布在服务器所有可用的处 理器上，这能够充分利用资源。</p>
+				<pre>
+var cluster=require('cluster');
+var http=require('http');
+var numCpus=require('os').cpus().length;
+if(cluster.isMaster){
+	//创建工作进程
+	for(var count=0;count&lt;numCpus;count++){
+		cluster.fork();
+	}
+	cluster.on('death',function(worker){
+		console.log('worker'+worker.pid+"died.");
+	})
+}else{
+	//工作进程创建http服务器
+	http.Server(function(req,res){
+		res.writeHead(200);
+		res.end("hello.\n");
+	}).listen(8000);
+}
+				</pre>
+				<p>我们使用了 Node 的一些核心模块来把工作平均分配到所有可用的 CPU 上，这些模块为：cluster 模块、http 模块和 os 模块。从 os 模块中，我们可以 轻松得到系统 CPU 的数量。cluster 工作的原理是每一个 Node 进程要么是主进程，要么成为工作进程。当 一个主进程调用 cluster.fork() 方法时，它会创建与主进程一模一样的子进程， 除了两个让每个进程可以检查自己是父 / 子进程的属性以外。在主进程中（Node 运行时直接调用的那个脚本），cluster.isMaster 会返回 true，而 cluster. isWorker 会 返 回 false。 而 在 子 进 程，cluster.isMaster 返 回 false， 且 cluster.isWorker 返回 true。</p>
+				<p>主脚本为每个 CPU 创建了一个工作进程。每个子进程创建了一个 HTTP 服 务器，这是 cluster 另一个独特的地方。在使用 cluster 的地方使用 listen() 监听一个 socket 的时候，多个进程可以同时监听同一个 socket。如果通过调用 node myscript.js 的方法启动多个 Node 进程，会导致出错，因为第二个进程在启动时会抛出 EADDRINUSE 的异常。cluster 提供了跨平台时让多个进程共享 socket 的方 法。即使多个子进程在共享一个端口上的连接，其中一个堵塞了，也不会影响其他 工作进程的新连接。</p>
+				<img src="../../images/nodeJsSection/errorAddrInUse.png" />
+				<p>除了共享 socket 外，我们还能用 cluster 做更多事情，因为它是基于 child_ process 模块的。这个模块会提供一系列属性，其中最有用的一些可以检查子进程 健康状态。在上面的例子中，当子进程死亡时，主进程会用 console.log() 输出 死亡提醒。</p>
+				<pre>
+cluster.on('death',function(worker){
+	console.log('worker'+worker.pid+"died.");
+	cluster.fork();
+})
+				</pre>
+				<p>这个简单的改造让主进程会不停地把死掉的进程重启，从而保证所有的 CPU 都有我 们的服务器在运行。然而，这只是对运行状态的基本检查，我们还能用更多花哨的 技巧。因为工作进程可以传消息给主进程，所以可以让每个工作进程报告自己的状 态，如内存使用量。这让主进程可以觉察哪些工作进程变得不稳定，确认哪些工作 进程没有冻结，或者被长时间运行的事件堵塞。</p>
+				<span class="label label-info" title>进程死亡后重启</span>
+				<pre>
+var cluster=require('cluster');
+var http=require('http');
+var numCpus=require('os').cpus().length;
+var rssWarn=(12*1024*1024)
+	,heapWan=(10*1024*1024);
+if(cluster.isMaster){
+	//创建工作进程
+	for(var count=0;count&lt;numCpus;count++){
+		var worker=cluster.fork();
+		worker.on('message',function(m){
+			if(m.memory){
+				if(m.memory.rss>rssWarn){
+					console.log('Worker '+m.process+' using too much memory:'+m.memory.rss);
+				}
+			}
+		})
+	}
+	cluster.on('death',function(worker){
+		console.log('worker'+worker.pid+"died.");
+		cluster.fork();
+	})
+}else{
+	//工作进程创建http服务器
+	http.Server(function(req,res){
+		res.writeHead(200);
+		res.end("hello.\n");
+	}).listen(8000);
+	//每秒报告一次状态
+	setInterval(function report(){
+		process.send({
+			memory:process.memoryUsage(),
+			process:process.pid
+		});
+	},1000)
+}					
+				</pre>
+				<p>在这个例子里，工作进程报告自己的内存使用量，当子进程使用了过多内存时，主 进程会发送一条警告到日志中去。这是运维团队常用的检测系统健康状态的功能。 这让 Node 主进程有控制的能力，也带来了好处。这个消息传递的接口也允许主进 程把消息发回给工作进程，这意味着你可以把主进程当成工作进程的一个轻量级控制接口。</p>
+				<p>我们还能用消息传递做更多的事情，而这些事情无法在 Node 之外实现。因为 Node 依赖事件循环来工作，所以有个风险是其中一个事件回调函数运行了很长的时间， 这会导致该进程的其他用户需要等待很长时间才能得到服务。主进程与每个工作进 程有一个连接，所以我们可以告诉它定时发送“all OK”消息，这样我们就能够验 证事件循环在以合适的速度周转着，并没有被某个回调函数堵塞。可悲的是，即使 识别了一个长时间运行的回调函数，我们也无法主动关闭它。因为我们发送给该进 程的任何通知都会加到事件队列里，所以它需要等待已经在长时间运行的回调函数 结束后才会被处理。因此，虽然我们能够让主进程识别僵尸进程，但唯一的补救方 法就是杀掉工作进程，而这会丢失它正在执行的工作。做些准备工作就能让你有能力杀掉某个威胁到系统资源的工作进程。</p>
+				<pre>
+var cluster=require('cluster');
+var http=require('http');
+var numCpus=require('os').cpus().length;
+var rssWarn=(50*1024*1024)
+	,heapWan=(50*1024*1024);
+var workers={};
+if(cluster.isMaster){
+	//创建工作进程
+	for(var count=0;count&lt;numCpus;count++){
+		createWorker();
+	}
+	setInterval(function(){
+		var time=new Date().getTime();
+		for(var id in workers){
+			//这里为什么输出的一直是undefined？
+			//console.log(id);
+			//还有为什么不是检测每个子进程，而是当所有的进程都被阻塞时才会重启
+			if(workers[id].lastCb+5000&lt;time){
+				console.log("Long running worker"+id+" killed.");
+				workers[id].worker.kill();
+				delete workers[id];
+				createWorker();
+			}
+		}		
+	},1000);
+}else{
+	//工作进程创建http服务器
+	http.Server(function(req,res){
+		//打乱2个客户端请求中的一个
+		if(Math.floor(Math.random()*100)>50){
+			console.log('Stopped '+process.pid+' from ever finishing.');
+			while(true) continue;
+		}
+		res.writeHead(200);
+		res.end("hello."+process.pid+'\n');
+	}).listen(8000);
+	//每秒报告一次状态
+	setInterval(function report(){
+		process.send({
+			cmd:"reportMem",
+			memory:process.memoryUsage(),
+		});
+	},1000)
+}
+
+function createWorker(){
+	var worker=cluster.fork();
+	console.log('Created worker: '+worker.process.pid);
+	workers[worker.pid]={worker:worker,lastCb:new Date().getTime()};
+	worker.on('message',function(m){
+		if(m.cmd==="reportMem"){
+			workers[m.pid].lastCb=new Date().getTime();		
+			if(m.memory.rss>rssWarn){
+				console.log("Worker "+m.processs+' using too much memory.');
+			}
+		}
+	})
+}					
+				</pre>
+				<p>在这个脚本中，我们给主进程也添加了类似工作进程的定时器。现在，每当一个工 作进程向主进程发送报告时，主进程都会记录报告的时间。大约每隔一秒，主进程 就会检查所有的工作进程，看看是否有某个进程已经超过 5 秒未更新状态（因为超时是以微秒为单位，所以我们用的是 >5000）。如果发现这样的进程，主进程将把阻塞的工作进程杀掉并重启。为了让这个流程更加高效，我们把创建工作进程的代码 放到一个小程序里，这样就能在同一个地方为不同情景提供启动工作。我们也对 HTTP 服务器做了一个小改动，让每个请求有 1/2 的概率会出错。这些彻底分隔的Node程序通过消息传递来交互。因为主进程是简单的小程序，不会卡住，所以它在任何情况下都能够一直检查其他进程。</p>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>
