@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>管理系统</title>
+
+    <!-- 修改了css和js路径，js放置在body底部 -->
+
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="/untitled/public/stylesheets/css.css" />   --> 
+    <style type="text/css">
+        html{height: 100%;}
+        body{height: 100%;overflow:hidden;}
+        #box{min-height: 600px;height:100%;}
+        .navbar-header img{width: 40px;height: auto;margin-top: -10px;}
+        #frame{height: 88%;border: 0px;min-height: 250px;}
+        .content{scroll-x:none;height: 100%;}
+        .nav-pills li{width: 100%;}
+        .subnav{padding: 5px;border-radius: 2px;width: 100%;background-color: rgba(86,190,190,0.5);}    
+        .subnav+div{border:1px solid gray;padding: 0px;display: none;}
+        .subnav+div a{margin: 0px;padding: 2px;background: ;}
+        .subnav+div li{width: 100%;height: 20px;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid" id="box">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">党政监督建议提案系统</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active" ><a href="#">提案<span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">评价</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">排序 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">按时间</a></li>
+                                <li><a href="#">按届次</a></li>
+                                <li><a href="#">按提案人</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">按主题</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">按复函人</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">搜索</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">账号 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">个人信息</a></li>
+                                <li><a href="#">修改信息</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">你的提案</a></li>
+                                <li><a href="#">你的复函</a></li>
+                                <li><a href="#">你的评价</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">设置</a></li>
+                                <li><a href="#">注销</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        <div class="container-fluid content">
+            <div id="index" class="col-lg-2">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a href="#collapseOne" class="collapsed" role="button" data-parent="#accordion" data-toggle="collapse" aira-expanded="false" aira-controls="collapseOne">指标管理</a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpanel" id="collapseOne" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" onclick="iframeJump('htmlSection/Canvas/canvas.html');" class=""><a href="#">添加指标</a></li>
+                                    <li role="presentation" onclick="iframeJump('htmlSection/HTML5/HTML5-code.html');"><a href="#">指标管理</a></li>
+                                </ul> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a href="#collapseTwo" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">查询与统计</a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpannel" id="collapseTwo" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" onclick="iframeJump('cssSection/box-shadow.html');"><a href="#">用户查询</a></li>
+                                    <li role="presentation" onclick="iframeJump('cssSection/border/border-image.html');"><a href="#">指标查询</a></li>
+                                    <li role="presentation" onclick="iframeJump('cssSection/transform/transform.html');"><a href="#">评分查询</a></li>
+                                    <li role="presentation" onclick="iframeJump('cssSection/layout/height.html');"><a href="#">业务进度查询</a></li>
+                                    <li role="presentation" onclick="iframeJump('cssSection/layout/height.html');"><a href="#">数据统计</a></li>
+                                </ul> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                            <h4 class="panel-title">
+                                <a href="#collapseThree" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseThree">数据管理</a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpannel" id="collapseThree" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation">
+                                        <div class="panel">
+                                            <div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> 数据添加</a></div>
+                                            <div class="panel-body">
+                                                <ul class="nav nav-pills">
+                                                    <li role="presentation" onclick="iframeJump('jsSection/referenceType/array.html');"><a href="#">Array类型</a></li>
+                                                    <li role="presentation" onclick="iframeJump('jsSection/referenceType/RegExp.html');"><a href="#">RegExp类型</a></li>
+                                                    <li role="presentation" onclick="iframeJump('jsSection/referenceType/Function.html');"><a href="#">Function类型</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li role="presentation">
+                                        <div class="panel">
+                                            <div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> 数据列表 </a></div>
+                                            <div class="panel-body">
+                                                <ul class="nav nav-pills">                                                      
+                                                    <li role="presentation" onclick="iframeJump('jsSection/AJAX/xhr.html');"><a href="#">XHR</a></li>
+                                                    <li role="presentation" onclick="iframeJump('jsSection/AJAX/xhr2.html');"><a href="#">XHR2级</a></li>
+                                                    <li role="presentation" onclick="iframeJump('jsSection/AJAX/progress.html');"><a href="#">进度事件</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li role="presentation">
+                                        <div class="panel">
+                                            <div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> 数据导入</a></div>
+                                            <div class="panel-body">
+                                                <ul class="nav nav-pills">
+                                                    <li role="presentation" onclick="iframeJump('jsSection/CORS/CORS.html');"><a href="#">CORS</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li role="presentation" onclick="iframeJump('jsSection/getStyle/getComputedStyle.html');"><a href="#">数据导出</a></li>
+                                    <li role="presentation" onclick="iframeJump('jsSection/download.html');"><a href="#">下载文件</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingJQuery">
+                            <h4 class="panel-title">
+                                <a href="#collapseJQuery" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseJQuery">数据字典</a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpannel" id="collapseJQuery" aria-labelledby="headingJQuery">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" onclick=""><a href="#">添加字典</a></li> 
+                                    <li role="presentation" onclick=""><a href="#">字典列表</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingBootstrap">
+                            <h4 class="panel-title">
+                                <a href="#collapseBootstrap" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseBootstrap">评分管理</a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpannel" id="collapseBootstrap" aria-labelledby="headingBootstrap">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" onclick=""><a href="#">评分列表</a></li> 
+                                    <li role="presentation" onclick=""><a href="#">评分录入</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingNodeJs">
+                            <h4 class="panel-title">
+                                <a href="#collapseNodeJs" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseNodeJs">系统管理</a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpannel" id="collapseNodeJs" aria-labelledby="headingNodeJs">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" onclick="iframeJump('NodeJsSection/module/globalAttr.html');"><a href="#">添加用户</a></li> 
+                                    <li role="presentation" onclick="iframeJump('NodeJsSection/module/path.html');"><a href="#">用户列表</a></li>
+                                    <li role="presentation" onclick="iframeJump('NodeJsSection/module/fs.html');"><a href="#">数据备份</a></li>
+                                    <li role="presentation" onclick="iframeJump('NodeJsSection/module/util.html');"><a href="#">数据还原</a></li>
+                                    <li role="presentation" onclick="iframeJump('NodeJsSection/module/notes.html');"><a href="#">阶段时间设定</a></li>
+                                    <li role="presentation">
+                                        <div class="panel">
+                                            <div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> 实践</a></div>
+                                            <div class="panel-body">
+                                                <ul class="nav nav-pills">
+                                                    <li role="presentation" onclick="iframeJump('NodeJsSection/practice/chatRoom.html');"><a href="#">在线聊天室</a></li>
+                                                    <li role="presentation" onclick="iframeJump('NodeJsSection/practice/twitter.html');"><a href="#">Twitter</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingNodeJs">
+                            <h4 class="panel-title">
+                                <a href="#collapseReport" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseNodeJs">汇报展示</a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpannel" id="collapseReport" aria-labelledby="headingNodeJs">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" onclick="iframeJump('NodeJsSection/module/globalAttr.html');"><a href="#">绩效展示</a></li> 
+                                    <li role="presentation" onclick="iframeJump('NodeJsSection/module/path.html');"><a href="#">评分展示</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <iframe src="htmlSection/Canvas/canvas.html" id="frame" class="col-lg-10"></iframe>
+        </div>
+<!--底部
+<div id="footer">版权所有：毕业设计--余志诚 &copy; 2016&nbsp;&nbsp;&nbsp;&nbsp;</div> -->
+</div>
+
+<script type="text/javascript" src="./js/jQuery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap/js/bootstrap.min.js"></script>
+<!-- <script type="text/javascript" src="../public/javascripts/sdmenu.js"></script>
+<script type="text/javascript" src="js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/untitled/public/javascripts/jquery1.9.0.min.js"></script>
+<script type="text/javascript" src="/untitled/public/javascripts/laydate.js"></script> -->
+<script>
+    /*!function(){
+        laydate.skin('molv');
+        laydate({elem: '#Calendar'});
+        laydate.skin('molv');
+        laydate({elem: '#Calendar2'});
+    }();*/
+    var iframeJump=function(url){
+        //兼容360极速和IE8+
+        if(window.parent.frames['frame'].location){
+            window.parent.frames['frame'].location.href=url;
+        }else{
+            //兼容Firefox和Chrome
+            window.parent.frames['frame'].src=url;
+        }
+    }
+    $(document).ready(function(){
+        var EventUtil={
+            addHandler:function(element,type,handler){
+                if(element.addEventListener){
+                    element.addEventListener(type,handler,false);
+                }else{
+                    element.attachEvent("on"+type,handler);
+                }
+            }
+        }
+    });
+    $(function(){
+        //控制索引树上active类的添加与删除,改善用户体验
+        var $presentation=$("li[role='presentation']");
+        $presentation.on('click',function(){
+            $presentation.filter(".active").removeClass("active");
+            $(this).addClass("active");
+        })
+        //二级索引树
+        var $subnav=$('.subnav');
+        $subnav.on("click",function(){
+            $subnav.find('span').removeClass("glyphicon-minus").addClass("glyphicon-plus");
+            if($(this).next().css("display")=="block"){
+                $(this).find('span').removeClass("glyphicon-minus").addClass("glyphicon-plus");
+                $subnav.next().slideUp();
+            }else{
+                $(this).find('span').removeClass("glyphicon-plus").addClass("glyphicon-minus");
+                $subnav.next().slideUp();
+                $(this).next().slideDown();
+            }           
+        })
+    });
+</script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-notes</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the notes in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		body{overflow-x: hidden;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		.alert{height: 30px;line-height: 20px;font-size: 15px;padding: 5px;}
+		.alert-danger{height: auto;}
+		img{margin-bottom: 10px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">module</a></li>
+		<li class="active">querystring模块</li>
+	</ol>
+	<h1><strong>Query String</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>查询字符串主要由两个方法和内置格式化方法组成，一个是将对象转换为字符串，一个则是相反，将字符串转换为对象.</p>
+			<pre>var qs=require('querystring');</pre>
+			<p>querystring模块和url模块的关系为：<code>url.parse(string).query</code> 所得到的串就是querystring模块用来解析的参数。querystring 模块是用来处理 query 字符串的简单辅助模块。query 字符串是在 URL 尾部编码过的参数。它的主要功能有 parse 和 decode，还包括一些内 部辅助函数，如 escape、unescape、unescapeBuffer、encode 和 stringify。</p>
+			<p>这个库在许多使用情景下都非常有用，因为除了 URL 外，很多地方会使用到 query 字符串。当你从一个 HTTP POST 发送的内容是 x-formencoded 格式的时候，它也 是以 query 字符串的形式呈现的。所有的浏览器厂商都为这一做法制定了标准。默 认情况下，HTML 里的 form 都会用这个方式发送数据到服务器上去。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">querystring模块的方法</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>stringify</span>
+				<p><code>querystring.stringify(obj,[sep],[eq]);</code>方法将JSON对象格式化为查询字符串格式的字符串，默认的分割符为： "&" 和 "=" ，具体设置可以添加第二个和第三个参数。</p>
+				<pre>
+var qs=require('querystring');
+qs.stringify({foo:'bar',baz:['qux','quux'],corge:''});		//输出foo=bar&baz=qux&baz=quux&corge=
+qs.stringify({foo:'bar',baz:'qux'},';',':');			//输出foo:bar;baz:qux
+				</pre>
+				<p>如果属性的值不是 string、Boolean 或 number 中的一种，它就不能被序列化，返回的内容中关键字（key）对应的值会是空的。</p>
+				<pre>console.log(qs.stringify({foo:'bar',func:function(){console.log('dogs')}}));	//输出foo=bar&func=</pre>
+			</section>
+			<section>
+				<span class="label label-info" title>parse</span>
+				<p><code>querystring.parse(str,[sep],[eq],[options]);</code>方法根据 "&" 和 "=" 将字符串进行分割，反序列化为JSON对象，seperate参数和equals参数则作为分隔符和对等符来分割字符串，而options包含的maxKeys默认设置为1000，如果将其设置为0则没有这个限制。</p>
+				<pre>
+var qs=require('querystring');
+var equal=qs.stringify({foo:'bar',baz:['qux','quux'],corge:''});
+var colon=qs.stringify({foo:'bar',baz:'qux'},';',':');
+
+console.log(qs.parse(equal));			//输出{foo:'bar',baz:['qux','quux'],corge:''}
+console.log(qs.parse(colon));			//输出{'foo:bar;baz:qux':''}
+console.log(qs.parse(colon,';',':'));		//输出{foo:'bar',baz:'qux'}					
+				</pre>
+				<p>你需要注意几件事情。第一，数字是返回成字符串的，并非数字类型。JavaScript 是弱类型语言，用一个数值运算就能够轻松 把一个字符串强制转换成数字。但是需要时刻考虑那些无法强制转换的情况。其次要注意的是，你传入的 query 字符串不能包含 URL 中标记的 ?。</p>				
+			</section>
+			<section>
+				<span class="label label-info" title>escape && unescape</span>
+				<p><code>querystring.escape(str)</code>和<code>querystring.unescape(str)</code>这两个内置方法，分别在上述方法中内置使用，用来格式化和解码URL字符串，将非标准字符使用 ASCII 码进行编码。</p>
+				<pre>
+console.log(equal);				//输出foo=bar&baz=qux&baz=quxx&corge=
+var escapeEqual=qs.escape(equal);
+console.log(escapeEqual);			//输出foo%3Dbar%26baz%3Dqux%26baz%3Dquux%26corge%3D
+console.log(qs.unescape(escapeEqual));		//输出foo=bar&baz=qux&baz=quxx&corge=
+				</pre>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

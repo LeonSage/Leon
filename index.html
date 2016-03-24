@@ -30,12 +30,10 @@
 						<li class="active"><a href="index.html">首页 <span class="sr-only">(Current)</span></a></li>
 						<li><a href="resume.html">简历</a></li>
 						<!-- <li><a href="resumePrint.html">简历实例</a></li> -->
-						<!-- <li><a href="js/Nodejs/index.html">NodeJs表单提交</a></li> -->
 						<li><a href="LeonShop.html">Leon购物</a></li>
 						<li><a href="learn.html">前端技能</a></li>
 						<li><a href="algorithm.html">算法</a></li>
 						<li><a href="homepage/PHPLearn.html">PHP学习</a></li>
-						<li><a href="htmlToPDF.html">在线HTML转PDF</a></li>
 						<!-- <li><a href="NodeJsLearn.html">NodeJs学习</a></li>	 -->						
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="ture" aria-expanded="false">实例展示<span class="caret"></span></a>
@@ -65,9 +63,9 @@
 <script>
 	//等待DOM树加载完成
 	$(function(){
-		var $cors=$('.cors');
+		/*var $cors=$('.cors');
 		$cors.on('click',function(){
-			/*var xdr=new XDomainRequest();
+			var xdr=new XDomainRequest();
 			xdr.onload=function(){
 				alert(xdr.responseText);
 			};
@@ -75,7 +73,7 @@
 				alert("An error occured.");
 			};
 			xdr.open('get',"http://localhost:1337/../someJson.txt");
-			xdr.send(null);*/
+			xdr.send(null);
 			var xhr=new XMLHttpRequest();
 			xhr.onload=function(){
 				if(xhr.status>=200&xhr.status<300||xhr.status==304){
@@ -86,7 +84,7 @@
 			};
 			xhr.open("get","http://localhost:1337/../someJson.txt",true);
 			xhr.send(null);
-		})
+		})*/
 	})	
 </script>
 </body>
