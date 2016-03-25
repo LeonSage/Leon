@@ -17,4 +17,5 @@ var escapeEqual=qs.escape(equal);
 console.log(escapeEqual);			//输出foo%3Dbar%26baz%3Dqux%26baz%3Dquux%26corge%3D
 console.log(qs.unescape(escapeEqual));		//输出foo=bar&baz=qux&baz=quxx&corge=
 
-console.log(qs.stringify({foo:'bar',baz:['qux','quux'],func:function(){console.log('dogs')}}));
+console.log(qs.stringify({foo:'bar',func:function(){console.log('dogs')}}));
+//输出foo=bar&func=
