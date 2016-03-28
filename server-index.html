@@ -1,10 +1,12 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
 	<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
 	<meta charset='utf-8'>
 	<meta name="author" content="Leon">
-	<meta name="description" content="Leon的个人主页,在这里记录着他前端开发过程中学习到的技术以及实践,其中也包含着各种各样的喜怒哀乐.">
+	<meta name="description" content="和服务器进行对接的主页，对接位置是NodeJs/sample/server.js，负责和服务器进行通信，互发消息。">
 	<link rel="shortcut icon" type="image/x-icon" href="./images/leon.ico">
 	<title>Github by Leon</title>
 	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
@@ -53,6 +55,9 @@
 		<div class="jumbotron">
 			<div class="container">
 				<h1>Hello,world!</h1>
+				<p id="msg">message</p>
+				<button class="btn btn-primary cast">Cast Message.</button>
+				<button class="btn btn-primary castUrl">Cast Url.</button>
 				<!-- <button class="btn btn-primary cors">Get 1337</button> -->
 			</div>			
 		</div>		
@@ -60,9 +65,46 @@
 <!--引入bootstrap和后面DOM操作所必须的jQuery库-->
 <script src="js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/socket.io.js"></script>
 <script>
 	//等待DOM树加载完成
 	$(function(){
+		var socket=io.connect();
+		var $msg=$('#msg');
+		socket.on('connect',function(){
+			console.log('connected');
+			socket.on('message',function(msg){
+				//$msg.append(msg+'\n');
+				window.open(msg);
+			})
+		})
+
+		var $cast=$('.cast');
+		$cast.on('click',function(){
+			console.log('click');
+			socket.send('client clicked');
+			/*var data=$.ajax({url:'/get',success:function(data){
+				console.log(data);
+
+				if(data=="slideUp"){
+					var $jumbotron=$('.jumbotron');
+					$jumbotron.slideUp('slow');
+					$jumbotron.slideDown();
+				}
+			}});*/
+		})
+		var $castUrl=$('.castUrl');
+		$castUrl.on('click',function(){
+			socket.send('http://www.baidu.com');
+		})
+		$('body').bind('mousewheel',function(event){
+			console.log(event)
+			if(event.wheelDelta>0){
+				console.log("up");
+			}else{
+				console.log('down');
+			}
+		});
 		/*var $cors=$('.cors');
 		$cors.on('click',function(){
 			var xdr=new XDomainRequest();

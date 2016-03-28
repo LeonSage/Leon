@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">module</a></li>
+		<li class="active">DNS模块</li>
+	</ol>
+	<h1><strong>Domain Name System 域名系统</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<pre>var dns=require('dns');</pre>
+			<p>用户都希望用域名来代替 IP 地址作为事物的引用名称。 DNS 模块就提供了这种查找的功能，也为那些使用域名的模块提供支持，如 HTTP 客户端。包含了两个主要方法 resolve() 和 reverse()，前者把域名转换成 DNS 记录，后者将 IP 地址转换成域名。DNS 模块的其他方法都是这两种方法的特殊形式。</p>
+		</div>
+		<div class="panel-footer">
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			dns模块的标准方法
+		</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>resolve 域名解析</span>
+				<p><code>dns.resolve(domain[,rrtype],callback)</code>方法使用DNS协议来将一个域名(如<code>www.yahoo.com</code>)解析成由<code>rrtype</code>定义好记录类型的一个数组。<code>rrtype</code>为<code>request record type</code>,是表示请求的记录类型的字符串，它可用的值有：
+				<dl class="dl-horizontal">
+					<dt><code>'A'</code> : </dt>
+					<dd><pre>IPV4地址，默认值.</pre></dd>
+					<dt><code>'AAAA'</code> : </dt>
+					<dd><pre>IPV6地址</pre></dd>
+					<dt><code>'MX'</code> : </dt>
+					<dd><pre>mail exchange records 邮箱记录</pre></dd>
+					<dt><code>'TXT'</code> : </dt>
+					<dd><pre>text records 文本记录</pre></dd>
+					<dt><code>'SRV'</code> : </dt>
+					<dd><pre>SRV records</pre></dd>
+					<dt><code>'PTR'</code> : </dt>
+					<dd><pre>used for reverse IP lookups</pre></dd>
+					<dt><code>'NS'</code> : </dt>
+					<dd><pre>name server records 名称服务器记录</pre></dd>
+					<dt><code>'CNAME'</code> : </dt>
+					<dd><pre>canonical name records 规范名称记录</pre></dd>
+					<dt><code>'SOA'</code> : </dt>
+					<dd><pre>start of authority record 起始授权机构记录</pre></dd>				
+				</dl>
+				许多人都熟悉 address 或 A record 类型，这种记录类型把 IPv4 区域映射到一个域名（前一个项目定义的）。而 canonical name 或 CNAME 记录允许你为 A record 或另外一个 CNAME 创建一个别名，如 www. example.com 可能是 A record 类型域名 example.com 的别名。MX 记录指向使用 SMTP 的邮件域名服务器。当你发送 email 到 person@domain.com 时，domain.com 的 MX 记录会告诉你的邮件服务器该把邮件发往哪里。Text 记录，或称为 TXT， 是依附在域名上的记录，它可以用作各种用途。DNS 库支持的最后一种类型是 service，或称为 SRV 记录，它的作用是在特定域名下说明有哪些服务可用。</p>
+				<p><code>callback(err,addresses)</code>回调函数，得到从DNS服务器返回由rrtype定义好格式并采取对应方法查询的地址数组，发生错误时，也返回err对象。</p>	
+				<pre>
+//调用dns.resolve()
+var dns=require('dns');
+dns.resolve('www.yahoo.com','A',function(e,r){
+	if(e){
+		console.log(e);
+	}
+	console.log(r);		//输出[ '116.214.12.74' ]
+})
+dns.resolve('yahoo.com','A',function(e,r){
+	if(e){
+		console.log(e);
+	}
+	console.log(r);		//输出[ '206.190.36.45', '98.138.253.109', '98.139.183.24' ]
+})
+dns.resolve('yahoo.com','AAAA',function(e,r){
+	if(e){
+		console.log(e);
+	}
+	console.log(r);		//输出[ '2406:2000:ec:601::1009' ]
+})
+				</pre>
+				<p>返回的结果就是通过DNS服务器查询出的IP地址，列表中的每一个值都可以访问到相同的网站。</p>
+				<p>还有些方便的方法可用来处理前面列出的各种记录类型。比如，除了调用 resolve ('example.com', 'MX', callback) 以外，你还可以调用 resolveMx('example. com', callback)。API 还提供了 resolve4() 和 resolve6() 方法， 分别用来解析 IPv4 和 IPv6 地址。</p>
+				<pre>
+var dns=require('dns');
+dns.resolveMx('yahoo.com',function(e,r){
+	if(e){
+		console.log(e);
+	}
+	console.log(r);		
+	//输出(应该是路由路径？)
+	[ { exchange: 'mta5.am0.yahoodns.net', priority: 1 },
+	  { exchange: 'mta6.am0.yahoodns.net', priority: 1 },
+	  { exchange: 'mta7.am0.yahoodns.net', priority: 1 } ]
+})
+dns.resolveTxt('yahoo.com',function(e,r){
+	if(e){
+		console.log(e);
+	}
+	console.log(r);		//输出[ [ 'v=spf1 redirect=_spf.mail.yahoo.com' ] ]
+})
+				</pre>
+				<span class="label label-info" title>lookup 查询路径</span>
+				<p><code>dns.lookup(hostname[,options],callback)</code>方法将主机名解析出第一个找到的IPv4或者IPv6地址记录如果你没有传入地址，它会默 认是网络设备接口的当前设置。。其中<code>options</code>可能是一个对象或者整数，如果指定4或者6，则只会返回相应的IP地址，如果不设置，则IPv4和IPv6都可以。<code>options</code>也可以作为一个对象，包含的属性(所有的均为可选项)有：
+				<pre>
+{
+	family:4,
+	//可选4||6||空，不设置时，IPv4和IPv6都可以。
+
+	hints:dns.ADDRCONFIG | dns.V4MAPPED,
+	//dns.ADDRCONFIG 只返回当前系统支持的地址类型，不包括本地环回地址
+	//dns.V4MAPPED 当定义返回IPv6但查询为空时，返回映射得到的IPv4地址
+
+	all:false
+	//当为true时，返回所有解析地址，默认为false，返回一个单一地址
+}
+				</pre>
+				<code>callback(err,address,family)</code>回调函数中，address为返回的地址数组，family为lookup时设置的方式(4||6)。当设置为<code>all:true</code>时，回调函数也变成<code>callback(err,addresses)</code>。
+				</p>
+				<pre>
+//lookup查询单个记录
+dns.lookup('yahoo.com',4,function(e,a){
+	console.log(a);		//输出98.139.183.24
+})
+				</pre>
+				<span class="label label-info" title>reverse </span>
+				<p><code>dns.reverse(ip,callback)</code>执行一个DNS查询并且解析IP地址到一个主机名数组。<code>callback(err,hostnames)</code>,返回值为一组给定的ip。</p>
+				<pre>
+dns.resolve('yahoo.com','A',(e,a)=>{
+	console.log(a);		//输出[ '98.139.183.24', '206.190.36.45', '98.138.253.109' ]
+	for(i in a){
+		dns.reverse(a[i],function(e,host){
+			console.log(host);
+			//输出
+				[ 'ir2.fp.vip.bf1.yahoo.com' ]
+				[ 'ir1.fp.vip.ne1.yahoo.com' ]
+				[ 'ir1.fp.vip.gq1.yahoo.com' ]
+		});
+	}
+})
+
+dns.resolve('google.com','A',(e,a)=>{
+	console.log(a);		//输出[ '216.58.197.110' ]
+	for(i in a){
+		dns.reverse(a[i],function(e,host){
+			console.log(host);
+			//输出[ 'hkg12s01-in-f14.1e100.net' ]
+		});
+	}
+})
+				</pre>
+				<p><code>(err,data)=>{...}</code>一样可以作为回调函数的表达方式。在例子中得到的域名都是可达的，不过是我们输入域名的具体主机名。</p>
+				<cite>参考资料：<code>http://nodejs.cn/api/dns.html#dns_dns_resolve_hostname_rrtype_callback</code></cite>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

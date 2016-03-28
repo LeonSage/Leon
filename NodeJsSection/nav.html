@@ -6,7 +6,7 @@
 	<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<!-- <meta http-equiv="Refresh" content="10;url=index.html" /> -->
 	<link rel="shotcut icon" type="image/x-icon" href="./images/leon.ico">
-	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
 	<title>前端开发 </title>
 	<style type="text/css">
 		html{height: 100%;}
@@ -32,15 +32,18 @@
 			<div class="panel panel-default">
 				<div class="panel-heading" role="tab" id="headingOne">
 					<h4 class="panel-title">
-						<a href="#collapseOne" data-parent="#accordion" data-toggle="collapse" aira-expanded="true" aira-controls="collapseOne">HTML</a>
+						<a href="#collapseOne" data-parent="#accordion" data-toggle="collapse" aira-expanded="true" aira-controls="collapseOne">Practice</a>
 					</h4>
 				</div>
 				<div class="panel-collapse collapse in" role="tabpanel" id="collapseOne" aria-labelledby="headingOne">
 					<div class="panel-body">
 						<ul class="nav nav-pills">
-							<li role="presentation" onclick="iframeJump('htmlSection/Canvas/canvas.html');" class="active"><a href="#">Canvas</a></li>
-							<li role="presentation" onclick="iframeJump('htmlSection/HTML5/HTML5-code.html');"><a href="#">HTML5新特性</a></li>
-							<li role="presentation"><a href="#">meta</a></li>
+							<li class="active" role="presentation" onclick="iframeJump('../NodeJsSection/practice/chatRoom.html');"><a href="#">在线聊天室</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/practice/twitter.html');"><a href="#">Twitter</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/practice/eventLoop.html');"><a href="#">事件循环</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/practice/multiProcess.html');"><a href="#">多进程</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/practice/errorHandle.html');"><a href="#">差错处理</a></li>
+							
 						</ul> 
 					</div>
 				</div>
@@ -48,16 +51,17 @@
 			<div class="panel panel-default">
 				<div class="panel-heading" role="tab" id="headingTwo">
 					<h4 class="panel-title">
-						<a href="#collapseTwo" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">CSS</a>
+						<a href="#collapseTwo" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">Module</a>
 					</h4>
 				</div>
 				<div class="panel-collapse collapse" role="tabpannel" id="collapseTwo" aria-labelledby="headingTwo">
 					<div class="panel-body">
 						<ul class="nav nav-pills">
-							<li role="presentation" onclick="iframeJump('cssSection/box-shadow.html');"><a href="#">box-shadow</a></li>
-							<li role="presentation" onclick="iframeJump('cssSection/border/border-image.html');"><a href="#">border-image</a></li>
-							<li role="presentation" onclick="iframeJump('cssSection/transform/transform.html');"><a href="#">transform</a></li>
-							<li role="presentation" onclick="iframeJump('cssSection/layout/height.html');"><a href="#">百分比高度</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/http.html');"><a href="#">http模块</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/url.html');"><a href="#">url模块</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/querystring.html');"><a href="#">querystring模块</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/fs.html');"><a href="#">fs模块</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/dns.html');"><a href="#">dns模块</a></li>
 						</ul> 
 					</div>
 				</div>
@@ -65,12 +69,13 @@
 			<div class="panel panel-default">
 				<div class="panel-heading" role="tab" id="headingThree">
 					<h4 class="panel-title">
-						<a href="#collapseThree" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseThree">JavaScript</a>
+						<a href="#collapseThree" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseThree">API</a>
 					</h4>
 				</div>
 				<div class="panel-collapse collapse" role="tabpannel" id="collapseThree" aria-labelledby="headingThree">
 					<div class="panel-body">
 						<ul class="nav nav-pills">
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/API/events.html');"><a href="#">事件模块</a></li>
 							<li role="presentation">
 								<div class="panel">
 									<div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> 引用类型</a></div>
@@ -82,31 +87,26 @@
 										</ul>
 									</div>
 								</div>
-							</li>
-							<li role="presentation">
-								<div class="panel">
-									<div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> AJAX </a></div>
-									<div class="panel-body">
-										<ul class="nav nav-pills">														
-											<li role="presentation" onclick="iframeJump('jsSection/AJAX/xhr.html');"><a href="#">XHR</a></li>
-											<li role="presentation" onclick="iframeJump('jsSection/AJAX/xhr2.html');"><a href="#">XHR2级</a></li>
-											<li role="presentation" onclick="iframeJump('jsSection/AJAX/progress.html');"><a href="#">进度事件</a></li>
-										</ul>
-									</div>
-								</div>
-							</li>
-							<li role="presentation">
-								<div class="panel">
-									<div class="panel-header subnav"><a href="#"><span class="glyphicon glyphicon-plus"></span> CORS</a></div>
-									<div class="panel-body">
-										<ul class="nav nav-pills">
-											<li role="presentation" onclick="iframeJump('jsSection/CORS/CORS.html');"><a href="#">CORS</a></li>
-										</ul>
-									</div>
-								</div>
-							</li>
-							<li role="presentation" onclick="iframeJump('jsSection/getStyle/getComputedStyle.html');"><a href="#">获取当前样式</a></li>
+							</li>																				
 							<li role="presentation" onclick="iframeJump('jsSection/download.html');"><a href="#">下载文件</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingNodeJs">
+					<h4 class="panel-title">
+						<a href="#collapseNodeJs" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseNodeJs">NodeJs</a>
+					</h4>
+				</div>
+				<div class="panel-collapse collapse" role="tabpannel" id="collapseNodeJs" aria-labelledby="headingNodeJs">
+					<div class="panel-body">
+						<ul class="nav nav-pills">
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/globalAttr.html');"><a href="#">全局变量</a></li>	
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/path.html');"><a href="#">path模块</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/util.html');"><a href="#">util模块</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/module/notes.html');"><a href="#">零碎知识点</a></li>
+							
 						</ul>
 					</div>
 				</div>
@@ -141,10 +141,11 @@
 					</div>
 				</div>
 			</div>
+			
 		</div>
 	</div>
-<script src="js/jQuery/jquery-1.11.3.min.js"></script>
-<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
 	var iframeJump=function(url){
 		//兼容360极速和IE8+
