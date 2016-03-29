@@ -1,0 +1,15 @@
+const crypto=require('crypto');
+const fs=require('fs');
+var pem=fs.readFileSync('key.pem');
+var key=pem.toString('ascii');
+var plain='data textarea';
+var encrypted="";
+var cipher=crypto.createCipher('blowfish',key);
+encrypted+=cipher.update(new Buffer(plain),'binary','hex');
+encrypted+=cipher.final('hex');
+var decrypted="";
+var decipher=crypto.createDecipher('blowfish',key);
+decrypted+=decipher.update(encrypted,'hex','binary');
+decrypted+=decipher.final('binary');
+console.log(plain);
+console.log(decrypted);
