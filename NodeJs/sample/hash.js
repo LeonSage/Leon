@@ -1,15 +1,18 @@
 const crypto=require('crypto');
 const fs=require('fs');
-var pem=fs.readFileSync('key.pem');
-var key=pem.toString('ascii');
-var plain='data textarea';
-var encrypted="";
-var cipher=crypto.createCipher('blowfish',key);
-encrypted+=cipher.update(new Buffer(plain),'binary','hex');
-encrypted+=cipher.final('hex');
-var decrypted="";
-var decipher=crypto.createDecipher('blowfish',key);
-decrypted+=decipher.update(encrypted,'hex','binary');
-decrypted+=decipher.final('binary');
-console.log(plain);
-console.log(decrypted);
+
+var privatePem=fs.readFileSync('key.pem');
+var publicPem=fs.readFileSync('key.pem');
+var key=privatePem.toString();
+var pubkey=publicPem.toString();
+var data="some data to sign";
+
+const sign=crypto.createSign('RSA-SHA256');
+sign.update(data);
+var sig=sign.sign(key,'hex');
+
+const verify=crypto.createVerify('RSA-SHA256');
+verify.update(data);
+
+console.log(verify.verify(pubkey,sig,'hex'));
+//输出

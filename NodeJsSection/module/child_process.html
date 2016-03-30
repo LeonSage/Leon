@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">module</a></li>
+		<li class="active">child_process模块</li>
+	</ol>
+	<h1><strong>CHILD_PROCESS 子进程</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<pre>const cp=require('child_process');</pre>
+			<p>你可以使用 child_process 模块来为 Node 主进程创建子进程。因为 Node 的单进 程只有一个事件循环，所以有时候创建子进程是很有用的。比如，你可能需要用此 方法来更好地利用 CPU 的多核，而单个 Node 进程只能使用其中一个核。或者说， 你可以用 child_process 来启动其他程序，然后与其交互。特别是当你在编写命 令行脚本的时候，这会非常有用。</p>
+			<p>child_process 有两个主要的方法。spawn() 会创建一个子进程，并且有独立的 stdin、stdout 和 stderr 文件描述符。exec() 会创建子进程，并会在进程结束的时候 以回调函数的方式返回结果。创建子进程的方法有很多种，其中一种依然是非阻塞 的方式，而且不需要你写额外的代码来推动运行。</p>
+			<p>所有的子进程都有一些公共的属性。它们每个都包含了 stdin、stdout 和 stderr 的特性。此外它们还有一个 pid 属性，它包含了该 子进程的 OS 进程 ID。子进程在退出的时候会触发 exit 事件。其他 data 事件可 以 通 过 child_process.stdin、child_process.stdout 和 child_process. stderr 的流方法获得。</p>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>Node即学即用</cite></code></p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading"> child_process.exec()</div>
+		<div class="panel-body">
+			<section>
+				<p><code>child_process.exec()</code>创建一个子进 程来运行其他程序（也可以是另外一个 Node 程序），然后在回调函数中返回执行的结果。</p>
+				<pre>
+var cp=require('child_process');
+cp.exec('dir',function(e,stdout,stderr){
+	if(!e){
+		console.log(stdout);
+		console.log(stderr);
+	}
+})
+
+//输出：
+ ������ E �еľ��� �ĵ�
+ �������к��� 0000-EE34
+
+ E:\git\Leon\NodeJs\sample ��Ŀ¼
+
+2016/03/29  20:57    <DIR>          .
+2016/03/29  20:57    <DIR>          ..
+2016/03/24  18:30               287 buffer.js
+2016/03/29  20:57               140 child_process.js
+2016/03/29  15:12    <DIR>          crypto
+2016/03/28  15:12               487 dns.js
+2016/03/23  14:34               246 eventEmitter.js
+2016/03/24  15:52             1,952 fs.js
+2016/03/29  16:31               474 hash.js
+2016/03/23  16:02               321 http.js
+2016/03/28  16:56               891 key.pem
+2016/03/29  20:26               296 process.js
+2016/03/28  10:09             2,561 server.js
+2016/03/29  09:46               288 test.enc
+2016/03/24  14:33               910 url.js
+              12 ���ļ�          8,853 �ֽ�
+               3 ��Ŀ¼ 97,249,701,888 �����ֽ�					
+				</pre>
+				<p>当调用 exec() 时，可以输入一个命令行指令让新创建的进程去执行。注意整个命 令是一个字符串。如果你需要给命令传入参数，也需要将其包含在字符串里。你还可以使用复杂的命令行功能，比如“|”来实现管道命令。Node 会返回管道中最后一个命 令的结果。</p>
+				<p>回调函数接收 3 个参数：一个 error 对象、stdout 的结果和 stderr 的结果。注意调用的命令会运行在 Node 程序当前所在的工作目录中，你可以调用 process. cwd() 获得这个目录。</p>
+				<p>重要的是要了解第一个和第三个参数的区别。如果子进程返回了错误的状态码或者 是有其他异常发生，error 对象就不会是 null。当子进程退出时，它会把状态传回 给父进程。比如，在 Unix 中，0 是表示成功，大于 0 的 8 位数字则用来表示错误。 error 对象也可以用来表示被调用的命令不满足 Node 对它的限制。当错误代码从子 进程返回时，error 对象会包含错误代码和 stderr。但是，若一个子进程运行是成功 的，stderr 中依然可以有数据。exec() 的第二个参数可以是一个可选的配置对象:</p>
+				<dl class="dl-horizontal">
+					<dt><code>encoding</code> : </dt>
+					<dd><pre>I/O流输入字符的编码格式</pre></dd>
+					<dt><code>timeout</code> : </dt>
+					<dd><pre>进程运行的时间，以毫秒为单位</pre></dd>
+					<dt><code>killSignal</code> : </dt>
+					<dd><pre>当时间或Buffer大小超过限制时，用来终止进程的信号</pre></dd>
+					<dt><code>maxBuffer</code> : </dt>
+					<dd><pre>stdout或stderr允许最大的字节，以千字节为单位</pre></dd>
+					<dt><code>setsid</code> : </dt>
+					<dd><pre>是否创建Node子进程的新会话</pre></dd>
+					<dt><code>cwd</code> : </dt>
+					<dd><pre>为子进程初始化工作目录，null表示使用当前的工作目录</pre></dd>
+					<dt><code>env</code> : </dt>
+					<dd><pre>进程的环境变量，所有的环境变量都可以从父进程继承</pre></dd>				
+				</dl>
+				<pre>
+//限制响应数据的Buffer大小
+var cp=require('child_process');
+cp.exec('dir',{maxBuffer:1},function(e,stdout,stderr){
+	if(!e){
+		console.log('stdout : '+stdout);
+		console.log('stderr : '+stderr);
+	}else{
+		console.log("e: "+e);
+	}
+})	
+
+//输出：e: Error: stdout maxBuffer exceeded				
+				</pre>
+				<p>在本例中，你可以看见我们设置了一个很小的 maxBuffer（只有 1kb），所以运行 dir 命令很快就耗尽所有的可用空间并且抛出错误。因此检查错误很重要，这让你能 够用合理的方法来处理它们。因为你已经限制在 child_process 里，所以你不会 希望由于访问了不存在的资源而导致真正的异常发生。如果 child_process 返回 了一个错误，它的 stdin 和 stdout 属性就不可用了，因此如果再去访问它们将会抛出异常。</p>					
+			</section>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">child_process.spawn()</div>
+		<div class="panel-body">
+			<p>spawn() 和 exec() 很像，但它是一个更加通用的方法。它要求你自己处理流和它 们的回调函数。这让它的功能更加强大和灵活，但这也意味着需要编写更多的代码 才能达到 exec() 那些一下子就能完成的功能。所以 spawn() 最常见的用途是用来 在服务器开发中创建服务器程序的子模块，它也是人们使 Node 运行在一台机器的 多个 CPU 核上的最常见方式。</p>
+			<p>虽然其功能和 exec() 一样，但 spawn() 的 API 还是有些差异的。第一个参数依然是让进程去开始运行的命令，但与 exec() 不同，它不再是一个命令字符串，而只是可执行程序。进程的参数以数组的形式作为第二个（可选 的）参数传给 spawn()。这和 process.argv 的反向操作类似：不是把命令按空格分隔开，而是提供一个数组来以空格连接起来（join()）。最后，spawn() 还可以接受一个选项数组作为最后一个参数。配置的部分属性与 exec() 的相同。</p>
+			<pre>
+var cp=require('child_process');
+var cat=cp.spawn('cat');
+cat.stdout.on('data',function(d){
+console.log(d.toString());
+})
+cat.on('exit',function(){
+console.log('kthxbai');
+})
+cat.stdin.write('meow');
+cat.stdin.end();
+
+//预期输出：
+meow
+kthxbai					
+			</pre>
+			<p class="alert alert-danger">这些命令都是linux下的命令，在windows下并不会正确执行，现在我也不想去查找cmd下对应的命令，所以这些可不用实践。</p>
+			<p>在上面的例子中，我们使用了 Unix 程序的 cat 命令，它会把所有输入的内容都复 制一遍并打印出来。你会看到，与 exec() 不同，我们没有直接给 spawn() 指定回 调函数，因为期待使用子进程类提供的流事件来读取并发送数据。我们把子进程的 实例命名为“cat”变量，然后就可以通过 cat.stdout 来设置子进程 stdout 流的事 件监听器了。我们为 cat.stdout 设置了监听器来监控所有的 data 事件，并且对 子进程本身设置了 exit 事件的监听器。通过其 child.stdin 流，就可以接着往子进程的 stdin 中发送数据。这只是一个普通的可写数据流，但是，由于 cat 程序的 行为特点，当我们关闭 stdin 的时候，子进程就会退出。这并非对所有程序都有效， 但对于 cat 程序来说是有效的，因为它的存在只是为了把数据回显。</p>
+			<p>你需要对 spawn() 进行更多的手工操作。env、setsid 和 cwd 属性都是 spawn() 的可选项。还有 uid 和 gid，分别用来设置用户 ID 和组 ID。与 process 类似，设置 uid 或 gid 来修改用户名或用户组的名称会因为查找用户或用户组而短暂堵塞。spawn() 还 比 exec() 多一个配置项，你可以设置自定义的文件描述符来传给新建立的子进程。</p>
+			<p>Unix 系统中的文件描述符是用来记录跟踪该程序正在对哪些文件进行操作的方法。 因为 Unix 允许多个程序同时运行，所以需要有方法来确保这些程序在修改文件系统 时不会不小心把别人的修改覆盖。文件描述符表是用来记录一个进程想要访问的所 有文件信息的，内核可能会为了防止两个程序同时修改一个文件而把某个特定的文 件锁住，当然还有其他管理功能。进程会从文件描述符表中查找某个文件对应的文 件描述符，然后传给内核去访问该文件。文件描述符其实只是用一个整数来表示。</p>
+			<p>重要的一点是，文件描述符并不是单纯地表示文件。网 络或其他 socket 一类的东西也是分配成文件描述符。Unix 的跨进程通信（IPC） socket 可以用来让进程间互相发消息，我们称它们为 stdin、stdout 和 stderr。当 spawn() 允许我们在创建新的子进程时指定文件描述符时，情况变得有趣起来。这 意味着，不必由操作系统指派一个新的文件描述符，我们可以要求子进程与父进程 一起共享一个已经存在的文件描述符。该文件描述符可以是一个连接在互联网的网 络 socket，或者只是父进程的 stdin。但重点是，我们有了一个功能强大的方法来把 工作分配给子进程了。？当传递 options 对象给 spawn() 时，我们可以指定 customFds 来把自己拥有的 3 个文件描述符传递给子进程，这样进程就不需要创立新 的 stdin、stdout 和 stderr 文件描述符了。</p>
+			<pre>
+var cp=require('child_process');
+var child=cp.spawn('cat',[],{customFds:[0,1,2]});
+
+//输出：
+Enki:~ $ echo "foo" 
+foo
+Enki:~ $ echo "foo" | node
+readline.js:80
+tty.setRawMode(true);
+        ^ 
+Error: ENOTTY, Inappropriate ioctl for device
+at new Interface (readline.js:80:9)
+    at Object.createInterface (readline.js:38:10)
+    at new REPLServer (repl.js:102:16)
+    at Object.start (repl.js:218:10)
+    at Function.runRepl (node.js:365:26)
+    at startup (node.js:61:13)
+    at node.js:443:3 
+Enki:~ $ echo "foo" | cat 
+foo 
+Enki:~ $ echo "foo" | node fds.js 
+foo 
+			</pre>
+			<p>文件描述符 0、1、2 分别代表了 stdin、stdout 和 stderr。在例子中， 我们创建了 一个子进程，并从父进程给它传递 stdin、stdout 和 stderr。可以在命令行里进行 连接测试。echo 命令可以打印出字符串 foo。如果直接把它用管道传给 node 程序 （stdout 到 stdin），结果是出错。但是，我们可以把它传递给 cat 命令，它会把内 容回显出来。同样，如果把内容通过管道传给运行脚本的 Node 程序，它也会把内 容重复出来。这是因为我们将 Node 进程的 stdin、stdout 和 stderr 都与子进程中的 cat 程序绑定在一起了。当 Node 主进程从 stdin 得到数据的时候，它会传给 cat 子 进程，并由 cat 程序把内容回传给共享的 stdout。要注意的一点是，一旦你把 Node 程序以这种方式连接起来，子进程就丢失了它的 child.stdin、child.stdout 和 child.stderr 的文件描述符引用。这是因为一旦把文件描述符传递给子进程，它 们就会被复制，并且由内核来处理数据传递。因此，Node 并不是在进程与文件描述 符之间（FD），所以你无法对这些数据流添加事件监听器。</p>
+			<p>当指定了自定义的文件描述符，这些流就被显式地设置为 null，并且完全不能从父 进程访问了。但在许多情况下这是有价值的，因为比起用 Node 的 stream.pipe() 把数据流连接起来，通过内核来分发要快很多。而且，stdin、stdout 和 stderr 并 非仅有的几个值得用来连接子进程的文件描述符。一个常见的使用情境是把网络 socket 和一组子进程相连接，来利用多核的性能。</p>
+			<p>假设我们在创建一个网站或游戏服务器，或者任何需要处理大量流量的应用。我们 有着强大的服务器，上面有一堆处理器，每个又有 2 个或 4 个核。假如只是简单地 启动 Node 进程来运行代码，就只能用上一个核。虽然 CPU 通常不是 Node 程序的 核心因素，但我们还是想尽量接近 CPU 的极限。此时我们可以把 Node 程序启动 到不同的端口上，然后利用 Nginx 或 Apache 来进行负载均衡。但是，这样做并不 优雅，而且要使用更多的软件。我们也可以让 Node 进程启动许多子进程，然后把 请求分发给它们。这离理想解决方案已经很接近了，但是这个方法会出现一个单点 故障，因为只有一个 Node 进程来分发所有的数据，这还不够理想。现在就是传递 custom FD 大显身手之时了。用传递主进程 stdin、stdout 和 stderr 同样的方法，我 们可以创建其他 socket 并且把它们传给子进程。但因为我们传递的是文件描述符而 不是消息，所以内核会负责处理分发。这意味着，即使依然需要有一个主 Node 进 程，但是它不再需要承载所有的流量负荷了。</p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

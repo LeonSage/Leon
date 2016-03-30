@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">api</a></li>
+		<li class="active">process</li>
+	</ol>
+	<h1><strong>PROCESS 进程</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>虽然 Node 把许多东西从操作系统中抽象出来，但你依然在操作系统里运行，而且 可能想要更直接地与它交互。Node 中可以使用系统中已经存在的进程，或者创建新 的子进程来做各种工作。虽然 Node 本身是一个“胖”线程，带有单独一个事件循 环，但你可以任意地开启其他进程（线程）在事件循环外工作。</p>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>Node即学即用</cite></code></p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">process</div>
+		<div class="panel-body">
+			<section>
+				<p>可以使用 process 模块从当前的 Node 进程中获得信息，并可以修改配置。和其他 大部分模块不同，process 模块是全局的，并且可以一直通过变量 process 获得。</p>
+				<span class="label label-info" title>process事件</span>
+				<p>process 是 EventEmitter 的实例，所以它提供了基于对 Node 进程的系统调用的 事件。exit 事件提供了在 Node 进程退出前的最终响应时机。重要的是， 事件循环在 exit 事件之后就不会再运行了，因此只有那些不需要回调函数的代码 才会被执行。 </p>
+				<pre>
+process.on('exit',function(){
+	setTimeout(function(){
+		console.log('This will not run.');
+	},100);
+	console.log('Bye');		//输出: Bye
+})					
+				</pre>
+				<p>因为事件循环不会再运行，因此 setTimeout() 里的代码永远不会执行。</p>
+				<p>process 提供的一个非常有用的事件是 uncaughtException。用过 Node 一段时间后，你会发现那些在事件主循环里碰到的异常会导致 Node 进程退 出。在许多应用场景下，特别是对那些希望永不当机的服务器程序来说，这都是不 可接受的。uncaughtException 事件会提供一个极其暴力的方法来捕获这些异常。 它确实是最后一道防线了，但对解决此问题非常有效。</p>
+				<pre>
+//如果不捕获异常，服务器会直接宕机
+process.on('uncaughtException',function(err){
+	console.log('Caught exception: '+err);
+});
+setTimeout(function(){
+	console.log('This will still run.');
+},500);
+
+//故意导致异常，并且不捕获它
+nonexistFunc();
+console.log('This will not run');
+
+//输出：
+Caught exception: ReferenceError: nonexistFunc is not defined
+This will still run.
+				</pre>
+				<p>因为捕获了一个不存在的函数触发的事件，所以虽然 Node 程序不会退出，但是标准的执行流程会被打断。我们知道所有的 JavaScript 都会执行一遍，然后任何回调函数都可能在其对应监听的事件触发时被调用到。但在这个例子中，因为 nonexistentFunc() 抛出了异常，所以在它之后 的代码都不会执行下去。然而，在此之前已经运行的代码会继续下去，也就是说， setTimeout() 依然会被调用。这在你开发服务器程序的时候很重要。让我们再看一个例子。</p>
+				<pre>
+var http=require('http');
+var server=http.createServer(function(req,res){
+	res.writeHead(200,{});
+	res.end('response');
+	noExistFunc();
+	console.log('sent response');
+}).listen(8080);
+
+process.on('uncaughtException',function(err){
+	console.log('Caught exception: '+err);
+});	
+
+//输出：	
+Caught exception: ReferenceError: noExistFunc is not defined
+Caught exception: ReferenceError: noExistFunc is not defined				
+				</pre>
+				<p>这段代码创建了一个简单的 HTTP 服务器，然后在进程层次上监听所有的未捕获异 常。在 HTTP 服务器中，回调函数在发送了 HTTP 响应后，故意调用了一个错误的函数。我们对它发起了几次 HTTP 请求。服务器并没有关闭退出。相反，错误被绑定在 uncaughtException事件上的函数记录了下来，而且我们依然能够提供完整的 HTTP 请求处理服务。 Node 故意阻止了正在运行的回调函数继续处理和调用下面的 console.log()。该错误只会影响我们派生出来的进程，而服务器能够继续运行， 所以该异常被封装在一个特定的代码路径上，其他代码并不会受影响。</p>
+				<span class="label label-info" title>EventEmitter的简略监听代码</span>
+				<p>还要重点理解的是 Node 中的监听器如何实现</p>
+				<pre>
+EventEmitter.prototype.emit=function(type){
+	if(...){
+		...
+		var handler=this._events[type];
+		...
+	}else if(isArray(handler)){
+		var args=Array.prototype.slice.call(arguments,1);
+		var listeners=handler.slice();
+		for(var i=0,l=listeners.length;i&lt;l;i++){
+			listeners[i].apply(this,args);
+		}
+		return true;
+	}
+	...
+}
+				</pre>
+				<p>在事件触发后，运行时处理程序中的一项检查是看看是否存在事件监听器的数组。 如果有几个监听器，运行执行器会按数组顺序把里面的监听器一一调用。意思是说， 第一个绑定的监听器会首先用 apply() 方法调用，然后是第二个，以此类推。这里 需要重点注意的是，同一个事件的所有监听器是在同一个代码路径上的。所以如果 其中一个回调函数出现了异常未被捕获，将导致该事件的其他回调函数终止执行。 但是一个事件实例中的未捕获异常不会影响其他事件。</p>
+				<p>我们还能利用 process 来访问一些系统事件。当进程得到一个信号的时候，它会 通过 process 触发的事件通知 Node 程序。例如操作系统会产生许多 POSIX 系 统事件,最常见的有 SIGINT、中断信号 量。通常，当用户对运行在终端的程序按下 Ctrl-C 的时候，SIGINT 就会发生。除 非你通过 process 来处理信号事件，否则 Node 会采取默认方法进行处理。比如说 SIGINT 的情况，默认操作就是立刻杀死进程。你可以通过 process.on() 方法来 修改这些默认行为，除了一些永远无法捕获的信号之外。</p>
+				<pre>
+//开始从标准输入读取内容，所以程序不会退出
+process.stdin.resume();
+
+process.on('SIGINT',function(){
+	console.log('Got SIGINT, Press Control-D to exit.');
+})
+				</pre>
+				<p>为了确保 Node 程序不会主动退出，我们从标准输入读取内容，这样 Node 进程就会继续运行了。如果你在程序运行的时候按下 Ctrl-C， 操作系统会发送 SIGINT 信号给 Node 程序，这会被 SIGINT 事件处理器所捕获。在本例中，我们采用把信息记录在终端的方式来代替原本的退出程序操作。只能关闭命令行窗口了，sigh。</p>																
+			</section>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">与当前Node进程交互</div>
+		<div class="panel-body">
+			<p>process 包含了有关 Node 进程的许多元信息。当你希望在进程内管理 Node 运行环 境时，这会很有用。这里面包含了关于 Node 进程的若干不可改变（只读）的信息：</p>
+			<dl class="dl-horizontal">
+				<dt><code>process.version</code> : </dt>
+				<dd><pre>正在运行的Node的版本号</pre></dd>
+				<dt><code>process.platform</code> : </dt>
+				<dd><pre>列出正在运行的平台名称，输出内容会指明内核（linux2、darwin 等），而 不是 Redhat ES3、Windows 7、OSX 10.7 这一类名称。</pre></dd>
+				<dt><code>process.uptime()</code> : </dt>
+				<dd><pre>当前进程运行了多少秒</pre></dd>				
+			</dl>
+			<pre>
+console.log(process.platform);		//输出：win32
+console.log(process.version);		//输出：v4.3.2
+console.log(process.execPath);		//输出：D:\NodeJs\node.exe
+console.log(process.uptime());		//输出：0.119
+			</pre>
+			<p>此外，你还可以从 Node 进程得到或设置一些属性。当进程运行时，它是按某个特 定的用户及用户组启动的。你可以调用 process.getgid()、process.setgid()、 process.getuid() 和 process.setuid() 来获得或修改这些属性。这样做可以有 效地确保 Node 程序运行在一个安全的环境中。还需要注意的是，set 方法除了可 以接受用户名 / 用户组所对应的数字 ID 外，还可以直接使用用户组 / 用户名本身。 但是，如果你传入的是用户组或用户名，该方法会采取堵塞的方式来把这个信息翻 译成 ID，这样会花费些时间。</p>
+			<p>正在运行的 Node 实例的进程 ID，或称为 PID，可以通过 process.pid 属性得到。你还能修改 process.title 属性来设置 Node 显示在系统的标题名称，该属性修改 后的内容会在 ps 命令调用时显示出来。当你在生产环境中需要运行多个 Node 进程 时，这会很有用。你可以为每个进程修改容易辨别的名称，而不是一堆进程都叫做 node（或者 node app.js）。当一个进程占用了大量的 CPU 或 RAM 时，也可以很 快地知道具体是谁干的。</p>
+			<p>其他可用的信息包括 process.execPath，它显示的是当前执行的 node 程序所在 的路径，比如 /usr/local/bin/node。当前的工作目录（所有打开文件的相对路径）可 以用 process.cwd() 获取。工作目录是 Node 启动的目录。你可以调用 process. chdir() 来修改（如果修改的目录不可读或者不存在，将会抛出异常），还可以使 用 process.memoryUsage() 来得到当前进程的内存使用情况，这会返回一个对象 来说明内存使用的各种情况：rss 是 RAM 的使用量，而 vsize 是内存使用总量， 包括了 RAM 和 swap。你还可以获知 V8 的一些状态：heapTotal 和 heapUsed 分 别表示 V8 分配了多少内存，已经有多少内存正在使用。</p>
+			<pre>
+console.log(process.pid);		//输出：5400
+console.log(process.title);		//输出：C:\WINDOWS\system32\cmd.exe - node  process.js
+console.log(process.memoryUsage());		//输出：{ rss: 18415616, heapTotal: 7409232, heapUsed: 3755992 }
+console.log(process.cwd());		//输出：E:\git\Leon\NodeJs\sample
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">操作系统的输入/输出</div>
+		<div class="panel-body">
+			<p>通过 process，还有若干方法可以与操作系统交互（除了修改正在运行的 Node 进 程以外）。其中一个主要功能就是可以访问操作系统的标准 I/O 流，stdin 是进程的默 认输入流，stdout 是进程的输出流，stderr 是其错误输出流。它们对应暴露的接口是 process.stdin、process.stdout 和 process.stderr， 其 中 process.stdin 是 可读的数据流，而 process.stdout 和 process.stderr 是可写的数据流。</p>
+			<span class="label label-info" title>stdin</span>					
+			<p><code>process.stdin</code>在进程间通信时是非常有用的，它能够为命令行下采用管道通信提供便利。当我们输入 cat file.txt | node program.js 时，标准输入 流会接收到 cat 命令输出的数据。</p>
+			<p>因为任何时候都能使用 process，所以 process.stdin 也会为所有的 Node 进程 初始化。但它一开始是处于暂停状态，这时候 Node 可以对它进行写入操作，但是 你不能从它读取内容。在尝试从 stdin 读数据之前，需要先调用它的 resume() 方法 。Node 会为此数据流填入供读取的缓存，并等待你的处理，这样可以避免数据丢失。</p>
+			<pre>
+process.stdin.resume();
+process.stdin.setEncoding('utf8');
+process.stdin.on('data',function(chunk){
+	process.stdout.write('data: '+chunk);
+});
+process.stdin.on('end',function(){
+	process.stdout.write('end');
+})
+			</pre>
+			<p>我们请求 process.stdin 进行 resume() 操作，并把编码设置为 UTF-8，然后设 置了监听器把接收的数据推送到 process.stdout 上去。当 process.stdin 发起 end 事件时，我们把它也传输给 process.stdout 流。因为 stdin 和 stdout 都是真 正的数据流，所以我们也可以采用更简便的方法，那就是使用数据流的 pipe() 方法, 这是连接两个数据流的最漂亮的方式。</p>
+			<pre>
+process.stdin.resume();
+process.stdin.pipe(process.stdout);		
+			</pre>
+			<span class="label label-info" title>stderr</span>
+			<p><code>process.stderr</code>用来输出异常和程序运行过程中遇到的问题，process.stderr 永远是 UTF-8 编码的数据流。在POSIX系 统里，因为它是另外一个独立的流，所以输出的日志和错误的日志很容易被记录到不同的目标位置。这也许是可取的，但 Node 有自己的一套处理特性。当写入 stderr 时，Node 将保证该次写入的会被完成。但是，和其他普通的流不一样，这会以堵 塞的方式执行。通常情况下，调用 Stream.write() 会返回一个布尔值，用来表示 Node 是否能够写到内核缓存中去。对于 process.stderr 来说这个返回值永远是真，但它可能不会像一般的 write() 那样立刻返回，而是需要等待一会儿。一般来 说，这是非常快的，但内核缓存有的时候可能满了，这就会导致你的程序挂起等待。 因此，在一个生产系统中，我们应该避免对 stderr 写入过多的内容，因为它会堵塞真正需要的工作。</p>
+			<p>另外，Node 程序员要从操作系统读取的内容还包括了程序启动时的参数。argv 是包含命令行参数的数组，以 node 命令为第一个参数。</p>
+			<pre>
+node argv.js -t 3 
+
+//输出
+['D:\\NodeJs\\node.exe',
+'E:\\git\\Leon\\NodeJs\\sample\\process.js',
+'-t',
+'3']
+			</pre>
+			<p>这里需要注意几个问题。第一，process.argv 数组只是简单地把命令行内容以空 格作分割得到的。如果两个参数之间包含多个空格，也只会被切分一次。检查空格 的方法可以用正则表达式（regex）的写法 \s+，但这不包括引号内的空格，引号可以用来把多个词组合在一起。而且，还要注意第一个文件参数是如何被展开成全路 径的。这意味着你可以传给命令行一个相对路径的文件名作为参数，它会在 argv 中显示成绝对路径。这对一些特殊字符也同样生效，比如用 ~ 来表示 home 目录，只有第一个参数会被这样展开。</p>
+			<span class="label label-info" title> 事件循环和计数器</span>
+			<p>在 Node 里相对于 setTimeout() 我们有更加直接的方法来访问事件循环，并且可以推延工作，这些非常有用。process.nextTick() 创建了一个回调函数，它会在下一个 tick 或者事件 循环下一次迭代时被调用。因为实现是使用队列的，所以它会取代其他事件。</p>
+			<pre>
+var http=require('http');
+var server=http.createServer(function(req,res){
+	res.writeHead(200,{});
+	res.end('hello');
+	console.log('front');
+	process.nextTick(function(){
+		console.log('tick');
+	})
+	console.log('after');
+}).listen(8080);
+
+//输出：
+front
+after
+tick
+			</pre>
+			<p>nextTick把某任务放在队列的最后（array.push)，nodejs在执行任务时，会一次性把队列中所有任务都拿出来，依次执行。nextTick() 回调函数不像其他回调函 数那样是一个单独的事件，因此也不像一般回调函数那样异常脆弱。</p>
+			<pre>
+process.on('uncaughtException',function(e){
+	console.log(e);
+});
+process.nextTick(function(){
+	console.log('tick');
+});
+process.nextTick(function(){
+	noExistFunc();
+	console.log('tock');
+});
+process.nextTick(function(){
+	console.log('tick tock');
+});
+console.log('End of last loop');
+
+//输出：
+End of last loop
+tick
+[ReferenceError: noExistFunc is not defined]
+tick tock				
+			</pre>
+			<p>尽管故意制造了错误，但与其他在单个事件内的回调函数不同，tick 中的每一个函 数都被隔离开了。让我们来看一下代码。首先，我们设置了异常监听器来捕获所有的异常。其次，调用 process.nextTick() 设置了几个回调函数。每一个回调函 数都会输出到终端。但是，第二个函数有一个故意的错误。最后，我们在终端记录 了一条消息。当 Node 运行这个程序的时候，它先处理了所有的代码，并且包括了 输出 'End of last loop'。然后它按顺序调用了 nextTice() 中的回调函数。第 一个 'tick' 输出后，我们抛出了异常，因为遇到了下一个 tick 中故意安放的错误。 这个错误导致进程触发了一个 uncaughtException 事件，并使得我们的函数把 错误输出到终端上。因为抛出了异常，'tock' 并没有在终端打印出来，但 'tick tock' 依然打印了，这是因为每次调用 nextTick() 的时候，回调函数都是在隔离 中创建的。你可能会想到将要被触发的事件是在事件循环当前遍历的内部执行的。而与其他事件相比，nextTick() 则是在事件循环的遍历开始前被调用的。最后， 其他事件在事件循环内按顺序执行。</p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

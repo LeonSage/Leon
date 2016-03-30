@@ -32,15 +32,13 @@
 			<p>crypto模块包含了一系列基于OpenSSL库封装好的加密函数，包括<code>hash,HMAC,cipher,decipher,sign and verify</code>。你需要在编译 Node 的时候指定添加 OpenSSL 支持，才能使用本节介绍的方法。加密模块能使 Node 能够使用 SSL/TLS。</p>
 		</div>
 		<div class="panel-footer">
+			<p>参考自：<code><cite>http://nodejs.cn/api/crypto.html#crypto_class_cipher</cite></code></p>
 		</div>
 	</div>
 	<div class="panel panel-info">
-		<div class="panel-heading">
-			crypto模块的标准方法
-		</div>
+		<div class="panel-heading">Hashing 哈希加密</div>
 		<div class="panel-body">
 			<section>
-				<span class="label label-info" title>Hashing 哈希加密</span>
 				<p>Hash类是一个创建数据的哈希摘要的实用库，它有两种使用方法：</p>
 				<ul>
 					<li>作为一个可读可写的数据流，数据被读入然后产生一个计算后的哈希摘要。</li>
@@ -117,13 +115,18 @@ Error: Not initialized
     at Function.Module.runMain (module.js:441:10)
     at startup (node.js:134:18)
     at node.js:962:3
-				</pre>	
-				<span class="label label-info" title>HMAC</span>
-				<p>HMAC 结合了哈希算法和加密密钥，是为了阻止对签名完整性的一些恶意攻击。这 意味着 HMAC 同时使用了哈希算法以及一个加密密钥。Node 提供的 HMAC API 和 Hash API 是一样的。唯一的不同是，创建 hmac 对象时需要在传入哈希算法的同时，再传入一个密钥。</p>
-				<p>创建 Hmac 对象需要的密钥可以是字符串，也可以是一个 PEM 编码的密钥，以字符串的格式传入。在命令行用 OpenSSL 可以轻松创建一个密钥。</p>
-				<img src="../../images/nodeJsSection/pem.png" />
-				<p>这个例子创建的是一个 PEM 格式的 RSA 密钥，并保存在一个文件里（在本例中是 key.pem）。如果我们忽略 -out key.pem 参数，也可以在 Node 中使用 process 模块来直接调用同样的功能，在标准输出 中得到结果，否则，就需要从文件中读取密钥，然后再用来创建 Hmac 对象并生成摘要了。</p>
-				<pre>
+				</pre>																
+			</section>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">HMAC</div>
+		<div class="panel-body">
+			<p>HMAC 结合了哈希算法和加密密钥，是为了阻止对签名完整性的一些恶意攻击。这 意味着 HMAC 同时使用了哈希算法以及一个加密密钥。Node 提供的 HMAC API 和 Hash API 是一样的。唯一的不同是，创建 hmac 对象时需要在传入哈希算法的同时，再传入一个密钥。</p>
+			<p>创建 Hmac 对象需要的密钥可以是字符串，也可以是一个 PEM 编码的密钥，以字符串的格式传入。在命令行用 OpenSSL 可以轻松创建一个密钥。</p>
+			<img src="../../images/nodeJsSection/pem.png" />
+			<p>这个例子创建的是一个 PEM 格式的 RSA 密钥，并保存在一个文件里（在本例中是 key.pem）。如果我们忽略 -out key.pem 参数，也可以在 Node 中使用 process 模块来直接调用同样的功能，在标准输出 中得到结果，否则，就需要从文件中读取密钥，然后再用来创建 Hmac 对象并生成摘要了。</p>
+			<pre>
 //使用PEM格式的RSA密钥来创建Hmac摘要
 const crypto=require('crypto');
 const fs=require('fs');
@@ -133,83 +136,87 @@ const hmac=crypto.createHmac('sha256',key);
 hmac.update('foo');
 console.log(hmac.digest('hex'));
 //输出: 4aa9b57812fea1d4070245687dba7283ab59b3ff90a31767e4ff1669c06ba48d
-				</pre>
-				<p>这个例子用到了 fs.readFileSync()，因为在许多情况下，读取密钥会放在服务器启动任务中。</p>
-				<p>Hmac类是一个创建HMAC加密摘要的实用工具库，它可以有两种使用方式：</p>
-				<ul>
-					<li>作为一个可读可写的数据流，数据被读入然后产生一个计算后的HMAC摘要。</li>
-					<li>使用<code>hmac.update()</code>和<code>hmac.digest()</code>方法来产生HMAC摘要。</li>
-				</ul>
-				<span class="label label-info" title>createHmac() 创建Hmac实例</span>
-				<p><code>crpto.createHmac()</code>来创建Hmac实例。</p>
-				<p>使用Hmac对象作为流</p>
-				<pre>
+			</pre>
+			<p>这个例子用到了 fs.readFileSync()，因为在许多情况下，读取密钥会放在服务器启动任务中。</p>
+			<p>Hmac类是一个创建HMAC加密摘要的实用工具库，它可以有两种使用方式：</p>
+			<ul>
+				<li>作为一个可读可写的数据流，数据被读入然后产生一个计算后的HMAC摘要。</li>
+				<li>使用<code>hmac.update()</code>和<code>hmac.digest()</code>方法来产生HMAC摘要。</li>
+			</ul>
+			<span class="label label-info" title>createHmac() 创建Hmac实例</span>
+			<p><code>crpto.createHmac()</code>来创建Hmac实例。</p>
+			<p>使用Hmac对象作为流</p>
+			<pre>
 const crypto=require('crypto');
 const hmac=crypto.createHmac('sha256','secret');
 hmac.on('readable',()=>{
-	var data=hmac.read();
-	if(data){
-		console.log(data.toString('hex'));
-		//输出:a753d7e1c8fbe9f53291fbb3460f7c52ee09367ee475df2e87554719acda7a7a
-	}
+var data=hmac.read();
+if(data){
+	console.log(data.toString('hex'));
+	//输出:a753d7e1c8fbe9f53291fbb3460f7c52ee09367ee475df2e87554719acda7a7a
+}
 });
 hmac.write("I'm Leon, let us to hash.");
 hmac.end();
-				</pre>
-				<p>使用Hmac和piped数据流</p>
-				<pre>
+			</pre>
+			<p>使用Hmac和piped数据流</p>
+			<pre>
 const crypto=require('crypto');
 const fs=require('fs');
 const hmac=crypto.createHmac('sha256','secret');
 const input=fs.createReadStream('../../someJson.txt');
 input.pipe(hmac).pipe(process.stdout);
 //输出：2�b��t;߼�27i\4j"�-��x��ܑ		( 我也不懂这些是什么鬼:) )		
-				</pre>
-				<p>使用<code>hmac.update()</code>和<code>hmac.digest()</code>方法来产生摘要</p>
-				<pre>
+			</pre>
+			<p>使用<code>hmac.update()</code>和<code>hmac.digest()</code>方法来产生摘要</p>
+			<pre>
 const crypto=require('crypto');
 const hmac=crypto.createHmac('sha256','secret');
 hmac.update('leon');
 console.log(hmac.digest('hex'));		
 //输出c2e333e478fa802d853e9d05f3802c68b823a85838410834f39414bd076ca0dd
-				</pre>
-				<p><code>hash.update(data[,encoding]);</code>和<code>hash.digest([encoding]);</code>方法与Hash中一样。</p>
-				<span class="label label-info" title>公钥加密</span>
-				<p>公钥加密功能分布在如下 4 个类中：Cipher、Decipher、Sign 和 Verify。和加 密模块的其他类一样，它们也有工厂方法。Cipher 把数据加密， Decipher 解密数据，Sign 为数据创建加密签名，Verify 验证加密签名。</p>
-				<p>对 HMAC 操作，我们用到了私钥。对于本小节的操作，我们将同时使用公钥和私 钥。公钥加密算法需要一组配对的密钥：一个是私钥，由物主保存，用来解密和对 数据签名，另外一个是公钥，提供给第三方。公钥可以用来加密数据，并且只能让 私钥拥有者解读，或者用来验证数据是否被对应的私钥所签名。</p>
-				<p>让我们从刚刚生成来进行 HMAC 摘要的私钥中提取对应的公钥吧。Node 要求公钥按照证书格式，所以需要你提供额外的信息，但你也可以不填这些信息， 让其留空就行了。</p>
-				<pre>
+			</pre>
+			<p><code>hash.update(data[,encoding]);</code>和<code>hash.digest([encoding]);</code>方法与Hash中一样。</p>
+			<span class="label label-info" title>公钥加密</span>
+			<p>公钥加密功能分布在如下 4 个类中：Cipher、Decipher、Sign 和 Verify。和加 密模块的其他类一样，它们也有工厂方法。Cipher 把数据加密， Decipher 解密数据，Sign 为数据创建加密签名，Verify 验证加密签名。</p>
+			<p>对 HMAC 操作，我们用到了私钥。对于本小节的操作，我们将同时使用公钥和私 钥。公钥加密算法需要一组配对的密钥：一个是私钥，由物主保存，用来解密和对 数据签名，另外一个是公钥，提供给第三方。公钥可以用来加密数据，并且只能让 私钥拥有者解读，或者用来验证数据是否被对应的私钥所签名。</p>
+			<p>让我们从刚刚生成来进行 HMAC 摘要的私钥中提取对应的公钥吧。Node 要求公钥按照证书格式，所以需要你提供额外的信息，但你也可以不填这些信息， 让其留空就行了。</p>
+			<pre>
 //从私钥中提取公钥证书
 openssl req -key key.pem -new -x509 -out cert.pem
-				</pre>
-				<p>我们让 OpenSSL 读取私钥，然后把公钥以 X509 证书格式输出到 cert.pem 文件中。 加密算法用到的密钥都要求是 PEM 格式的。</p>
-				<span class="label label-info" title>用Cipher加密</span>
-				<p><code>crypto.createCipher('algorithm','secret')</code>或者<code>crypto.createCipheriv()</code>方法输入一个算法和私钥创建一个Cipher实例，支持的算法从你安装的OpenSSL实现中支持的：<code>blowfish</code>或者<code>aes192</code>。许多现代的加密算法使用块密码，也就是输出的通常是标准大小的“块”。块大小与 使用的算法有关，如 blowfish 使用的是 40 字节的块。这当你使用 Cipher API 时 会明显看出，因为 API 总是使用固定大小的块。这种做法能够防止信息泄露给攻击者，如加密的信息或者是用来加密的特定密钥。</p>
-				<p>实例用来加密数据，这个类可以使用两种方式：</p>
-				<ul>
-					<li>作为一个可写可读的流，读入未加密的文本输出加密的数据。</li>
-					<li>使用<code>cipher.update()</code>和<code>cipher.final()</code>方法来加密数据</li>
-				</ul>
-				<p>使用Cipher对象作为流</p>
-				<pre>
+			</pre>
+			<p>我们让 OpenSSL 读取私钥，然后把公钥以 X509 证书格式输出到 cert.pem 文件中。 加密算法用到的密钥都要求是 PEM 格式的。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">用Cipher加密</div>
+		<div class="panel-body">
+			<p><code>crypto.createCipher('algorithm','secret')</code>或者<code>crypto.createCipheriv()</code>方法输入一个算法和私钥创建一个Cipher实例，支持的算法从你安装的OpenSSL实现中支持的：<code>blowfish</code>或者<code>aes192</code>。许多现代的加密算法使用块密码，也就是输出的通常是标准大小的“块”。块大小与 使用的算法有关，如 blowfish 使用的是 40 字节的块。这当你使用 Cipher API 时 会明显看出，因为 API 总是使用固定大小的块。这种做法能够防止信息泄露给攻击者，如加密的信息或者是用来加密的特定密钥。</p>
+			<p>实例用来加密数据，这个类可以使用两种方式：</p>
+			<ul>
+				<li>作为一个可写可读的流，读入未加密的文本输出加密的数据。</li>
+				<li>使用<code>cipher.update()</code>和<code>cipher.final()</code>方法来加密数据</li>
+			</ul>
+			<p>使用Cipher对象作为流</p>
+			<pre>
 const crypto=require('crypto');
 const cipher=crypto.createCipher('aes192','password');
 var encrypted='';
 cipher.on('readable',()=>{
-	var data=cipher.read();
-	if(data){
-		encrypted+=data.toString('hex');		
-	}
+var data=cipher.read();
+if(data){
+	encrypted+=data.toString('hex');		
+}
 });
 cipher.on('end',()=>{
-	console.log(encrypted);
-	//输出:d23291d24de95b0c8f45d55596a080da161e3ab39de38ca5789c9a29c149e18c
+console.log(encrypted);
+//输出:d23291d24de95b0c8f45d55596a080da161e3ab39de38ca5789c9a29c149e18c
 })
 cipher.write("some clear text data.");
 cipher.end();
-				</pre>
-				<p>使用Cipher和piped数据流</p>
-				<pre>
+			</pre>
+			<p>使用Cipher和piped数据流</p>
+			<pre>
 const crypto=require('crypto');
 const fs=require('fs');
 const cipher=crypto.createCipher('aes192','password');
@@ -218,28 +225,32 @@ input.pipe(cipher).pipe(process.stdout);
 //输出：��H%���v�� �P���@�3\�ާ�����
 ����J�����#j2��R]����F�v�o��Yb�O�ܳ  '�l
 EO�E%; b�G���ԥƉ�#   ^3��t���       ��4�k1�/u��#�3��f�o�_6�ʬ�L݆��d��j�ƀ��4N9w��Yt'F���ml�RU��q���ڰG�e^U8̕�쀙��-k�   %��F���Cye����[�ªC�@ĕ)��F���L�S;���^�z�.��y��"3Ҝ�		
-				</pre>
-				<p>使用<code>cipher.update()</code>和<code>cipher.final()</code>方法来产生摘要</p>
-				<pre>
+			</pre>
+			<p>使用<code>cipher.update()</code>和<code>cipher.final()</code>方法来产生摘要</p>
+			<pre>
 const crypto=require('crypto');
 const cipher=crypto.createCipher('aes192','password');
 var encrypted=cipher.update('some clear text data','utf8','hex');
 encrypted+=cipher.final('hex');
 console.log(encrypted);		
 //输出d23291d24de95b0c8f45d55596a080dac609924387c7b1802fb79a4365a7ebe9
-				</pre>
-				<span class="label label-info" title>update 更新输入数据</span>
-				<p><code>cipher.update(data[,input_encoding][,output_encoding]);</code>使用data更新cipher，输入编码方式有<code>'utf8'</code>,<code>'ascii'</code>或者<code>'binary'</code>，这时data数据应该被指定的格式编码。当data是Buffer，则<code>input_encoding</code>被忽略。</p>
-				<p>输出编码格式是加密后数据的格式，可以为<code>'hex'</code>,<code>'binary'</code>或者<code>'base64'</code>。如果指定<code>output_encoding</code>，则返回指定格式的加密数据，如果不指定，则返回Buffer。</p>
-				<p><code>cipher.update()</code>可以在<code>cipher.final()</code>之前调用很多次，之后则会报错。</p>
-				<span class="label label-info" title>final 输出加密数据 </span>
-				<p><code>cipher.final([output_encoding]);</code>返回所有的加密数据，同时添加足够的填充使其满足块大小格式。<code>output_encoding</code>参数可以为<code>'hex'</code>,<code>'binary'</code>或者<code>'base64'</code>。如果不指定，则返回Buffer。</p>
-				<p><code>cipher.final()</code>方法只能被调用一次，多次调用会抛出错误。</p>
-				<span class="label label-info" title>setAutoPadding 自动填充 </span>
-				<p><code>cipher.setAutoPadding(auto_padding=true);</code>当使用块加密算法时，Cipher自动填充输入数据到合适的块大小，取消自动填充为<code>cipher.setAutoPadding(false);</code>但当为块大小的非倍数时，抛出错误。该方法必须在final()前辈调用。</p>
-				<span class="label label-info" title>用Decipher解密</span>
-				<p><code>crypto.createDecipher('algorithm','secret')</code>或者<code>crypto.createCipheriv()</code>方法几乎就是Cipher类的反面。</p>
-				<pre>
+			</pre>
+			<span class="label label-info" title>update 更新输入数据</span>
+			<p><code>cipher.update(data[,input_encoding][,output_encoding]);</code>使用data更新cipher，输入编码方式有<code>'utf8'</code>,<code>'ascii'</code>或者<code>'binary'</code>，这时data数据应该被指定的格式编码。当data是Buffer，则<code>input_encoding</code>被忽略。</p>
+			<p>输出编码格式是加密后数据的格式，可以为<code>'hex'</code>,<code>'binary'</code>或者<code>'base64'</code>。如果指定<code>output_encoding</code>，则返回指定格式的加密数据，如果不指定，则返回Buffer。</p>
+			<p><code>cipher.update()</code>可以在<code>cipher.final()</code>之前调用很多次，之后则会报错。</p>
+			<span class="label label-info" title>final 输出加密数据 </span>
+			<p><code>cipher.final([output_encoding]);</code>返回所有的加密数据，同时添加足够的填充使其满足块大小格式。<code>output_encoding</code>参数可以为<code>'hex'</code>,<code>'binary'</code>或者<code>'base64'</code>。如果不指定，则返回Buffer。</p>
+			<p><code>cipher.final()</code>方法只能被调用一次，多次调用会抛出错误。</p>
+			<span class="label label-info" title>setAutoPadding 自动填充 </span>
+			<p><code>cipher.setAutoPadding(auto_padding=true);</code>当使用块加密算法时，Cipher自动填充输入数据到合适的块大小，取消自动填充为<code>cipher.setAutoPadding(false);</code>但当为块大小的非倍数时，抛出错误。该方法必须在final()前辈调用。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">用Decipher解密</div>
+		<div class="panel-body">
+			<p><code>crypto.createDecipher('algorithm','secret')</code>或者<code>crypto.createCipheriv()</code>方法几乎就是Cipher类的反面。</p>
+			<pre>
 const crypto=require('crypto');
 const fs=require('fs');
 var pem=fs.readFileSync('key.pem');
@@ -258,124 +269,90 @@ decrypted+=decipher.final('binary');
 
 console.log(plain);		//输出data textarea
 console.log(decrypted);		//输出data textarea
-				</pre>
-				<span class="label label-info" title>用Sign来创建签名</span>
-				<p><code>crypto.createDecipher('algorithm','secret')</code>或者<code>crypto.createCipheriv()</code>方法几乎就是Cipher类的反面。</p>
-				<pre>
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">用Sign来创建签名</div>
+		<div class="panel-body">
+			<p>Sign是用来产生签名的实用库，<code>crypto.createSign(algorithm)</code>方法使用签名算法来创建一个Sign实例，它有两种使用方式：</p>
+			<ul>
+				<li>作为一个可写的数据流，读入将要签名的数据并使用<code>sign.sign()</code>方法来生成并返回签名。</li>
+				<li>使用<code>sign.update()</code>和<code>sign.sign()</code>方法来产生签名。</li>
+			</ul>
+			<p>Signatures 验证的是签名者是否用其私钥对数据进行授权。但是，和 HMAC 不同， 公钥可以用来对签名进行认证。</p>
+			<span class="label label-info" title>update 更新数据</span>
+			<p><code>sign.update(data);</code>当作为流时，可以被调用多次，使用data来更新Sign对象。</p>
+			<span class="label label-info" title>sign 产生签名</span>
+			<p><code>sign.sign(private_key[,output_format]);</code>使用你的私钥来计算出所有通过<code>sign.update()</code>和<code>sign.write()</code>传入的数据的签名。</p>
+			<p><code>private_key</code>参数可以为字符串或对象，当它为字符串时，会被认为是一个没有密码的原始密钥；当它是一个对象时，会被解释执行为一个含有两个属性的hash对象：
+			<ul>
+				<li><code>key</code>:{string}--PEM编码的私钥</li>
+				<li><code>passphrase</code>:{String}--私钥的密码</li>
+			</ul></p>
+			<p><code>output_format</code>可以指定为<code>'binary'</code>,<code>'hex'</code>或者<code>'base64'</code>返回格式。如果不指定，则返回Buffer。</p>
+			<p><code>sign.sign()</code>方法只能被调用一次，多次调用会抛出错误。</p>
+			<pre>
 const crypto=require('crypto');
 const fs=require('fs');
+const sign=crypto.createSign('RSA-SHA256');
 var pem=fs.readFileSync('key.pem');
 var key=pem.toString('ascii');
-var plain='data textarea';
 
-var encrypted="";
-var cipher=crypto.createCipher('blowfish',key);
-encrypted+=cipher.update(new Buffer(plain),'binary','hex');
-encrypted+=cipher.final('hex');
+//Sign对象作为流数据
+sign.write('some data to sign');
+sign.end();
 
-var decrypted="";
-var decipher=crypto.createDecipher('blowfish',key);
-decrypted+=decipher.update(encrypted,'hex','binary');
-decrypted+=decipher.final('binary');
+//使用sign内置方法
+//sign.update('some data to sign');
 
-console.log(plain);		//输出data textarea
-console.log(decrypted);		//输出data textarea
-				</pre>
-				<code><cite>http://nodejs.cn/api/crypto.html#crypto_class_cipher</cite></code>
+console.log(sign.sign(key,'hex'));
+//输出：3b3f8ae027efcc28a68b0e37594f751c6e3db560049534db1220f9330602902ed9c7b07c29877dad15d408027143405ca8ca1aa6453ae7d0887c27e82c48716df8f299da800c0b2473d572aefb210709e694c780fccbc642552a0cfe42d32a6f1f4dbbc41c27a248e77fb20613165e7d36c2d07e3a39b0c7ab251c1ea3c80215
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Verify 验证签名</div>
+		<div class="panel-body">
+			<span class="label label-info" title></span>
+			<p>Verify是用来验证签名的实用库，<code>crypto.createVerify(algorithm)</code>方法使用签名算法来创建一个Verify实例，它有两种使用方式：</p>
+			<ul>
+				<li>作为一个可写的数据流，给提供的签名进行验证。</li>
+				<li>使用<code>verify.update()</code>和<code>verify.verify()</code>方法来验证签名。</li>
+			</ul>
+			<span class="label label-info" title>update 更新数据</span>
+			<p><code>verify.update(data);</code>当作为流时，可以被调用多次，使用data来更新Verify对象。</p>
+			<span class="label label-info" title>verify 验证签名</span>
+			<p><code>verify.verify(object,signature[,signature_format]);</code>使用给定的对象和签名来验证数据。<<code>object</code>参数是一个包含PEM编码对象的字符串，它可以是一个RSA公钥，一个DSA公钥，或者一个X.509证书。<<code>signature</code>参数是对数据提前计算好的签名，在<code>signature_format</code>里可以是<code>'binary'</code>,<code>'hex'</code>或者<code>'base64'</code>格式。如果不指定，则返回Buffer。返回true或者false取决于签名对于数据和公钥的合法性。</p>
+			<p><code>verify.verify()</code>方法只能被调用一次，多次调用会抛出错误。</p>
+			<pre>
+const crypto=require('crypto');
+const fs=require('fs');
 
-				<pre>
-//调用dns.resolve()
+var privatePem=fs.readFileSync('key.pem');
+var publicPem=fs.readFileSync('cert.pem');
+var key=privatePem.toString();
+var pubkey=publicPem.toString();
+var data="some data to sign";
 
-				</pre>
-				<p>返回的结果就是通过DNS服务器查询出的IP地址，列表中的每一个值都可以访问到相同的网站。</p>
-				<p>还有些方便的方法可用来处理前面列出的各种记录类型。比如，除了调用 resolve ('example.com', 'MX', callback) 以外，你还可以调用 resolveMx('example. com', callback)。API 还提供了 resolve4() 和 resolve6() 方法， 分别用来解析 IPv4 和 IPv6 地址。</p>
-				<pre>
-var dns=require('dns');
-dns.resolveMx('yahoo.com',function(e,r){
-	if(e){
-		console.log(e);
-	}
-	console.log(r);		
-	//输出(应该是路由路径？)
-	[ { exchange: 'mta5.am0.yahoodns.net', priority: 1 },
-	  { exchange: 'mta6.am0.yahoodns.net', priority: 1 },
-	  { exchange: 'mta7.am0.yahoodns.net', priority: 1 } ]
-})
-dns.resolveTxt('yahoo.com',function(e,r){
-	if(e){
-		console.log(e);
-	}
-	console.log(r);		//输出[ [ 'v=spf1 redirect=_spf.mail.yahoo.com' ] ]
-})
-				</pre>
-				<span class="label label-info" title>lookup 查询路径</span>
-				<p><code>dns.lookup(hostname[,options],callback)</code>方法将主机名解析出第一个找到的IPv4或者IPv6地址记录如果你没有传入地址，它会默 认是网络设备接口的当前设置。。其中<code>options</code>可能是一个对象或者整数，如果指定4或者6，则只会返回相应的IP地址，如果不设置，则IPv4和IPv6都可以。<code>options</code>也可以作为一个对象，包含的属性(所有的均为可选项)有：
-				<pre>
-{
-	family:4,
-	//可选4||6||空，不设置时，IPv4和IPv6都可以。
+const sign=crypto.createSign('RSA-SHA256');
+sign.update(data);
+var sig=sign.sign(key,'hex');
 
-	hints:dns.ADDRCONFIG | dns.V4MAPPED,
-	//dns.ADDRCONFIG 只返回当前系统支持的地址类型，不包括本地环回地址
-	//dns.V4MAPPED 当定义返回IPv6但查询为空时，返回映射得到的IPv4地址
+const verify=crypto.createVerify('RSA-SHA256');
+verify.update(data);
 
-	all:false
-	//当为true时，返回所有解析地址，默认为false，返回一个单一地址
-}
-				</pre>
-				<code>callback(err,address,family)</code>回调函数中，address为返回的地址数组，family为lookup时设置的方式(4||6)。当设置为<code>all:true</code>时，回调函数也变成<code>callback(err,addresses)</code>。
-				</p>
-				<pre>
-//lookup查询单个记录
-dns.lookup('yahoo.com',4,function(e,a){
-	console.log(a);		//输出98.139.183.24
-})
-				</pre>
-				<span class="label label-info" title>reverse </span>
-				<p><code>dns.reverse(ip,callback)</code>执行一个DNS查询并且解析IP地址到一个主机名数组。<code>callback(err,hostnames)</code>,返回值为一组给定的ip。</p>
-				<pre>
-dns.resolve('yahoo.com','A',(e,a)=>{
-	console.log(a);		//输出[ '98.139.183.24', '206.190.36.45', '98.138.253.109' ]
-	for(i in a){
-		dns.reverse(a[i],function(e,host){
-			console.log(host);
-			//输出
-				[ 'ir2.fp.vip.bf1.yahoo.com' ]
-				[ 'ir1.fp.vip.ne1.yahoo.com' ]
-				[ 'ir1.fp.vip.gq1.yahoo.com' ]
-		});
-	}
-})
-
-dns.resolve('google.com','A',(e,a)=>{
-	console.log(a);		//输出[ '216.58.197.110' ]
-	for(i in a){
-		dns.reverse(a[i],function(e,host){
-			console.log(host);
-			//输出[ 'hkg12s01-in-f14.1e100.net' ]
-		});
-	}
-})
-				</pre>
-				<p><code>(err,data)=>{...}</code>一样可以作为回调函数的表达方式。在例子中得到的域名都是可达的，不过是我们输入域名的具体主机名。</p>
-				<cite>参考资料：<code>http://nodejs.cn/api/dns.html#dns_dns_resolve_hostname_rrtype_callback</code></cite>
-			</section>
+console.log(verify.verify(pubkey,sig,'hex'));
+//输出
+			</pre>
+			<div class="alert alert-danger">这里我并没有成功得到cert.pem，因为上述的公钥获取需要安装OPENSSL，然而我断网了（什么鬼），所以回头会返回来试一下。</div>
 		</div>
 	</div>
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
 	$(function(){
-		var data={
-			num:110,
-			name:'丽丽',
-			"地址":"背景"
-		}
-		console.log(data);
-		for(var i in data){
-			console.log(data[i]);
-		}
-		console.log(data['地址']);
+		
 	});
 </script>
 </body>
