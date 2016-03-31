@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">Database</a></li>
+		<li class="active">MongoDB</li>
+	</ol>
+	<h1><strong>MongoDB 数据库</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>因为 Mongo 提供了 JavaScript 环境下的 BSON 对象存储（一种 JSON 的二进制变 种），因此从 Node 去读写数据都非常高效。Mongo 把传入的数据保存在内存里，因 此很适合高并发写操作的情况。它的每个新版本都不断提高了集群、复制和分片的 功能。</p>
+			<p>因为写入的数据保存在内存中，所以往 Mongo 插入数据是非阻塞的，因此也很适 合用来记录操作和远程数据。Mongo 支持在查询里嵌入 JavaScript 函数，还能进行 MapReduce 查询，所以读取数据的时候功能也很强大。</p>
+			<p>使用 MongoDB 的文档型存储，你可以把子记录保存在母记录的内部。比如，一篇 博客及其相关的所有评论都能保存在一条记录里，这样读取起来就非常快。</p>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>Node即学即用</cite></code></p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading"> VM标准方法</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>Mongoose </span>
+				<p>Node 使 用 Mongoose 库 能 够 支 持 大 量 的 Mongo 操 作。 与 原 生 的 驱 动 相 比， Mongoose 是一个表达更加清楚的环境，让模型和架构更加直观。</p>
+				<p>。最快捷地安装和运行 Mongoose 的方法是用 npm 来安装它：</p>
+				<pre>npm install mongo</pre>
+				<p>或者，你可以从源代码下载到最新的版本，然后按照 Mongoose 项目主页（http:// mongoosejs.com）的方法来编译。</p>
+				<p> 定义结构（schema）。使用 MongoDB 的时候，不需要像关系数据库那样定义数 据的结构。每当需求变更或者需要保存新的信息时，只要把包含新信息的记录保存 进去，就能马上查询使用了。你可以把旧数据转换成新的字段，包含默认值或为空 值，但 MongoDB 并不要求这样做。</p>
+				<p>虽然结构对于 MongoDB 来说并不重要，但它有助于人们理解数据的内容，并包含 了该领域数据的操作规则。Mongoose 的作用在于，它使用了人可读的结构描述，提 供了简洁的数据库交互接口。</p>
+				<p>什么是结构？许多程序员会想成是定义数据结构模型的术语，但较少会想到这些模 型代表的底层数据库。SQL 数据库中的一张表需要在写入数据前先创建好，表中的 每一个字段都与你的模型相匹配。该结构（指数据库中模型的定义）是与你的程序 分别创建的，因此结构先于数据存在。</p>
+				<p>人们常说 MongoDB（及其他 NoSQL 数据库）是无结构的，因为它不要求显式地定 义存储数据的数据结构。实际上，MongoDB 是有结构的，但并不由它保存的数据 所决定。你可以在程序运行了几个月后对模型增加新的属性，但不必重新为之前已 经保存的数据定义结构，就能对新的字段进行查询。。再次说明，Mongo 并不强制执行结构，但程序员需要在自己的程序里定义 统一的访问模式。</p>
+				<p>性能。使用 Mongoose 的时候，你不需要自己维护 MongoDB 的连接，因为所 有的结构定义和查询都会被缓存起来，直到真的连接使用。这点很重要，这也是 Mongoose 提供 Node 服务的重要方法。通过一次性把所有“正在执行的”命令提交 到 Mongo，你可以限制使用时间，减少需要处理的回调函数，从而大大提升程序能 够进行的操作的数量。 </p>
+			</section>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">连接池 </div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>Mongoose </span>
+				<p>生产环境通常由多种资源组成：Web 服务器、缓存服务器和数据库服务器。数据库 通常是部署在 Web 服务器之外的独立机器上，这使得面向公众的网站不必重新配置 和修改复杂的数据库集群就可以垂直增长。因此应用开发程序员需要留心访问这些 资源时的性能实现情况，以及这些访问开销会如何影响网站的表现。</p>
+				<p>连接池在 Web 开发中是非常重要的概念，因为建立一个数据库连接的开销相对来说 还是很大的。为每个请求创建一个甚至多个连接会对高流量网站造成不必要的额外 负担，也会导致性能下降。解决方案是在内部缓存池里维护数据库连接，当某连接 不再需要时，它会被放回连接池里，这样就能立刻为下一个进入的请求服务了。</p>
+				<p>连接池通过神奇的创建（create）和销毁（destroy）函数来工作。当客户尝试获 取一个连接时，如果没有已经打开的连接，连接池会调用创建函数。如果一个连接 闲置太久了（由 idleTimeoutMillis 属性来指定空闲间隔，以毫秒来计算），它会 被销毁并且释放内存资源。</p>
+				<p> Node 连接池的优雅之处在于，它可以表示任何持久化的资源。选择数据库可谓得天 独厚，同时你也可以轻松地写些命令来维护与外界资源（如会话缓存，甚至是硬件 接口）的连接。</p>
+			</section>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">消息队列协议  </div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>Mongoose </span>
+				<p>之前，我们举了邮递员的例子来描述 Node 的事件循环架构。如果邮递员碰到哪家 关了门，他就无法继续投递信件了。想象一下，如果有一名好心的老门卫能够把门 打开，让邮递员通过呢？但是门卫已经上了年纪，且因为服务多年而身体虚弱，他 需要多花点时间才能清理道路，因此这段时间内邮递员暂时无法继续投递信件。</p>
+				<p>这就类似堵塞的进程，但这种状况不会一直持续。最终，门卫会把门打开，然后邮 递员又能继续他的业务了。如果邮递员到达的每一个屋子都有类似的开门进程，会 把整个通道都拖慢。在 Node 程序里，这类堵塞将严重降低系统性能。</p>
+				<p>在计算机领域，造成类似情况的原因很多，可能是因为在注册过程中需要发送用户 邮件，需要对用户输入进行大量的数学运算，或者是某个任务需要花费的时间超过 了用户期望的等待时间，等等。Node 的事件驱动设计可用来应对大多数情况，它采 用的是异步函数和回调的方法。但是如果一个事件特别“重”的话，就不应该放在 Node 内部处理。Node 应该只负责快速运算和处理返回的结果。</p>
+				<p> 以一个普通的用户注册流程为例。当用户自己注册时，应用程序会在数据库中保存 一条新的记录，并发送邮件给该用户。它也许还会记录下注册过程中的一些统计数 据，比如整个过程包括了几个步骤、花费了多少时间。如果用户刚在你的网页上点 击提交按钮，系统就马上处理那么多的操作，其实并没有太大意义。比如，发送邮 件的流程也许需要花费几秒钟（如果你运气不佳，要花上几分钟）来完成，数据库 调用可以等到用户受到欢迎之后再进行操作，统计数据可以从程序的主逻辑独立出 去处理。这样的情况下，你可以选择生成一条消息，来通知程序的其他部分有新用 户注册了，这样的程序也可能是完全运行在另外一台服务器上的。这就是我们所称 的发布 - 订阅模型（publish-subscribe pattern）。</p>
+				<p>再假设你有一个集群的机器运行了 Node.js 程序。当一台新机器要加入到集群的时 候，它发出一条信息来请求配置信息。配置服务器返回的信息包含了新机器整合到 集群中所需要的配置信息列表，这称为请求 - 回复模型（request-reply pattern）.消息队列允许程序员发布事件然后继续其他操作，通过进程间通信频道，提高了并 发处理的效率，并实现了更高的扩展性。</p>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

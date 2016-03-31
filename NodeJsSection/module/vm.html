@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">Module</a></li>
+		<li class="active">virtual machine</li>
+	</ol>
+	<h1><strong>VIRTUAL MACHINE 虚拟机</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<pre>const vm=require('vm');</pre>
+			<p>虚拟机模块让你可以运行任意一块代码，并得到运行结果。它提供了一些功 能，可以修改指定代码运行的上下文。这很有用，比如可以用来作为人造沙箱。但 是代码还是运行在同一个 Node 进程里，所以你依然需要小心行事。vm 和 eval() 类似，但提供了更多功能和更好的 API 来管理代码。然而，它不像 eval() 那样能 提供与本地作用域互动的能力。</p>
+			<p>用 vm 运行代码有两种方法。第一种与使用 eval() 的方法类似，把代码内嵌运行； 第二种是先把代码预编译成 vm.Script 对象。</p>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>Node即学即用</cite></code> && <code><cite>http://nodejs.cn/api/vm.html</cite></code></p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading"> VM标准方法</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>runInThisContext </span>
+				<p><code>vm.runInThisContext(code[,options])</code>编译，运行并得到结果，运行时并不具有本地作用域，但它可以访问global对象。</p>
+				<p>使用<code>vm.runInThisContext()</code>和<code>eval()</code>的差别：</p>
+				<pre>
+var vm=require('vm');
+var localVar='inital value';
+
+const vmResult=vm.runInThisContext('localVar="vm";');
+console.log('vmResult: '+vmResult);
+console.log('localVar: '+localVar);
+
+const evalResult=eval('localVar="eval";');
+console.log('evalResult: '+evalResult);
+console.log('localVar: '+localVar);
+
+//输出：
+vmResult: vm
+localVar: inital value
+evalResult: eval
+localVar: eval
+				</pre>
+				<p>runInThisContext()不能访问本地作用域，所以localVar值不变，而eval()可以访问，所以localVar值变化了。</p>
+				<p>在这方面<code>vm.runInThisContext()</code>更像<code>indirect eval() call</code>，比如<code>(0,eval)('code')</code>，然而，它可以拥有以下的选项参数：</p>
+				<dl class="dl-horizontal">
+					<dt><code>filename</code> : </dt>
+					<dd><pre>允许你控制显示所有产生的堆栈跟踪的文件</pre></dd>
+					<dt><code>lineOffset</code> : </dt>
+					<dd><pre>允许你控制堆栈跟踪文件中的行号偏移</pre></dd>
+					<dt><code>columnOffset</code> : </dt>
+					<dd><pre>允许你控制堆栈跟踪文件中的列偏移</pre></dd>
+					<dt><code>displayErrors</code> : </dt>
+					<dd><pre>不管是否输出错误，在抛出错误之前高亮造成错误的代码文本，默认为true。捕获包括编译代码时变量错误和执行时错误。</pre></dd>
+					<dt><code>timeout</code> : </dt>
+					<dd><pre>终止执行的时间(ms)，如果执行终止会抛出一个错误。</pre></dd>				
+				</dl>
+				<p>所有的 vm 运行命令都可以把文件名作为可选的最后一个参数。它不会改变其功能， 但是允许你设置出现错误时在消息里想要显示的文件名字。如果你从磁盘加载并运 行了许多文件，这个功能就很有帮助，因为它能够告诉你哪个代码出现了错误。该 参数是完全随意的，因此你可以采用任何有助于调试的字符串作为参数。</p>
+				<pre>
+var vm=require('vm');
+var v=0;
+vm.runInThisContext('v=v+1');
+
+//报错：ReferenceError: v is not defined					
+				</pre>
+				<p>vm 实际上会在每一个实例的内部，维护一套独立的本地上下文，并且能够保持状态。因此，当我们在 vm 的作用域内使用了变量 v，得到的结果是出现异常，因为对变量 v 的引用是在等号右边，而该变量还没 有定义。定义v后，该变量就能够在同一个 vm 的后续操作中有效，并且保持上一次调用时的状态。但是 vm 内的变量 v 并不会影响运 行在主事件循环中的本地作用域。此外，也可以传给 vm 一个已经存在的上下文内容。该上下文会作为默认的上下文 使用。</p>
+				<span class="label label-info" title>runInNewContext</span>
+				<p><code>vm.runInNewContext(code[,sandbox][,options]</code>执行代码在一个给定的上下文中，如果缺省，就在全局对象下运行并返回结果。参数和<code>vm.runInThisContext()</code>一样。如果我们继续把它传给不同的调 用，此上下文就会被修改。而且，这个上下文能够被全局作用域使用。</p>
+				<pre>
+var vm=require('vm');
+const util=require('util');
+const sandbox={
+	animal:'cat',
+	count:2
+};
+vm.runInNewContext('count+=1;name="kitty"',sandbox);
+console.log(util.inspect(sandbox));		//输出{ animal: 'cat', count: 3, name: 'kitty' }
+
+vm.runInNewContext('count+=1;name="kitty"',sandbox);
+console.log(util.inspect(sandbox));		//输出{ animal: 'cat', count: 4, name: 'kitty' }
+
+console.log(sandbox.count);//输出: 4
+				</pre>
+				<p>运行不信任的代码是个很需要注意的事务，虽然<code>vm.runInNewContext()</code>很有用，但是在一个独立的进程中运行更为安全。</p>
+				<p>你也可以把代码编译成 vm.Script 对象。这样就可以重复运行同一段代 码，从而节省一些代码量。在运行的时候，你可以选择用哪个上下文来执行，这样 就可以很方便地对不同的上下文执行同一段代码了。</p>
+				<span class="label label-info" title>script 脚本运行在vm中</span>
+				<p><code>script.runInNewContext([sandbox][,options])</code>和<code>vm.runInNewContext()</code>方法很相似，options参数也一样，只不过添加了一个预先编译的script对象。</p>
+				<pre>
+var vm=require('vm');
+const util=require('util');
+const fs=require('fs');
+
+var code=fs.readFileSync('vmCode.js');
+console.log(code.toString());
+//输出：
+var i=0,sum=0;
+while(i&lt;1000){
+        sum+=i++;
+}
+
+const sandbox={
+	animals:'cat',
+	age:3
+}
+var script=new vm.Script(code);
+script.runInNewContext(sandbox);
+
+console.log(util.inspect(sandbox));		//输出：{ animals: 'cat', age: 3, i: 1000, sum: 499500 }
+				</pre>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>
