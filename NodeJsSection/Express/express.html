@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">Express</a></li>
+		<li class="active">express</li>
+	</ol>
+	<h1><strong>EXPRESS 初识</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>Express 网站上是这样介绍 Express 的：“精简的、灵活的 Node.js Web 程序框架，为构建单 页、多页及混合的 Web 程序提供了一系列健壮的功能特性。</p>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>Node与Express开发</cite></code></p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading"> VM标准方法</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>安装 </span>
+				<pre>npm install --save express</pre>
+				<span class="label label-info" title>精简 </span>
+				<p>这是 Express 最吸引人的特性之一。框架开发者经常会忘掉“少即是多”这一基本原 则。Express 的哲学是在你的想法和服务器之间充当薄薄的一层。这并不意味着它不够 健壮，或者没有足够的有用特性，而是尽量少干预你，让你充分表达自己的思想，同时提供一些有用的东西。</p>
+				<span class="label label-info" title>灵活 </span>
+				<p>Express 哲学中的另一个关键点是可扩展。Express 提供了一个非常精简的框架，你可以 根据自己的需要添加 Express 功能中的不同部分，替换掉不能满足需要的部分。这种做 法很新鲜。很多框架把什么都给你了，一行代码还没写，你拥有的就已经是一个臃肿、 神秘而复杂的项目了。通常，你的第一项任务就是把不需要的功能砍掉，或者替换掉不 能满足需求的功能。Express 则采取了截然不同的方式，让你在需要时才去添加东西。</p>
+				<span class="label label-info" title>Web程序框架 </span>
+				<p>这里需要琢磨一下语义了。什么是 Web 程序？这意味着 Express 就不能做出网站或者 网页了吗？不，网站是 Web 程序，网页也是 Web 程序。但 Web 程序的含义不止这些， 它还可以向其他 Web 程序提供功能（还有别的）。一般而言，“程序”是具有功能的， 它不止是内容的静态集合（尽管这也是非常简单的 Web 程序）。尽管现在“程序”（在 你的设备本地运行的东西）和“网页”（通过网络为你的设备服务的东西）之间有明显 的界限，但这种界限渐渐变得模糊了，这要感谢 PhoneGap 这样的项目，同时也要感谢 微软允许 HTML5 像本地应用程序一样在桌面上运行。不难想象，几年之内程序和网站 之间的界限将不复存在。</p>
+				<span class="label label-info" title>单页Web程序 </span>
+				<p>单页 Web 程序是比较新颖的想法。不像之前的网站，用户每次访问不同的页面都要发 起网络请求，单页 Web 程序把整个网站（或很大一部分）都下载到客户端浏览器上。 经过初始下载后，用户访问不同页面的速度更快了，因为几乎不需要或者只要很少的服 务端通信。单页程序的开发可以使用 Angular 或 Ember 等流行框架，Express 跟它们都 配合得很好。</p>
+				<span class="label label-info" title>多页和混合的Web程序 </span>
+				<p>多页 Web 程序是更传统的方式。网站上的每个页面都是通过向服务器发起单独的请求 得到的。这种方式确实比较传统，但这并不意味着它没有优点，或者说单页程序更好。 只是现在有更多选择了，你可以决定哪些内容应该作为单页程序提供，哪些应该通过不 同的请求提供。“混合”说的就是同时使用这两种方式的网站。</p>
+			</section>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading"> VM标准方法</div>
+		<div class="panel-body">
+			<section>
+				<span class="label label-info" title>精简 </span>
+				<p>这是 Express 最吸引人的特性之一。框架开发者经常会忘掉“少即是多”这一基本原 则。Express 的哲学是在你的想法和服务器之间充当薄薄的一层。这并不意味着它不够 健壮，或者没有足够的有用特性，而是尽量少干预你，让你充分表达自己的思想，同时提供一些有用的东西。</p>
+				<span class="label label-info" title>灵活 </span>
+				<p>Express 哲学中的另一个关键点是可扩展。Express 提供了一个非常精简的框架，你可以 根据自己的需要添加 Express 功能中的不同部分，替换掉不能满足需要的部分。这种做 法很新鲜。很多框架把什么都给你了，一行代码还没写，你拥有的就已经是一个臃肿、 神秘而复杂的项目了。通常，你的第一项任务就是把不需要的功能砍掉，或者替换掉不 能满足需求的功能。Express 则采取了截然不同的方式，让你在需要时才去添加东西。</p>
+				<span class="label label-info" title>Web程序框架 </span>
+				<p>这里需要琢磨一下语义了。什么是 Web 程序？这意味着 Express 就不能做出网站或者 网页了吗？不，网站是 Web 程序，网页也是 Web 程序。但 Web 程序的含义不止这些， 它还可以向其他 Web 程序提供功能（还有别的）。一般而言，“程序”是具有功能的， 它不止是内容的静态集合（尽管这也是非常简单的 Web 程序）。尽管现在“程序”（在 你的设备本地运行的东西）和“网页”（通过网络为你的设备服务的东西）之间有明显 的界限，但这种界限渐渐变得模糊了，这要感谢 PhoneGap 这样的项目，同时也要感谢 微软允许 HTML5 像本地应用程序一样在桌面上运行。不难想象，几年之内程序和网站 之间的界限将不复存在。</p>
+				<span class="label label-info" title>单页Web程序 </span>
+				<p>单页 Web 程序是比较新颖的想法。不像之前的网站，用户每次访问不同的页面都要发 起网络请求，单页 Web 程序把整个网站（或很大一部分）都下载到客户端浏览器上。 经过初始下载后，用户访问不同页面的速度更快了，因为几乎不需要或者只要很少的服 务端通信。单页程序的开发可以使用 Angular 或 Ember 等流行框架，Express 跟它们都 配合得很好。</p>
+				<span class="label label-info" title>多页和混合的Web程序 </span>
+				<p>多页 Web 程序是更传统的方式。网站上的每个页面都是通过向服务器发起单独的请求 得到的。这种方式确实比较传统，但这并不意味着它没有优点，或者说单页程序更好。 只是现在有更多选择了，你可以决定哪些内容应该作为单页程序提供，哪些应该通过不 同的请求提供。“混合”说的就是同时使用这两种方式的网站。</p>
+			</section>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>
