@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden;background: black;color:#DB9E77; }
+		section{margin-bottom: 20px;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">Express</a></li>
+		<li class="active">generator</li>
+	</ol>
+	<h1><strong>EXPRESS 应用生成器</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">Express创建应用骨架</div>
+		<div class="panel-body">
+			<section>
+				<p>通过应用生成器工具 express 可以快速创建一个应用的骨架。</p>
+				<p>通过如下命令安装：</p>
+				<pre>$ npm install express-generator -g</pre>
+				<p>-h 选项可以列出所有可用的命令行选项：</p>
+				<pre>
+E:\git\myapp>express -h
+
+  Usage: express [options] [dir]
+
+  Options:
+
+    -h, --help          output usage information
+    -V, --version       output the version number
+    -e, --ejs           add ejs engine support (defaults to jade)
+        --hbs           add handlebars engine support
+    -H, --hogan         add hogan.js engine support
+    -c, --css &lt;engine>  add stylesheet &lt;engine> support (less|stylus|compass|sass) (defaults to plain css)
+        --git           add .gitignore
+    -f, --force         force on non-empty directory
+				</pre>
+				<p>例如，下面的示例就是在当前工作目录下创建一个命名为 myapp 的应用。</p>
+				<pre>
+E:\git\generatorApp>express myapp
+
+   create : myapp
+   create : myapp/package.json
+   create : myapp/app.js
+   create : myapp/routes
+   create : myapp/routes/index.js
+   create : myapp/routes/users.js
+   create : myapp/public
+   create : myapp/public/images
+   create : myapp/public/stylesheets
+   create : myapp/public/stylesheets/style.css
+   create : myapp/views
+   create : myapp/views/index.jade
+   create : myapp/views/layout.jade
+   create : myapp/views/error.jade
+   create : myapp/bin
+   create : myapp/bin/www
+
+   install dependencies:
+     > cd myapp && npm install
+
+   run the app:
+     > SET DEBUG=myapp:* & npm start
+
+   create : myapp/public/javascripts
+				</pre>
+				<p>然后安装所有依赖包：</p>
+				<pre>
+$ cd myapp
+$ npm install
+				</pre>
+				<p>启动这个应用（MacOS 或 Linux 平台）：</p>
+				<pre>$ DEBUG=myapp npm start</pre>
+				<p>Windows 平台使用如下命令：</p>
+				<pre>> set DEBUG=myapp & npm start</pre>
+				<p>然后在浏览器中打开 http://localhost:3000/ 网址就可以看到这个应用了。</p>
+				<p>通过 Express 应用生成器创建的应用一般都有如下目录结构：</p>
+				<pre>
+.
+├── app.js
+├── bin
+│   └── www
+├── package.json
+├── public
+│   ├── images
+│   ├── javascripts
+│   └── stylesheets
+│       └── style.css
+├── routes
+│   ├── index.js
+│   └── users.js
+└── views
+    ├── error.jade
+    ├── index.jade
+    └── layout.jade
+
+7 directories, 9 files
+				</pre>	
+				<p class="alert alert-info">通过 Express 应用创建应用只是众多方法中的一种。你可以不使用它，也可以修改它让它符合你的需求，都是开源的。</p>			
+			</section>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>http://www.expressjs.com.cn/starter/generator.html</cite></code></p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

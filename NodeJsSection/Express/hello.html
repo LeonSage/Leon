@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden;background: black;color:#DB9E77; }
+		section{margin-bottom: 20px;}
+		textarea{width: 80%;min-height: 300px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">Express</a></li>
+		<li class="active">Hello World</li>
+	</ol>
+	<h1><strong>Hello World</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">最简单的实例</div>
+		<div class="panel-body">
+			<section>
+				<p>继续之前请务必按照 Installing 章节执行了所有的前期准备工作。</p>
+				<p>接下来，我们一起创建一个基本的 Express 应用。</p>
+				<p>进入 myapp 目录，创建一个名为 app.js 的文件，然后将下列代码复制进去：</p>
+				<pre>
+var express=require('express');
+var app=express();
+
+app.get('/',function(req,res){
+	res.send('Hello World!');
+})
+
+var server=app.listen(3000,function(){
+	var host=server.address().address;
+	var port=server.address().port;
+
+	console.log('Server is running at http:%s:%s',host,port);
+})
+				</pre>
+				<p>上面的代码启动一个服务并监听从 3000 端口进入的所有连接请求。他将对所有 ( / ) URL 或 路由 返回 “Hello World!” 字符串。对于其他所有路径全部返回 404 Not Found.</p>
+				<p>通过如下命令启动此应用：</p>
+				<pre>node app.js</pre>
+				<p>然后在浏览器中打开 http://localhost:3000/ 并查看输出结果。</p>
+				
+			</section>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>http://www.expressjs.com.cn/starter/hello-world.html</cite></code></p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>
