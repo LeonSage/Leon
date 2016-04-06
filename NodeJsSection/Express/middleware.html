@@ -13,282 +13,280 @@
 		.title{color: rgba(50,160,180,1);font-size: 16px;}
 		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
 		pre{overflow-x:hidden;background: black;color:#DB9E77; }
-		section{margin-bottom: 20px;}
 		textarea{width: 80%;min-height: 300px;}
 		thead{background: #EEE;}
+		a:hover{text-decoration: none;}
 	</style>
 </head>
 <body>
 	<ol class="breadcrumb">
 		<li><a href="#">NodeJs</a></li>
 		<li><a href="#">Express</a></li>
-		<li class="active">Router</li>
+		<li class="active">Middleware</li>
 	</ol>
-	<h1><strong>Routing 路由</strong></h1>
+	<h1><strong>MIDDLEWARE 中间件</strong></h1>
 	<div class="panel panel-info">
-		<div class="panel-heading">一个简单的Express路由</div>
+		<div class="panel-heading">使用中间件</div>
 		<div class="panel-body">
-			<section>
-				<p>路由（Routing）是由一个 URI（或者叫路径）、一个特定的 HTTP 方法（GET、POST 等）和若干个句柄组成的，涉及到如何定义应用的端点（URIs）以及如何响应客户端的请求。</p>
-				<p>每一个路由都可以有一个或者多个处理器函数，当匹配到路由时，这些函数将被执行。</p>
-				<p>路由的定义由如下结构组成：<code>app.method(path, handler)</code>。其中，app 是一个 express 实例；method 是某个 HTTP 请求方式中的一个；path 是服务器端的路径；handler 是当路由匹配到时需要执行的函数。</p>
-				<p class="alert alert-info">本教程假定已经存在一个命名为 app 的 express 实例了，并且应用程序是运行状态。如果你还不熟悉如何创建一个应用并使其运行，请参考 Hello world 实例。</p>
-				<p>下面的代码展示了几个路由实例：</p>
-				<pre>
-var express=require('express');
-var app=express();
-
-//网站首页的访问响应
-app.get('/',function(req,res){
-	res.send('Hello World!');
-})
-
-app.post('/',function(req,res){
-	res.send('Got a POST request');
-})
-
-app.put('/user',function(req,res){
-	res.send('Got a PUT request at /user');
-})
-
-// /user路径接受 DELETE 请求
-app.delete('/user',function(req,res){
-	res.send('Got a DELETE request at /user');
-})
-
-var server=app.listen(3000,function(){
-	var host=server.address().address;
-	var port=server.address().port;
-
-	console.log('Server is running at http:%s:%s',host,port);
-})
-				</pre>			
-			</section>
+			<p>Express 是一个自身功能极简，完全是由路由和中间件构成一个的 web 开发框架：从本质上来说，一个 Express 应用就是在调用各种中间件。</p>
+			<p>中间件（Middleware） 是一个函数，它可以访问请求对象（request object (req)）, 响应对象（response object (res)）, 和 web 应用中处于请求-响应循环流程中的中间件，一般被命名为 next 的变量。</p>
+			<p>中间件的功能包括：</p>
+			<ul>
+				<li>执行任何代码。</li>
+				<li>修改请求和响应对象。</li>
+				<li>终结请求-响应循环。</li>
+				<li>调用堆栈中的下一个中间件。</li>
+			</ul>
+			<p>如果当前中间件没有终结请求-响应循环，则必须调用 next() 方法将控制权交给下一个中间件，否则请求就会挂起。</p>
+			<p>Express 应用可使用如下几种中间件：</p>
+			<ul>
+				<li><a href="#application">应用级中间件</a></li>
+				<li><a href="#router">路由级中间件</a></li>
+				<li><a href="#errorHandler">错误处理中间件</a></li>
+				<li><a href="#inner">内置中间件</a></li>
+				<li><a href="#thirdParty">第三方中间件</a></li>
+			</ul>
+			<p>使用可选则挂载路径，可在应用级别或路由级别装载中间件。另外，你还可以同时装在一系列中间件函数，从而在一个挂载点上创建一个子中间件栈。</p>	
 		</div>
 	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">路由方法</div>
+	<div class="panel panel-info" id="application">
+		<div class="panel-heading">应用级中间件</div>
 		<div class="panel-body">
-			<p>Express 定义了如下和 HTTP 请求对应的路由方法：<code> get, post, put, head, delete, options, trace, copy, lock, mkcol, move, purge, propfind, proppatch, unlock, report, mkactivity, checkout, merge, m-search, notify, subscribe, unsubscribe, patch, search, 和 connect。</code></p>
-			<p class="alert alert-info">有些路由方法名不是合规的 JavaScript 变量名，此时使用括号记法，比如：<code> app['m-search']('/', function(){...});</code></p>
-			<p>app.all() 是一个特殊的路由方法，没有任何 HTTP 方法与其对应，它的作用是对于一个路径上的所有请求加载中间件。</p>
-			<p>在下面的例子中，来自 “/secret” 的请求，不管使用 GET、POST、PUT、DELETE 或其他任何 http 模块支持的 HTTP 请求，句柄都会得到执行。</p>
+			<p>应用级中间件绑定到 app 对象 使用 app.use() 和 app.METHOD()， 其中， METHOD 是需要处理的 HTTP 请求的方法，例如 GET, PUT, POST 等等，全部小写。例如：</p>
 			<pre>
-app.all('/secret',function(req,res,next){
-	res.send('Accessing the secret secretion ...');
-	console.log('Accessing the secret secretion ...');
+var app = express();
 
-	//pass control to the next handler
-	next();
-})
-			</pre>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">路由路径</div>
-		<div class="panel-body">
-			<p>路由路径和请求方法一起定义了请求的端点，它可以是字符串、字符串模式或者正则表达式。</p>
-			<p class="alert alert-info">Express 使用 path-to-regexp 匹配路由路径，请参考文档查阅所有定义路由路径的方法。 Express Route Tester 是测试基本 Express 路径的好工具，但不支持模式匹配。</p>
-			<p class="alert alert-danger">查询字符串不是路由路径的一部分。</p>
-			<p>使用字符串的路由路径示例：</p>
-			<pre>
-app.all('/path',function(req,res,next){
-	res.send('Accessing the path. ');
-})
+// 没有挂载路径的中间件，应用的每个请求都会执行该中间件
+app.use(function (req, res, next) {
+  console.log('Time:', Date.now());
+  next();
+});
 
-// 匹配 /random.text 路径的请求
-app.get('/random.text', function (req, res) {
-  res.send('random.text');
+// 挂载至 /user/:id 的中间件，任何指向 /user/:id 的请求都会执行它
+app.use('/user/:id', function (req, res, next) {
+  console.log('Request Type:', req.method);
+  next();
+});
+
+// 路由和句柄函数(中间件系统)，处理指向 /user/:id 的 GET 请求
+app.get('/user/:id', function (req, res, next) {
+  res.send('USER');
 });
 			</pre>
-			<p>使用字符串模式的路由路径示例：</p>
+			<p>下面这个例子展示了在一个挂载点装载一组中间件。</p>
 			<pre>
-// 匹配 acd 和 abcd
-app.get('/ab?cd', function(req, res) {
-  res.send('ab?cd');
-});
-
-// 匹配 abcd、abbcd、abbbcd等
-app.get('/ab+cd', function(req, res) {
-  res.send('ab+cd');
-});
-
-// 匹配 abcd、abxcd、abRABDOMcd、ab123cd等
-app.get('/ab.*cd', function(req, res) {
-  res.send('ab*cd');
-});
-
-// 匹配 /abe 和 /abcde
-app.get('/ab(cd)?e', function(req, res) {
- res.send('ab(cd)?e');
+// 一个中间件栈，对任何指向 /user/:id 的 HTTP 请求打印出相关信息
+app.use('/user/:id', function(req, res, next) {
+  console.log('Request URL:', req.originalUrl);
+  next();
+}, function (req, res, next) {
+  console.log('Request Type:', req.method);
+  next();
 });
 			</pre>
-			<p class="alert alert-info">字符 ?、+、* 和 () 是正则表达式的子集，- 和 . 在基于字符串的路径中按照字面值解释。</p>
-			<p>使用正则表达式的路由路径示例：</p>
+			<p>作为中间件系统的路由句柄，使得为路径定义多个路由成为可能。在下面的例子中，为指向 /user/:id 的 GET 请求定义了两个路由。第二个路由虽然不会带来任何问题，但却永远不会被调用，因为第一个路由已经终止了请求-响应循环。</p>
 			<pre>
-// 匹配任何路径中含有 a 的路径：
-app.get(/a/, function(req, res) {
-  res.send('/a/');
+// 一个中间件栈，处理指向 /user/:id 的 GET 请求
+app.get('/user/:id', function (req, res, next) {
+  console.log('ID:', req.params.id);
+  next();
+}, function (req, res, next) {
+  res.send('User Info');
 });
 
-// 匹配 butterfly、dragonfly，不匹配 butterflyman、dragonfly man等
-app.get(/.*fly$/, function(req, res) {
-  res.send('/.*fly$/');
+// 处理 /user/:id， 打印出用户 id
+app.get('/user/:id', function (req, res, next) {
+  res.end(req.params.id);
+});
+			</pre>
+			<p>如果需要在中间件栈中跳过剩余中间件，调用 next('route') 方法将控制权交给下一个路由。 注意： next('route') 只对使用 app.VERB() 或 router.VERB() 加载的中间件有效。</p>
+			<pre>
+// 一个中间件栈，处理指向 /user/:id 的 GET 请求
+app.get('/user/:id', function (req, res, next) {
+  // 如果 user id 为 0, 跳到下一个路由
+  if (req.params.id == 0) next('route');
+  // 否则将控制权交给栈中下一个中间件
+  else next(); //
+}, function (req, res, next) {
+  // 渲染常规页面
+  res.render('regular');
+});
+
+// 处理 /user/:id， 渲染一个特殊页面
+app.get('/user/:id', function (req, res, next) {
+  res.render('special');
 });
 			</pre>
 		</div>
 	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">路由句柄</div>
+	<div class="panel panel-info" id="router">
+		<div class="panel-heading">路由级中间件</div>
 		<div class="panel-body">
-			<p>可以为请求处理提供多个回调函数，其行为类似 中间件。唯一的区别是这些回调函数有可能调用 next('route') 方法而略过其他路由回调函数。可以利用该机制为路由定义前提条件，如果在现有路径上继续执行没有意义，则可将控制权交给剩下的路径。</p>
-			<p>路由句柄有多种形式，可以是一个函数、一个函数数组，或者是两者混合，如下所示.</p>
-			<p>使使用多个回调函数处理路由（记得指定 next 对象）：</p>
+			<p>路由级中间件和应用级中间件一样，只是它绑定的对象为 express.Router()。</p>
+			<pre>var router = express.Router();</pre>
+			<p>路由级使用 router.use() 或 router.VERB() 加载。</p>
+			<p>上述在应用级创建的中间件系统，可通过如下代码改写为路由级：</p>
 			<pre>
-app.get('/example/b', function (req, res, next) {
-  console.log('response will be sent by the next function ...');
+var app = express();
+var router = express.Router();
+
+// 没有挂载路径的中间件，通过该路由的每个请求都会执行该中间件
+router.use(function (req, res, next) {
+  console.log('Time:', Date.now());
   next();
-}, function (req, res) {
-  res.send('Hello from B!');
 });
-			</pre>
-			<p>使用回调函数数组处理路由：</p>
-			<pre>
-var cb0 = function (req, res, next) {
-  console.log('CB0');
-  next();
-}
 
-var cb1 = function (req, res, next) {
-  console.log('CB1');
+// 一个中间件栈，显示任何指向 /user/:id 的 HTTP 请求的信息
+router.use('/user/:id', function(req, res, next) {
+  console.log('Request URL:', req.originalUrl);
   next();
-}
-
-var cb2 = function (req, res) {
-  res.send('Hello from C!');
-}
-
-app.get('/example/c', [cb0, cb1, cb2]);
-			</pre>
-			<p>混合使用函数和函数数组处理路由：</p>
-			<pre>
-app.get('/example/d', [cb0, cb1], function (req, res, next) {
-  console.log('response will be sent by the next function ...');
+}, function (req, res, next) {
+  console.log('Request Type:', req.method);
   next();
-}, function (req, res) {
-  res.send('Hello from D!');
 });
+
+// 一个中间件栈，处理指向 /user/:id 的 GET 请求
+router.get('/user/:id', function (req, res, next) {
+  // 如果 user id 为 0, 跳到下一个路由
+  if (req.params.id == 0) next('route');
+  // 负责将控制权交给栈中下一个中间件
+  else next(); //
+}, function (req, res, next) {
+  // 渲染常规页面
+  res.render('regular');
+});
+
+// 处理 /user/:id， 渲染一个特殊页面
+router.get('/user/:id', function (req, res, next) {
+  console.log(req.params.id);
+  res.render('special');
+});
+
+// 将路由挂载至应用
+app.use('/', router);
 			</pre>
 		</div>
 	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">响应方法</div>
+	<div class="panel panel-info" id="errorHandler">
+		<div class="panel-heading">错误处理中间件</div>
 		<div class="panel-body">
-			<p>下表中响应对象（res）的方法向客户端返回响应，终结请求响应的循环。如果在路由句柄中一个方法也不调用，来自客户端的请求会一直挂起。</p>
+			<p class="alert alert-info">错误处理中间件有 4 个参数，定义错误处理中间件时必须使用这 4 个参数。即使不需要 next 对象，也必须在签名中声明它，否则中间件会被识别为一个常规中间件，不能处理错误。</p>
+			<p>错误处理中间件和其他中间件定义类似，只是要使用 4 个参数，而不是 3 个，其签名如下： (err, req, res, next)。</p>
+			<pre>
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+			</pre>
+			<p>请参考 错误处理 一章了解更多关于错误处理中间件的内容。</p>
+		</div>
+	</div>
+	<div class="panel panel-info" id="inner">
+		<div class="panel-heading">内置中间件</div>
+		<div class="panel-body">
+			<p>从 4.x 版本开始，, Express 已经不再依赖 Connect 了。除了 express.static, Express 以前内置的中间件现在已经全部单独作为模块安装使用了。请参考 中间件列表。</p>
+			<p><code>express.static(root, [options])</code>是 Express 唯一内置的中间件。它基于 serve-static，负责在 Express 应用中提托管静态资源。参数 root 指提供静态资源的根目录。可选的 options 参数拥有如下属性。</p>
 			<table class="table table-bordered table-condensed table-hover">
 				<thead>
 					<tr>
-						<th>方法</th>
+						<th>属性</th>
 						<th>描述</th>
+						<th>类型</th>
+						<th>缺省值</th>
 					</tr>					
 				</thead>
 				<tbody>
 					<tr>
-						<td><code>res.download()</code></td>
-						<td>提示下载文件。</td>
+						<td><code>dotfiles</code></td>
+						<td>是否对外输出文件名以点（.）开头的文件。可选值为 “allow”、“deny” 和 “ignore”</td>
+						<td><code>String</code></td>
+						<td><code>“ignore”</code></td>
 					</tr>
 					<tr>
-						<td><code>res.end()</code></td>
-						<td>终结响应处理流程。</td>
+						<td><code>etag</code></td>
+						<td>是否启用 etag 生成</td>
+						<td><code>Boolean</code></td>
+						<td><code>true</code></td>
 					</tr>
 					<tr>
-						<td><code>res.json()</code></td>
-						<td>发送一个 JSON 格式的响应。</td>
+						<td><code>extensions</code></td>
+						<td>设置文件扩展名备份选项</td>
+						<td><code>Array</code></td>
+						<td><code>[]</code></td>
 					</tr>
 					<tr>
-						<td><code>res.jsonp()</code></td>
-						<td>发送一个支持 JSONP 的 JSON 格式的响应。</td>
+						<td><code>index</code></td>
+						<td>发送目录索引文件，设置为 false 禁用目录索引。</td>
+						<td><code>Mixed</code></td>
+						<td><code>“index.html”</code></td>
 					</tr>
 					<tr>
-						<td><code>res.redirect()</code></td>
-						<td>重定向请求。</td>
+						<td><code>lastModified</code></td>
+						<td>设置 Last-Modified 头为文件在操作系统上的最后修改日期。可能值为 true 或 false。</td>
+						<td><code>Boolean</code></td>
+						<td><code>true</code></td>
 					</tr>
 					<tr>
-						<td><code>res.render</code></td>
-						<td>渲染视图模板。</td>
+						<td><code>maxAge</code></td>
+						<td>以毫秒或者其字符串格式设置 Cache-Control 头的 max-age 属性。</td>
+						<td><code>Number</code></td>
+						<td><code>0</code></td>
 					</tr>
 					<tr>
-						<td><code>res.send()</code></td>
-						<td>发送各种类型的响应。</td>
+						<td><code>redirect</code></td>
+						<td>当路径为目录时，重定向至 “/”。</td>
+						<td><code>Boolean</code></td>
+						<td><code>true</code></td>
 					</tr>
 					<tr>
-						<td><code>res.sendFile</code></td>
-						<td>以八位字节流的形式发送文件。</td>
-					</tr>
-					<tr>
-						<td><code>res.sendStatus()</code></td>
-						<td>设置响应状态代码，并将其以字符串形式作为响应体的一部分发送。</td>
+						<td><code>setHeaders</code></td>
+						<td>设置 HTTP 头以提供文件的函数。</td>
+						<td><code>Function</code></td>
+						<td><code></code></td>
 					</tr>
 				</tbody>
 			</table>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">app.route()</div>
-		<div class="panel-body">
-			<p>可使用 app.route() 创建路由路径的链式路由句柄。由于路径在一个地方指定，这样做有助于创建模块化的路由，而且减少了代码冗余和拼写错误。
-			</p>
-			<p>下面这个示例程序使用 app.route() 定义了链式路由句柄。</p>
+			<p>下面的例子使用了 express.static 中间件，其中的 options 对象经过了精心的设计。</p>
 			<pre>
-app.route('/book')
-  .get(function(req, res) {
-    res.send('Get a random book');
-  })
-  .post(function(req, res) {
-    res.send('Add a book');
-  })
-  .put(function(req, res) {
-    res.send('Update the book');
-  });
+var options = {
+  dotfiles: 'ignore',
+  etag: false,
+  extensions: ['htm', 'html'],
+  index: false,
+  maxAge: '1d',
+  redirect: false,
+  setHeaders: function (res, path, stat) {
+    res.set('x-timestamp', Date.now());
+  }
+}
+
+app.use(express.static('public', options));
+			</pre>
+			<p>每个应用可有多个静态目录。</p>
+			<pre>
+app.use(express.static('public'));
+app.use(express.static('uploads'));
+app.use(express.static('files'));
 			</pre>
 		</div>
 	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">express.Router</div>
+	<div class="panel panel-info" id="thirdParty">
+		<div class="panel-heading">第三方中间件</div>
 		<div class="panel-body">
-			<p>可使用 express.Router 类创建模块化、可挂载的路由句柄。Router 实例是一个完整的中间件和路由系统，因此常称其为一个 “mini-app”。</p>
-			<p>下面的实例程序创建了一个路由模块，并加载了一个中间件，定义了一些路由，并且将它们挂载至应用的路径上。</p>
-			<p>在 app 目录下创建名为 birds.js 的文件，内容如下：</p>
+			<p>通过使用第三方中间件从而为 Express 应用增加更多功能。安装所需功能的 node 模块，并在应用中加载，可以在应用级加载，也可以在路由级加载。</p>
+			<p>下面的例子安装并加载了一个解析 cookie 的中间件： cookie-parser</p>
+			<pre>$ npm install cookie-parser</pre>
 			<pre>
 var express = require('express');
-var router = express.Router();
+var app = express();
+var cookieParser = require('cookie-parser');
 
-// 该路由使用的中间件
-router.use(function timeLog(req, res, next) {
-  console.log('Time: ', Date.now());
-  next();
-});
-// 定义网站主页的路由
-router.get('/', function(req, res) {
-  res.send('Birds home page');
-});
-// 定义 about 页面的路由
-router.get('/about', function(req, res) {
-  res.send('About birds');
-});
-
-module.exports = router;
+// 加载用于解析 cookie 的中间件
+app.use(cookieParser());
 			</pre>
-			<p>然后在应用中加载路由模块：</p>
-			<pre>
-var birds = require('./birds');
-...
-app.use('/birds', birds);
-			</pre>
-			<p>应用即可处理发自 /birds 和 /birds/about 的请求，并且调用为该路由指定的 timeLog 中间件。</p>
 		</div>
 		<div class="panel-footer">
-			<p>参考自：<code><cite>http://www.expressjs.com.cn/guide/routing.html</cite></code></p>
+			<p>参考自：<code><cite>http://www.expressjs.com.cn/guide/using-middleware.html</cite></code></p>
 		</div>
 	</div>
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
