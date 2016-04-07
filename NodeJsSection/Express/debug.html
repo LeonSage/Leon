@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden;background: black;color:#DB9E77; }
+		textarea{width: 80%;min-height: 300px;}
+		thead{background: #EEE;}
+		a:hover{text-decoration: none;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">Express</a></li>
+		<li class="active">debug</li>
+	</ol>
+	<h1><strong>DEBUG 调试</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">Express调试</div>
+		<div class="panel-body">
+			<p>Express 内部使用 debug 模块记录路由匹配、使用到的中间件、应用模式以及请求-响应循环。</p>
+			<p class="alert alert-info">debug 有点像改装过的 console.log，不同的是，您不需要在生产代码中注释掉 debug。它会默认关闭，而且使用一个名为 DEBUG 的环境变量还可以打开。</p>
+			<p>在启动应用时，设置 DEBUG 环境变量为 express:*，可以查看 Express 中用到的所有内部日志。</p>
+			<pre>$ DEBUG=express:* node index.js</pre>
+			<p>在 Windows 系统里，使用如下的命令。</p>
+			<pre>> set DEBUG=express:* & node index js</pre>
+			<p>在由 express 应用生成器 生成的默认应用中执行，会打印出如下信息：</p>
+			<pre>
+E:\git\generatorApp\myapp>node app.js
+  express:router:route new / +0ms
+  express:router:layer new / +5ms
+  express:router:route get / +5ms
+  express:router:layer new / +2ms
+  express:router:route new / +6ms
+  express:router:layer new / +2ms
+  express:router:route get / +0ms
+  express:router:layer new / +1ms
+  express:application set "x-powered-by" to true +3ms
+  express:application set "etag" to 'weak' +3ms
+  express:application set "etag fn" to [Function: wetag] +2ms
+  express:application set "env" to 'development' +1ms
+  express:application set "query parser" to 'extended' +1ms
+  express:application set "query parser fn" to [Function: parseExtendedQueryString] +2ms
+  express:application set "subdomain offset" to 2 +3ms
+  express:application set "trust proxy" to false +4ms
+  express:application set "trust proxy fn" to [Function: trustNone] +3ms
+  express:application booting in development mode +2ms
+  express:application set "view" to [Function: View] +3ms
+  express:application set "views" to 'E:\\git\\generatorApp\\myapp\\views' +3ms
+  express:application set "jsonp callback name" to 'callback' +3ms
+  express:application set "views" to 'E:\\git\\generatorApp\\myapp\\views' +4ms
+  express:application set "view engine" to 'jade' +2ms
+  express:router use / query +7ms
+  express:router:layer new / +2ms
+  express:router use / expressInit +3ms
+  express:router:layer new / +2ms
+  express:router use / logger +3ms
+  express:router:layer new / +2ms
+  express:router use / jsonParser +247ms
+  express:router:layer new / +2ms
+  express:router use / urlencodedParser +18ms
+  express:router:layer new / +2ms
+  express:router use / cookieParser +3ms
+  express:router:layer new / +3ms
+  express:router use / serveStatic +4ms
+  express:router:layer new / +2ms
+  express:router use / router +4ms
+  express:router:layer new / +2ms
+  express:router use /users router +3ms
+  express:router:layer new /users +2ms
+  express:router use / <anonymous> +4ms
+  express:router:layer new / +2ms
+  express:router use / <anonymous> +3ms
+  express:router:layer new / +2ms
+  express:router use / <anonymous> +2ms
+  express:router:layer new / +3ms
+			</pre>
+			<p>当应用收到请求时，能看到 Express 代码中打印出的日志。</p>	
+			<pre>
+express:router dispatching GET / +4h
+express:router query  : / +2ms
+express:router expressInit  : / +0ms
+express:router favicon  : / +0ms
+express:router logger  : / +1ms
+express:router jsonParser  : / +0ms
+express:router urlencodedParser  : / +1ms
+express:router cookieParser  : / +0ms
+express:router stylus  : / +0ms
+express:router serveStatic  : / +2ms
+express:router router  : / +2ms
+express:router dispatching GET / +1ms
+express:view lookup "index.jade" +338ms
+express:view stat "/projects/example/views/index.jade" +0ms
+express:view render "/projects/example/views/index.jade" +1ms
+			</pre>
+			<p>设置 DEBUG 的值为 express:router，只查看路由部分的日志；设置 DEBUG 的值为 express:application，只查看应用部分的日志，依此类推。</p>	
+			<h2><strong>通过 express 生成应用</strong></h2>
+			<p>通过 express 命令行生成的应用也使用了 debug 模块，它的命名空间限制在应用中。</p>
+			<p>如果您通过下述命令生成应用：</p>
+			<pre>$ express sample-app</pre>
+			<p>则可通过下述命令打开调试信息：</p>	
+			<pre>$ DEBUG=sample-app node ./bin/www</pre>
+			<p>可通过逗号隔开的名字列表来指定多个调试命名空间，如下所示：</p>
+			<pre>$ DEBUG=http,mail,express:* node index.js</pre>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>http://www.expressjs.com.cn/guide/debugging.html</cite></code></p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>

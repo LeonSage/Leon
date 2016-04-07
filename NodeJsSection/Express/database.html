@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs-fs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden;background: black;color:#DB9E77; }
+		textarea{width: 80%;min-height: 300px;}
+		thead{background: #EEE;}
+		a:hover{text-decoration: none;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">Express</a></li>
+		<li class="active">database</li>
+	</ol>
+	<h1><strong>DATABASE 集成数据库</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">MongoDB</div>
+		<div class="panel-body">
+			<p>为 Express 应用添加连接数据库的能力，只需要加载相应数据库的 Node.js 驱动即可。这里将会简要介绍如何为 Express 应用添加和使用一些常用的数据库 Node 模块。</p>
+			<p>安装：</p>
+			<pre>$ npm install mongoskin</pre>
+			<p>示例：</p>
+			<pre>
+var db = require('mongoskin').db('localhost:27017/animals');
+
+db.collection('mamals').find().toArray(function(err, result) {
+  if (err) throw err;
+  console.log(result);
+});
+			</pre>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>http://www.expressjs.com.cn/guide/database-integration.html</cite></code></p>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>
