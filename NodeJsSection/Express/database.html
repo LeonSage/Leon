@@ -2,12 +2,12 @@
 <html lang="zh-cmn-Hans">
 <head>
 	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
-	<title>NodeJs-fs</title>
+	<title>NodeJs</title>
 	<meta name="author" content="Leon" />
 	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
 	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
-		body,xmp{padding: 0px;margin: 0px;}
+		body{padding: 0px;margin: 0px;}
 		.panel-body{font-size: 15px;}
 		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
 		.title{color: rgba(50,160,180,1);font-size: 16px;}
@@ -28,6 +28,322 @@
 	<div class="panel panel-info">
 		<div class="panel-heading">MongoDB</div>
 		<div class="panel-body">
+			<p>下载</p>
+			<p>到官网<code><cite>www.mongodb.org/downloads</cite></code>来进行下载对应版本的MongoDB。</p>
+			<p>双击下载好的文件来进行安装。</p>
+			<p>在安装好的MongoDB目录下新建'data'文件夹，它将会作为数据存放的根文件夹。</p>
+			<p>启动：</p>
+			<pre>
+$ D:
+$ cd MongoDB\bin
+$ mongod --dbpath D:\MongoDB\data
+			</pre>
+			<p>配置成功后会显示如下界面：</p>
+			<pre>
+D:\MongoDB\bin>mongod --dbpath D:\MongoDB\data
+2016-04-07T09:38:40.002+0800 I CONTROL  [initandlisten] MongoDB starting : pid=1332 port=27017 dbpath=D:\MongoDB\data 64-bit host=DESKTOP-GTK829H
+2016-04-07T09:38:40.005+0800 I CONTROL  [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2016-04-07T09:38:40.006+0800 I CONTROL  [initandlisten] db version v3.2.1
+2016-04-07T09:38:40.007+0800 I CONTROL  [initandlisten] git version: a14d55980c2cdc565d4704a7e3ad37e4e535c1b2
+2016-04-07T09:38:40.009+0800 I CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.0.1p-fips 9 Jul 2015
+2016-04-07T09:38:40.010+0800 I CONTROL  [initandlisten] allocator: tcmalloc
+2016-04-07T09:38:40.010+0800 I CONTROL  [initandlisten] modules: none
+2016-04-07T09:38:40.011+0800 I CONTROL  [initandlisten] build environment:
+2016-04-07T09:38:40.013+0800 I CONTROL  [initandlisten]     distmod: 2008plus-ssl
+2016-04-07T09:38:40.014+0800 I CONTROL  [initandlisten]     distarch: x86_64
+2016-04-07T09:38:40.015+0800 I CONTROL  [initandlisten]     target_arch: x86_64
+2016-04-07T09:38:40.017+0800 I CONTROL  [initandlisten] options: { storage: { dbPath: "D:\MongoDB\data" } }
+2016-04-07T09:38:40.026+0800 I -        [initandlisten] Detected data files in D:\MongoDB\data created by the 'wiredTiger' storage engine, so setting the active storage engine to 'wiredTiger'.
+2016-04-07T09:38:40.028+0800 I STORAGE  [initandlisten] wiredtiger_open config: create,cache_size=1G,session_max=20000,eviction=(threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,archive=true,path=journal,compressor=snappy),file_manager=(close_idle_time=100000),checkpoint=(wait=60,log_size=2GB),statistics_log=(wait=0),
+2016-04-07T09:38:41.260+0800 I NETWORK  [HostnameCanonicalizationWorker] Starting hostname canonicalization worker
+2016-04-07T09:38:41.260+0800 I FTDC     [initandlisten] Initializing full-time diagnostic data capture with directory 'D:/MongoDB/data/diagnostic.data'
+2016-04-07T09:38:41.306+0800 I NETWORK  [initandlisten] waiting for connections on port 27017
+			</pre>
+			<p>我们上面在配置mongodb服务时并没有指定服务的端口号，所以会指定mongodb默认的端口号27017。我们也可以在配置时指定端口。例：如果我们想指定mongodb的服务端口号为10001，命令如下：</p>
+			<pre>mongod --dbpath D:\MongoDB\data --port 10001</pre>
+			<p>访问浏览器<code><cite>localhost:27017</cite></code>你会看到如下提示：</p>
+			<pre>It looks like you are trying to access MongoDB over HTTP on the native driver port.</pre>
+			<p>如此，MongoDB数据库服务已经完全启动了。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Mongoose入门</div>
+		<div class="panel-body">
+			<p>首先你要确保自己已经安装了MongoDB和Node.js。</p>
+			<p>然后使用下面的命令来安装Mongoose：</p>
+			<pre>$ npm install mongoose</pre>
+			<p>现在我们可以存储一些东西在数据库里了，首先我们需要在我们的项目里包含mongoose，并且和正在运行的MongoDB实例建立一个连接。</p>
+			<pre>
+var mongoose=require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+			</pre>
+			<p>现在我们在本地有了一个挂起的数据库连接，但我们需要注意是否会发生连接错误：</p>
+			<pre>
+var db=mongoose.connection;
+db.on('error',console.error.bind(console,'connection error:'));
+db.once('open',function(callback){
+	console.log('Connect database successfully...');
+})
+			</pre>
+			<p>在Mongoose里，所有的东西都是从Schema派生出来的，它作为基类而被其他的对象所继承：</p>
+			<pre>
+var blogSchema=mongoose.Schema({
+	author: String,
+	body: String
+});
+			</pre>
+			<p>现在我们已经拥有了一个博客性质的数据库模式，它有两个字符串类型的属性，然后我们需要把它编译成模型。</p>
+			<pre>var blog=mongoose.model('blog',blogSchema);</pre>
+			<p>模型就是用来结构化文档的类，在这个例子中，每一个blog都会拥有在blogSchema中声明属性和方法。我们来创造一个实例：</p>
+			<pre>
+var blog1=new blog({author:'leon',body:'The first day'});
+console.log(blog1.body);		//输出：The first day
+			</pre>
+			<p>我们给每一个博客都添加一个查询内容的方法：</p>
+			<pre>
+var blogSchema=mongoose.Schema({
+	author: String,
+	body: String
+});
+blogSchema.methods.query=function(){
+	console.log("author: "+this.author);
+	console.log("content: "+this.body);
+}
+
+var blog=mongoose.model('blog',blogSchema);
+var blog1=new blog({author:'leon',body:'The first day'});
+blog1.query();		
+//输出：
+	author: leon
+	content: The first day
+			</pre>
+			<p>这里需要注意的是，添加方法一定要在编译成模型之前，添加之后再编译成模型就可以被每一个文档实例所使用。</p>
+			<p>但直到这个时候，我们还没有保存任何东西到MongoDB里，我们可以调用<code>save(err,this)</code>方法来保存：</p>
+			<pre>
+blog1.save(function(err,blog){
+	if(err) return console.error(err);
+	blog.query();
+	//输出：
+		author: leon
+		content: The first day
+});				
+			</pre>
+			<p>保存进了数据库后，我们可以使用<code>find(regex,callback)</code>方法来访问模型中的文档：</p>
+			<pre>
+blog.find(function(err,result){
+	if(err) return console.error(err);
+	console.log(result);
+})
+blog.find({author:/le/},function(err,result){
+	if(err) return console.error(err);
+	console.log(result);
+})
+//两次输出均为：
+	[ { __v: 0,
+    body: 'The first day',
+    author: 'leon',
+    _id: 5706064c094d067823e9802e },
+  { __v: 0,
+    body: 'The first day',
+    author: 'leon',
+    _id: 57060952d8344e180edf656f } ]				
+			</pre>
+			<p>因为上面的示例中保存有两次，所以会输出两次，其中因为内容重复，所以_id不同。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Schemas 数据库模式</div>
+		<div class="panel-body">
+			<p>Mongoose中的所有东西都衍生于Schema，每个schema映射到一个MongoDB集合并且定义了集合内文档的基本结构。</p>
+			<p>Schema中的每一个键都定义了一个文档中的属性，它会被转换为指定的类型。在键值对中也可以嵌套对象。允许的值类型有：<code>String, Number, Date, Buffer, Boolean, Mixed, Objectid, Array</code>。</p>
+			<pre>
+var blogSchema=mongoose.Schema({
+	title: String,
+	author: String,
+	body: String,
+	comments:[{body:String,date:Date}],
+	date:{type:Date,default:Date.now},
+	meta:{
+		votes:Number,
+		favs:Number
+	}
+});
+			</pre>
+			<p>Schemas不仅仅定义文档结构，还可以定义实例方法，静态模型方法，复合索引和叫做中间件的文档生命周期钩子。</p>
+			<p>当你需要向Schema添加键值对的时候可以调用<code>Schema.add(obj,prefix);</code>方法。</p>
+			<pre>blogSchema.add({hidden: 'Boolean',color:'String'});</pre>
+			<p>Schema.add()源码：</p>
+			<pre>
+Schema.prototype.add = function add (obj, prefix) {
+  prefix = prefix || '';
+  var keys = Object.keys(obj);
+  for (var i = 0; i < keys.length; ++i) {
+    var key = keys[i];
+    if (null == obj[key]) {
+      throw new TypeError('Invalid value for schema path `'+ prefix + key +'`');
+    }
+    if (utils.isObject(obj[key]) && (!obj[key].constructor || 'Object' == obj[key].constructor.name) && (!obj[key].type || obj[key].type.type)) {
+      if (Object.keys(obj[key]).length) {
+        // nested object { last: { name: String }}
+        this.nested[prefix + key] = true;
+        this.add(obj[key], prefix + key + '.');
+      } else {
+        this.path(prefix + key, obj[key]); // mixed type
+      }
+    } else {
+      this.path(prefix + key, obj[key]);
+    }
+  }
+};
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Model 模型</div>
+		<div class="panel-body">
+			<p>为了使用定义好的数据库模型，我们使用<code>mongoose.model(modelName,schema);</code>方法把它转化成我们可以使用的Model。</p>
+			<pre>var blog=mongoose.model('blog',blogSchema);</pre>
+			<span class="label label-info" title>实例方法</span>
+			<p>模型的实例是文档，文档有很多内置的实例方法，我们也可以自己定义需要的方法：</p>
+			<pre>
+blogSchema.methods.query=function(){
+	console.log("author: "+this.author);
+	console.log("content: "+this.body);
+}				
+			</pre>
+			<span class="label label-info" title>模型方法</span>
+			<p>我们也可以在模型级别上添加方法，使用<code>static(name,fn)</code>，它和save，update，find，是平级的，可以在model上直接调用。</p>
+			<pre>
+blogSchema.statics.findByName=function(name,callback){
+	this.find({name:new RegExp(name,'i')},callback);
+}
+			</pre>
+			<span class="label label-info" title>索引</span>
+			<p>MongoDB支持二级索引。在mongoose中，我们在path层次或schema层次上定义这些索引，当我们创建复杂索引时，定义在schema层次上就是很必要的。</p>
+			<pre>
+var blogSchema=mongoose.Schema({
+	name: String,
+	type: String,
+	tags:{type:[String],index:true} 		//field level
+})
+blogSchema.index({author:1,title:-1});		//schema level
+			</pre>
+			<p>当你的程序启动后，mongoose会自动调用ensureIndex()方法来给你Schema中的每一个确定的索引。当在开发时，建议关闭这个选项，因为它会明显影响到性能。两种方法来关闭它：</p>
+			<pre>
+blogSchema.set('autoIndex',false);
+//or
+new Schema({...},{autoIndex: false});
+			</pre>
+			<span class="label label-info" title>虚属性</span>
+			<p>虚属性是在MongoDB里可以得到和赋值但是并不确实存在的文档属性。其中，get方法可以格式化和组合内容，set可以分离一个单一值变成多个值来存储。我们先定义一个Schema：</p>
+			<pre>
+var personSchema=mongoose.Schema({
+	name:{
+		first:String,
+		last: String
+	}
+});
+var person=mongoose.model('person',personSchema);
+var Leon=new person({name:{first:'Leon',last:'Sage'}});
+			</pre>
+			<p>假设我们此时希望输出它的全名，我们当然可以手动输出：</p>
+			<pre>console.log(Leon.name.first+' '+Leon.name.last);  //输出：Leon Sage</pre>
+			<p>但同时我们也可以使用虚属性的get来完成：</p>
+			<pre>
+personSchema.virtual('name.full').get(function(){
+	return this.name.first+" "+this.name.last;
+})
+			</pre>
+			<p>现在我们可以访问虚拟的<code>name.full</code>属性了，我们的get方法会在取值时调用。</p>
+			<pre>console.log('%s is fullname',Leon.name.full);	//输出：Leon Sage</pre>
+			<p>这种情况下当我们输出记录到对象或者JSON格式时，虚属性是不会被包含在内的，传递参数<code>virtuals:true</code>给toObject或者toJSON时他们则会被返回。</p>
+			<p>当然我们也可以从name.full中设置name.first和name.last，假设我们传递了full.name给对象，这时我们可以通过set方法来完成分解并赋值：：</p>
+			<pre>
+personSchema.virtual('name.full').set(function(name){
+	var split=name.split(' ');
+	this.name.first=split[0];
+	this.name.last=split[1];
+})
+
+Leon.name.full='Leon Sage';
+console.log(Leon.name.first);		//输出Leon
+console.log(Leon.name.last);		//输出Sage
+			</pre>
+			<p>只有非虚拟属性才能被查询或者域选择，当我们查询Leon时：</p>
+			<pre>
+console.log(Leon);
+//输出：{ name: { first: 'Leon', last: 'Sage' },
+  		_id: 57070d48400fcf5c0c3f173b }	
+			</pre>
+			<span class="label label-info" title>配置选项</span>
+			<p>Schema有一些可选的配置项传递给结构体或者直接设置选项：</p>
+			<pre>
+new Schema({...},options);
+//or
+var schema=new Schema({...});
+schema.set(options,value);
+			</pre>
+			<p>合法的参数有：<code>autoIndex,capped,collection,id,_id,read,safe,shardKey,strict,toJSON,toObject,versionKey</code></p>
+			<span class="label label-info" title>autoIndex</span>
+			<p>程序运行时，Mongoose默认在后台自动创建autoIndex，你可以设置它为false并且使用ensureIndexes方法在你的模型上来开启：</p>
+			<pre>
+var schema=new Schema({...},{autoIndex:false});
+var clock=mongoose.model('clock',schema);
+clock.ensureIndexes(callback);
+			</pre>
+			<span class="label label-info" title>bufferCommands</span>
+			<p>当禁止autoReconnect选项并且连接一个单一的非副本集mongod时，除非你手动重连否则断开不会自动重连。在这些环境下，把它设置为false。</p>
+			<pre>
+var schema=new Schema({...},{bufferCommands:false});
+			</pre>
+			<span class="label label-info" title>id</span>
+			<p>Mongoose给你的每一个schemas默认分配一个virtual getter，它返回一个String类型的文档 _id，或者是一些hexString格式的ObjectIds。如果你不想在你的schema中添加一个id,你可以在构建时禁止它：</p>
+			<pre>
+//default behavior
+var schema=new Schema({name:String});
+var page=mongoose.model('Page',schema);
+var p=new page({name:'mongodb.org'});
+console.log(p.id); // 输出：57072689df9fe24c11e12beb
+
+//disabled id
+var schema=new Schema({name:String},{id:false});
+var page=mongoose.model('Page',schema);
+var p=new page({name:'mongodb.org'});
+console.log(p.id); // 输出：undefined
+			</pre>
+			<span class="label label-info" title>_id</span>
+			<p>Mongoose默认给每一个没有传递给Schema结构体中的schemas分配一个_id，MongoDBs默认分配一个ObjectId对象。如果你不想要这个属性，可以禁用它，它会阻止Mongoose通过getting来创建_id，然而当插入MongoDB时依然会被创建_id，在插入数据库后使用<code>Schema.set('_id',false);</code>将不会再起作用。</p>
+			<pre>
+//default behavior
+var schema=new Schema({name:String});
+var page=mongoose.model('Page',schema);
+var p=new page({name:'mongodb.org'});
+console.log(p); // 输出：{ _id: 57075055bbd5fb6c1d8e920c, name: 'Leon Sage' }
+
+//disabled _id
+var schema=new Schema({name:String},{_id:false});
+var page=mongoose.model('Page',schema);
+var p=new page({name:'mongodb.org'});
+console.log(p); // { name: 'Leon Sage' }
+
+//insert to MongoDB
+Leon.save(function(err,doc){
+	if(err) console.error(err);
+	console.log(doc);
+	//输出：
+		[Error: document must have an _id before saving]
+		undefined
+})
+			</pre>
+			<p class="alert alert-danger">自己的测试结果和文档上的有些差异，自己报错信息为必须填写一个_id才可以保存，而不是会自动保存，估计是文档年久失修。</p>
+		</div>
+		<div class="panel-footer">
+			<p>参考自：<code><cite>http://www.nodeclass.com/api/mongoose.html#guide</cite></code></p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Mongoskin</div>
+		<div class="panel-body">
 			<p>为 Express 应用添加连接数据库的能力，只需要加载相应数据库的 Node.js 驱动即可。这里将会简要介绍如何为 Express 应用添加和使用一些常用的数据库 Node 模块。</p>
 			<p>安装：</p>
 			<pre>$ npm install mongoskin</pre>
@@ -40,10 +356,12 @@ db.collection('mamals').find().toArray(function(err, result) {
   console.log(result);
 });
 			</pre>
+		</div>
 		<div class="panel-footer">
 			<p>参考自：<code><cite>http://www.expressjs.com.cn/guide/database-integration.html</cite></code></p>
 		</div>
 	</div>
+
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script>
