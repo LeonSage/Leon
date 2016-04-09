@@ -126,7 +126,7 @@
 					<div class="panel-body">
 						<ul class="nav nav-pills">
 							<li role="presentation" onclick="iframeJump('../NodeJsSection/DB/NoSQL.html');"><a href="#">NoSQL</a></li>	
-							<li role="presentation" onclick=""><a href="#">未定义</a></li>
+							<li role="presentation" onclick="iframeJump('../NodeJsSection/DB/mongoose.html');"><a href="#">Mongoose</a></li>
 						</ul>
 					</div>
 				</div>
@@ -150,7 +150,7 @@
 							<li role="presentation" onclick="iframeJump('../NodeJsSection/Express/templateEngine.html');"><a href="#">模板引擎</a></li>
 							<li role="presentation" onclick="iframeJump('../NodeJsSection/Express/debug.html');"><a href="#">调试</a></li>
 							<li role="presentation" onclick="iframeJump('../NodeJsSection/Express/proxy.html');"><a href="#">设置代理</a></li>
-							<li role="presentation" onclick="iframeJump('../NodeJsSection/Express/database.html');"><a href="#">Mongoose</a></li>
+							
 						</ul>
 					</div>
 				</div>
@@ -184,6 +184,8 @@
 		}
 	});
 	$(function(){
+
+
 		//控制索引树上active类的添加与删除,改善用户体验
 		var $presentation=$("li[role='presentation']");
 		$presentation.on('click',function(){
@@ -202,6 +204,12 @@
 				$subnav.next().slideUp();
 				$(this).next().slideDown();
 			}			
+		})
+
+		//控制索引在点击后不会弹回最上端
+		var $li=$('li');
+		$li.on('click',function(){
+			return false;
 		})
 	});
 

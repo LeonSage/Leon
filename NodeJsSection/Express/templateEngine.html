@@ -34,7 +34,7 @@
 				<li>view engine, 模板引擎，比如： app.set('view engine', 'jade')</li>
 			</ul>
 			<p>然后安装相应的模板引擎 npm 软件包。</p>
-			<pre>$ npm install jade --save</pre>
+			<pre>$ npm install jade --save --registy=https://registry.npm.taobao.org</pre>
 			<p class="alert alert-info">和 Express 兼容的模板引擎，比如 Jade，通过 res.render() 调用其导出方法 __express(filePath, options, callback) 渲染模板。有一些模板引擎不遵循这种约定，Consolidate.js 能将 Node 中所有流行的模板引擎映射为这种约定，这样就可以和 Express 无缝衔接。</p>
 			<p>一旦 view engine 设置成功，就不需要显式指定引擎，或者在应用中加载模板引擎模块，Express 已经在内部加载，如下所示。</p>	
 			<pre>app.set('view engine','jade');</pre>
@@ -56,6 +56,75 @@ app.get('/', function (req, res) {
 		</div>
 		<div class="panel-footer">
 			<p>参考自：<code><cite>http://www.expressjs.com.cn/guide/using-template-engines.html</cite></code></p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Jade 标签</div>
+		<div class="panel-body">
+			<p>Jade 是一个高性能的模板引擎，它深受 Haml 影响，它是用 JavaScript 实现的，并且可以供 Node 使用。</p>
+			<p>标签就是一个简单的单词</p>
+			<pre>html</pre>
+			<p>它会被转换为<code>&lt;html>&lt;/html></code></p>
+			<p>标签也可以有id和class：</p>
+			<pre>
+//添加id
+div#container
+
+//添加class
+div.user-details
+
+//添加多个class和id
+div#foo.bar.baz
+//转换为&lt;div id="foo" class="bar baz">&lt;/div>
+			</pre>
+			<p>不停的写<code>div div div</code>很繁琐，我们可以更为简洁的编写：</p>
+			<pre>
+#foo
+.bar
+//转换为：
+&lt;div id="foo">&lt;/div>
+&lt;div class="bar">&lt;/div>
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">标签+文本</div>
+		<div class="panel-body">
+			<p>我们只需要简单的把内容放在标签之后：</p>
+			<pre>
+p wahoo!
+//transfer to:
+&lt;p>wahoo!&lt;/p>
+			</pre>
+			<p>非常简洁，但是大段的文本怎么办呢：</p>
+			<pre>
+p
+	| foo bar baz
+	| rawr rawr
+	| super cool
+	| go jade go				
+			</pre>
+			<p>它会被转换为<code>&lt;p>foo bar baz rawr ...&lt;p></code></p>
+			<p>我们也可以把文本和传递的数据结合起来，我们在app.js文件里把<code>{name:'tj',email:'tj@vision-media.ca'}</code>传递给render()，然后在模板里写：<pre>#user #{name} & lt; #{email}\&gt;</pre></p>
+			<pre>
+//添加id
+div#container
+
+//添加class
+div.user-details
+
+//添加多个class和id
+div#foo.bar.baz
+//转换为&lt;div id="foo" class="bar baz">&lt;/div>
+			</pre>
+			<p>不停的写<code>div div div</code>很繁琐，我们可以更为简洁的编写：</p>
+			<pre>
+#foo
+.bar
+//转换为：
+&lt;div id="foo">&lt;/div>
+&lt;div class="bar">&lt;/div>
+			</pre>
 		</div>
 	</div>
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
