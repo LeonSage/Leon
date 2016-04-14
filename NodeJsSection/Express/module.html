@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>NodeJs</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of 'fs' module in NodeJs." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden;background: black;color:#DB9E77; }
+		textarea{width: 80%;min-height: 300px;}
+		thead{background: #EEE;}
+		a:hover{text-decoration: none;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">NodeJs</a></li>
+		<li><a href="#">Express</a></li>
+		<li class="active">Module</li>
+	</ol>
+	<h1><strong>MODULE 模块化</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">在Express中模块化功能</div>
+		<div class="panel-body">
+			<p>你肯定非常熟悉nodejs模块中的exports对象，你可以用它创建你的模块。</p>
+			<p>这里有一个roker.js文件：</p>
+			<pre>
+exports.name=function(){
+	console.log('My name is Lemmy Kilmister');
+}				
+			</pre>
+			<p>而在另一个文件中可以这样引用：</p>
+			<pre>
+var rocker=require('./rocker.js');
+rocker.name();		//输出：My name is Lemmy Kilmister
+			</pre>
+			<p>这样将不同的功能分置在不同的文件里，使用exports对象和require()方法来互相调用就是Express的模块化。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Module.exports</div>
+		<div class="panel-body">
+			<p>其实，Module.exports才是真正的接口，而exports只不过是它的一个辅助工具。最终返回给调用的是Module.exports对象。</p>
+			<p>所有的exports方法收集到的属性和方法，最终都赋值给了Module.exports对象。当然，这有一个前提，就是Module.exports对象不具有任何属性和方法，否则，exports收集到的信息将被忽略。</p>
+			<p>修改rocker.js如下：</p>
+			<pre>
+module.exports='Rock it!';
+exports.name=function(){
+	console.log('My name is Lemmy Kilmister');
+}
+			</pre>
+			<p>再次引用执行rocker.js：</p>
+			<pre>
+var rocker=require('./rocker.js');
+rocker.name();		//输出：TypeError: Object Rock it! has no method 'name'
+			</pre>
+			<p>你的模块可以是你设置给它的任何东西。如果你没有显式的给Module.exports设置任何属性和方法，那么你的模块就是exports设置给Module.exports的属性。</p>
+			<p>你的模块可以是任何合法的javascript对象--boolean,number,date,JSON,string,function,array等等。</p>
+			<p>当你的模块是一个类：</p>
+			<pre>
+module.exports=function(name,age){
+	this.name=name;
+	this.age=age;
+	this.about=function(){
+		console.log(this.name+' is '+this.age+' years old');
+	}
+}
+			</pre>
+			<p>你可以这样应用它：</p>
+			<pre>
+var Rocker=require('./rocker.js');
+var r=new Rocker('Ozzy',62);
+r.about();	//输出Ozzy is 62 years old
+			</pre>
+			<p>当你的模块是一个数组：</p>
+			<pre>module.exports=['Lemmy Kilmister','Ozzy Osbourne','Ronnie James','Steven Tyler'];</pre>
+			<p>你可以这样应用它：</p>
+			<pre>
+var Rocker=require('./rocker.js');
+console.log('Rocker has member: '+Rocker[2]);	//输出：Rocker has member: Ronnie James
+			</pre>
+			<p>所以，当你想输出一个特定的类型时就用Module.exports，如果是一个实例化对象就用exports。推荐使用exports导出。</p>
+			<p>给module也可以添加属性：</p>
+			<pre>
+module.exports.name=function(){
+	console.log('My name is Lemmy Kilmister');
+}
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-footer">参考引用：<code>http://www.cnblogs.com/pigtail/archive/2013/01/14/2859555.html</code></div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		
+	});
+</script>
+</body>
+</html>
