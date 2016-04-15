@@ -54,9 +54,6 @@ app.get('/', function (req, res) {
 			</pre>
 			<p>此时向主页发送请求，“index.jade” 会被渲染为 HTML。</p>
 		</div>
-		<div class="panel-footer">
-			<p>参考自：<code><cite>http://www.expressjs.com.cn/guide/using-template-engines.html</cite></code></p>
-		</div>
 	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading">Jade 标签</div>
@@ -125,6 +122,284 @@ div#foo.bar.baz
 &lt;div id="foo">&lt;/div>
 &lt;div class="bar">&lt;/div>
 			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">变量调用</div>
+		<div class="panel-body">
+			<p>jade的变量调用有3种方式:</p>
+			<pre>
+- var s='hello world'
+p #{s}
+p= s
+p!=s
+//会被渲染成：
+&lt;p>hello world&lt;/p>
+&lt;p>hello world&lt;/p>
+&lt;p>hello world&lt;/p>
+			</pre>
+			<p>其中：符号 - 开头的代码代表属于在服务端执行的代码：</p>
+			<pre>
+- console.log('hello');		//在服务端输出hello
+- var s='hello world';		//在服务端空间定义变量
+			</pre>
+			<p>其中方式1可以自由的嵌入各种地方，方式2返回表达式的值，方式3同方式2。下面这种使用方法也可：</p>
+			<pre>
+- var s='hello';
+p hello #{s}
+p= 'hello'+s
+			</pre>
+			<p>除了在模板中直接定义变量，我们更常见的是使用express中的res.render方法来传递变量值，例如：</p>
+			<pre>
+res.render(test,{
+	s:'hello world'
+})
+			</pre>
+			<p>这样在调用的模板中，可以直接调用s这个变量。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">判断分支</div>
+		<div class="panel-body">
+			<p>我们可以通过筛选不同的条件来不同的渲染页面：</p>
+			<pre>
+- var user={desc:'I like cat'};
+- if(user.desc)
+	h2 描述
+	p.desc=user.desc
+- else
+	h1 描述
+	p.desc 无用户描述
+
+//渲染为：
+&lt;h2> 描述&lt;/h2>
+&lt;p class='desc'>I like cat</p>
+			</pre>
+			<p>上述代码可以简写：</p>
+			<pre>
+- var user = { description: '我喜欢猫' }
+	#user
+		if user.description
+			h2 描述
+			p.description= user.description	
+		else
+			h1 描述
+			p.description 用户无描述
+			</pre>
+			<p>unless是jade提供的关键字，相当于if结果取反：</p>
+			<pre>
+- var user={name:'Alan', isVip:false};
+unless user.isVip
+	p 亲爱的 #{user.name} 您并不是VIP
+
+//渲染为：
+&lt;p>亲爱的 Alan 您并不是VIP&lt;/p>
+			</pre>
+			<p>类似switch，但是这里的case不支持case穿透，如果发生穿透会报错。</p>
+			<pre>
+- var friends=10
+case friends
+	when 0
+		p you have no friends
+	when 1
+		p you have a friends
+	default
+		p you have #{friends} friends
+			</pre>
+			<p>可以简写：</p>
+			<pre>
+- var friends=10
+case friends
+	when 0: p you have no friends
+	when 1: p you have a friends
+	default: p you have #{friends} friends
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">循环</div>
+		<div class="panel-body">
+			<p>我们可以使用for循环来在页面中方便的输出查询结果列表：</p>
+			<pre>
+- var array=[1,2,3];
+ul
+	- for(var i=0;i&lt;array.length;++i){
+		li hello #{array[i]}
+	- }
+
+//渲染为：
+&lt;ul>
+	&lt;li>hello 1</li>
+	&lt;li>hello 2</li>
+	&lt;li>hello 3</li>
+&lt;/ul>
+			</pre>			
+			<p>同样的jade对于循环也提供了省略 - 的写法：</p>
+			<pre>
+ul
+	each val,index in['西瓜','苹果','梨子']
+		li= index+ ': ' +val
+			</pre>
+			<p>这种写法同样适用于json数据。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">在模板中调用其他语言</div>
+		<div class="panel-body">
+			<p>我们可以在jade模板中调用其他语言来渲染内容：</p>
+			<pre>
+:markdown
+	# Markdown 标题
+	这里使用的是 Markdown格式
+script
+	:coffee
+		console.log '这里是 coffee script'
+
+//渲染为：
+&lt;h1>Markdown 标题&lt;/h1>
+&lt;p>这里使用的是 Markdown格式&lt;/p>
+&lt;script>console.log('这里是 coffee script')&lt;/script>
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">重用jade块</div>
+		<div class="panel-body">
+			<p>我们可以使用Mixins来重用jade块：</p>
+			<pre>
+//声明可重用的代码块
+mixin list
+	ul
+		li foo
+		li bar
+		li baz
+
+//调用
++list()
++list()
+
+//渲染为：两个列表块
+			</pre>
+			<p>你也可以指定块中的参数：</p>
+			<pre>
+mixin pets(pets)
+	ul.pets
+		- each pet in pets
+			li= pet
+
++pets(['cat','dog','pig'])
+			</pre>
+			<p>Mixins同时也支持在外部传入jade块：</p>
+			<pre>
+mixin article(title)
+	.article
+		h1= title
+
+		//block 为jade关键字，代表外部传入的块
+		if block
+			block
+		else
+			p 该文章没有内容
+
++article('Hello world')
++article('Hello world')
+	p 这里是外部传入的块
+	p 再写两句
+
+//渲染为：
+&lt;div class="article">
+	&lt;h1>Hello world&lt;/h1>
+	&lt;p>该文章没有内容&lt;/p>
+&lt;/div>
+&lt;div class="article">
+	&lt;h1>Hello world&lt;/h1>
+	&lt;p>这里是外部传入的块&lt;/p>
+	&lt;p>再写两句&lt;/p>
+&lt;/div>
+			</pre>
+			<p>Mixins同时可以从外部获取属性：</p>
+			<pre>
+mixin link(href,name)
+	a(class!=attributes.class,href=href)= name
+
++link('/foo','foo')(class='btn')
+
+//渲染为：
+&lt;a href='/foo' class='btn'>foo</a>
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">模板包含</div>
+		<div class="panel-body">
+			<p>你可以使用Includes在模板中包含其他模板的内容。</p>
+			<p>比如我们有一个index.jade代码如下：</p>
+			<pre>
+doctype html
+html
+	include includes/head
+body
+	h1 我的网站
+	p 欢迎来到我的网站
+	include includes/foot
+			</pre>
+			<p>includes/head.jade代码如下：</p>
+			<pre>
+head
+	title 我的网站				
+			</pre>
+			<p>includes/foot.jade代码如下：</p>
+			<pre>
+#footer
+	p Copyright (c) foobar				
+			</pre>
+			<p>调用index.jade，会渲染页面为：</p>
+			<pre>
+&lt;!doctype html>
+&lt;html>
+  &lt;head>
+    &lt;title>我的网站&lt;/title>
+  &lt;/head>
+  &lt;body>
+    &lt;h1>我的网站&lt;/h1>
+    &lt;p>欢迎来到我的网站。&lt;/p>
+    &lt;div id="footer">
+      &lt;p>Copyright (c) foobar&lt;/p>
+    &lt;/div>
+  &lt;/body>
+&lt;/html>
+			</pre>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">模板引用</div>
+		<div class="panel-body">
+			<p>当我们需要模板的继承和嵌套的时候，就需要使用extends和block关键字了。通过Extends引用外部的jade块，比include好用一些。</p>
+			<p>比如我们有一个layout.jade代码如下：</p>
+			<pre>
+doctype html
+html
+	head
+		title
+			block title
+	body
+		block content
+			</pre>
+			<p>我们这时就可以写index.jade代码如下：</p>
+			<pre>
+extends ../layout
+block content
+	h1 Welcome to here	
+	p some data
+	p some else data			
+			</pre>
+			<p>渲染index页面时会先引入layout然后把本页面的block替换进相应的位置</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-footer">
+			参考自：<cite><code>http://cnodejs.org/topic/5368adc5cf738dd6090060f2</code></cite>
+			<p><code><cite>http://www.expressjs.com.cn/guide/using-template-engines.html</cite></code></p>
 		</div>
 	</div>
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
