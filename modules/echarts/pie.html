@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>CORS</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of Cross-Origin Resource Sharing in js." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../../resourses/css/FENav.css">
+	<style type="text/css">
+		#echarts-container{width: 100%;height: 300px;}
+		.echarts-container{width: 100%;height: 400px;border: 1px solid #AAA;border-radius: 2px;}
+		a,a:hover,a:visited,a:link{text-decoration: none;}
+		button a,button a:visited,button a:hover,button a:link{color:white;}
+		.panel-footer a{color:#709BFF;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">ECharts</a></li>
+		<li class="active">pie</li>
+	</ol>
+	<h1><strong>饼图</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>ECharts 提供了丰富的自定义配置选项，并且能够从全局、系列、数据三个层级去设置数据图形的样式。下面我们来看如何使用 ECharts 实现下面这个南丁格尔图：</p>
+		</div>
+		<div class="panel-footer">该页面参考自<a href="http://echarts.baidu.com/tutorial.html#%E4%B8%AA%E6%80%A7%E5%8C%96%E5%9B%BE%E8%A1%A8%E7%9A%84%E6%A0%B7%E5%BC%8F">Echarts 官方网站</a>。</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Demo</div>
+		<div class="panel-body">
+			<div id="echarts-container"></div>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">绘制饼图</div>
+		<div class="panel-body">
+			<p>上一篇中讲了如何绘制一个简单的柱状图，这次要画的是饼图，饼图主要是通过扇形的弧度表现不同类目的数据在总和中的占比，它的数据格式比柱状图更简单，只有一维的数值，不需要给类目。因为不在直角坐标系上，所以也不需要xAxis，yAxis。</p>
+			<pre>
+myChart.setOption({
+    series : [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            data:[
+                {value:400, name:'搜索引擎'},
+                {value:335, name:'直接访问'},
+                {value:310, name:'邮件营销'},
+                {value:274, name:'联盟广告'},
+                {value:235, name:'视频广告'}
+            ]
+        }
+    ]
+})
+			</pre>
+			<p>于是我们得到了：</p>
+			<div id="pie-default" class="echarts-container"></div>
+			<p>这里data属性值不像入门教程里那样每一项都是单个数值，而是一个包含 name 和 value 属性的对象，ECharts 中的数据项都是既可以只设成数值，也可以设成一个包含有名称、该数据图形的样式配置、标签配置的对象，具体见 data 文档。</p>
+			<p>ECharts 中的饼图也支持通过设置 roseType 显示成南丁格尔图。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">绘制南丁格尔图</div>
+		<div class="panel-body">
+			<p>ECharts 中的饼图也支持通过设置 roseType 显示成南丁格尔图。</p>
+			<pre>roseType: 'angle'</pre>
+			<p>南丁格尔图会通过半径表示数据的大小：</p>
+			<div id="pie-nightingale" class="echarts-container"></div>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">饼图的阴影配置</div>
+		<div class="panel-body">
+			<p>ECharts 中有一些通用的样式，诸如阴影、透明度、颜色、边框颜色、边框宽度等，这些样式一般都会在系列的 itemStyle 里设置。例如阴影的样式可以通过下面几个配置项设置：</p>
+			<pre>
+itemStyle: {
+    normal: {
+        // 阴影的大小
+        shadowBlur: 200,
+        // 阴影水平方向上的偏移
+        shadowOffsetX: 0,
+        // 阴影垂直方向上的偏移
+        shadowOffsetY: 0,
+        // 阴影颜色
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+    }
+}
+			</pre>
+			<p>南丁格尔图会通过半径表示数据的大小：</p>
+			<div id="pie-shadow" class="echarts-container"></div>
+			<p>itemStyle都会有normal和emphasis两个选项，normal选项是正常展示下的样式，emphasis是鼠标 hover 时候的高亮样式。这个示例里是正常的样式下加阴影，但是可能更多的时候是 hover 的时候通过阴影突出。</p>
+			<pre>
+itemStyle: {
+    emphasis: {
+        shadowBlur: 200,
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+    }
+}
+			</pre>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../resourses/js/echarts.min.js"></script>
+<script>
+	$(function(){
+		// 基于准备好的dom，初始化echarts实例
+		var myChart=echarts.init(document.getElementById('pie-default'));
+		// 指定图表的配置项和数据
+		var option = {
+			title:{
+				text: '基本的饼图'
+			},
+			series: [{
+				name: '访问来源',
+	            type: 'pie',
+	            radius: '55%',
+	            data:[
+	                {value:400, name:'搜索引擎'},
+	                {value:335, name:'直接访问'},
+	                {value:310, name:'邮件营销'},
+	                {value:274, name:'联盟广告'},
+	                {value:235, name:'视频广告'}
+	            ]
+			}]
+		};
+		// 使用刚配置的数据和项来显示图标
+		myChart.setOption(option);
+		// 南丁格尔图
+		var $pieNightingale=echarts.init(document.getElementById('pie-nightingale'));
+		$pieNightingale.setOption({
+			title:{
+				text: '南丁格尔饼图'
+			},
+			
+			series: [{
+				name: '访问来源',
+	            type: 'pie',
+	            radius: '55%',
+				roseType: 'angle',
+	            data:[
+	                {value:400, name:'搜索引擎'},
+	                {value:335, name:'直接访问'},
+	                {value:310, name:'邮件营销'},
+	                {value:274, name:'联盟广告'},
+	                {value:235, name:'视频广告'}
+	            ]
+			}]
+		});
+		// 绘制带有阴影的饼图
+		var $pieShadow=echarts.init(document.getElementById('pie-shadow'));
+		$pieShadow.setOption({
+			title:{
+				text: '饼图阴影(蓝色normal，红色emphasis)'
+			},
+			series: [{
+				name: '访问来源',
+	            type: 'pie',
+	            radius: '55%',
+				roseType: 'angle',
+	            data:[
+	                {value:400, name:'搜索引擎'},
+	                {value:335, name:'直接访问'},
+	                {value:310, name:'邮件营销'},
+	                {value:274, name:'联盟广告'},
+	                {value:235, name:'视频广告'}
+	            ],
+	            itemStyle: {
+	            	normal: {
+	            		// 阴影的大小
+	            		shadowBlur: 300,
+	            		// 阴影水平方向的平移
+	            		shadowOffsetX: 0,
+	            		shadowOffsetY: 0,
+	            		// 阴影颜色
+	            		shadowColor: '#4F6EB5'
+	            	},
+	            	emphasis: {
+	            		shadowBlur: 100,
+	            		shadowColor: 'red'
+	            	}
+	            }
+			}]
+		})
+	});
+</script>
+</body>
+</html>

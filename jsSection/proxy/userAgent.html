@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>CORS</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of Cross-Origin Resource Sharing in js." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../../resourses/css/FENav.css">
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">JS</a></li>
+		<li><a href="#">proxy</a></li>
+		<li class="active">userAgent</li>
+	</ol>
+	<h1><strong>浏览器代理检测</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>以下针对自己的想法做了新的改进，支持区分ie、firefox、opera、chrome、safari，另外版本号的取值也与jquery不同，jquery取得版本号可能是内核的版本号吧，以后再考虑改进改进： </p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Demo</div>
+		<div class="panel-body">
+			<form class="form-horizontal" role="form">
+			  <div class="form-group">
+			    <label for="browser" class="col-sm-2 control-label">我的浏览器：</label>
+			    <div class="col-sm-10">
+			      <input type="text" class="form-control" id="browser" readonly>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="lang" class="col-sm-2 control-label">我的语言：</label>
+			    <div class="col-sm-10">
+			      <input type="text" class="form-control" id="lang" readonly>
+			    </div>
+			  </div>
+			</form>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			检测用户代理
+		</div>
+		<div class="panel-body">
+			<pre>
+// 正则表达式 
+rwebkit = /(webkit)[ \/]([\w.]+)/,  
+ropera = /(opera)(?:.*version)?[ \/]([\w.]+)/,  
+rmsie = /(msie) ([\w.]+)/,  
+rmozilla = /(mozilla)(?:.*? rv:([\w.]+))?/,  
+			</pre>
+			<p>通过正则表达式和我们从用户代理字符串中获得的信息进行匹配，可以正确得到用户现在使用的浏览器是什么。</p>
+			<pre>
+var userAgent = navigator.userAgent, // userAgent  
+rMsie = /.*(msie) ([\w.]+).*/, // ie  
+rFirefox = /.*(firefox)\/([\w.]+).*/, // firefox  
+rOpera = /(opera).+version\/([\w.]+)/, // opera  
+rChrome = /.*(chrome)\/([\w.]+).*/, // chrome  
+rSafari = /.*version\/([\w.]+).*(safari).*/;// safari  
+jMeteor.browser = {};  
+var ua = userAgent.toLowerCase();  
+function uaMatch(ua) {  
+    var match = rMsie.exec(ua);  
+    if (match != null) {  
+        return { browser : match[1] || "", version : match[2] || "0" };  
+    }  
+    var match = rFirefox.exec(ua);  
+    if (match != null) {  
+        return { browser : match[1] || "", version : match[2] || "0" };  
+    }  
+    var match = rOpera.exec(ua);  
+    if (match != null) {  
+        return { browser : match[1] || "", version : match[2] || "0" };  
+    }  
+    var match = rChrome.exec(ua);  
+    if (match != null) {  
+        return { browser : match[1] || "", version : match[2] || "0" };  
+    }  
+    var match = rSafari.exec(ua);  
+    if (match != null) {  
+        return { browser : match[2] || "", version : match[1] || "0" };  
+    }  
+    if (match != null) {  
+        return { browser : "", version : "0" };  
+    }  
+}  
+var browserMatch = uaMatch(userAgent.toLowerCase());  
+if (browserMatch.browser) {  
+    jMeteor.browser[browserMatch.browser] = true;  
+    jMeteor.browserName = browserMatch.browser;  
+    jMeteor.browser.version = browserMatch.version;  
+    jMeteor.browser.language = (navigator.language ? navigator.language  
+            : navigator.userLanguage || "");  
+}  
+			</pre>
+			<p>使用方法：</p>
+			<pre>
+jMeteor.browser.msie //判断是否为ie，返回true则代表是  
+jMeteor.browserName //浏览器名称  
+jMeteor.browser.version //浏览器版本  
+jMeteor.browser.language //语言
+			</pre>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var $browser=$('#browser');
+		var $lang=$('#lang')
+		var jMeteor={};
+		var userAgent = navigator.userAgent, // userAgent  
+		rMsie = /.*(msie) ([\w.]+).*/, // ie  
+		rFirefox = /.*(firefox)\/([\w.]+).*/, // firefox  
+		rOpera = /(opera).+version\/([\w.]+)/, // opera  
+		rChrome = /.*(chrome)\/([\w.]+).*/, // chrome  
+		rSafari = /.*version\/([\w.]+).*(safari).*/;// safari  
+		jMeteor.browser = {};  
+		var ua = userAgent.toLowerCase();  
+		function uaMatch(ua) {  
+		    var match = rMsie.exec(ua);  
+		    if (match != null) {  
+		        return { browser : match[1] || "", version : match[2] || "0" };  
+		    }  
+		    var match = rFirefox.exec(ua);  
+		    if (match != null) {  
+		        return { browser : match[1] || "", version : match[2] || "0" };  
+		    }  
+		    var match = rOpera.exec(ua);  
+		    if (match != null) {  
+		        return { browser : match[1] || "", version : match[2] || "0" };  
+		    }  
+		    var match = rChrome.exec(ua);  
+		    if (match != null) {  
+		        return { browser : match[1] || "", version : match[2] || "0" };  
+		    }  
+		    var match = rSafari.exec(ua);  
+		    if (match != null) {  
+		        return { browser : match[2] || "", version : match[1] || "0" };  
+		    }  
+		    if (match != null) {  
+		        return { browser : "", version : "0" };  
+		    }  
+		}  
+		var browserMatch = uaMatch(userAgent.toLowerCase());  
+		if (browserMatch.browser) {  
+		    jMeteor.browser[browserMatch.browser] = true;  
+		    jMeteor.browserName = browserMatch.browser;  
+		    jMeteor.browser.version = browserMatch.version;  
+		    jMeteor.browser.language = (navigator.language ? navigator.language  
+		            : navigator.userLanguage || "");  
+		}
+		$browser.val(jMeteor.browserName+' - '+jMeteor.browser.version);
+		$lang.val(jMeteor.browser.language);
+	});
+</script>
+</body>
+</html>

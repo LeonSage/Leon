@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>CORS</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of Cross-Origin Resource Sharing in js." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		body,xmp{padding: 0px;margin: 0px;}
+		.panel-body{font-size: 15px;}
+		.panel-body dt{width: 200px;text-align: right;margin-right: 20px;}
+		.title{color: rgba(50,160,180,1);font-size: 16px;}
+		span[title]{font-size: 18px;margin-bottom: 5px;display:inline-block;line-height: 20px;}
+		pre{overflow-x:hidden; }
+		tr{text-align: center;}
+		section{margin-bottom: 20px;}
+		section:after{content: "------------------------------------------------------------------------------";color: lightblue;}
+		.alert{line-height: 20px;font-size: 15px;padding: 5px;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">JS</a></li>
+		<li><a href="#">event</a></li>
+		<li class="active">mousewheel</li>
+	</ol>
+	<h1><strong>鼠标滚轮事件</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>鼠标滚轮事件主要分为FireFox派和其他派。</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			Firefox的鼠标滚轮事件：DOMMouseScroll
+		</div>
+		<div class="panel-body">
+			<p>Firefox支持一个名为DOMMouseScroll的类似事件，也是在鼠标滚轮滚动时触发。与mousewheel事件一样，DOMMouseScroll也被视为鼠标事件，因而包含于鼠标事件有关的所有属性。而有关鼠标滚轮的信息则保存在detail属性中，当向上滚动鼠标滚轮时，这个属性的值是-3的倍数，当向下滚动鼠标滚轮时，这个属性的值是3的倍数。火狐内核FireFox浏览器的方向判断的数值的正负与其他浏览器是相反的。FireFox浏览器向下滚动是正值，而其他浏览器是负值。</p>
+			<p>火狐的鼠标滚轮事件参数在e.originalEvent.detail中，为正负值，但是绝对值特别小，所以一般*5</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			其他浏览器的鼠标滚轮事件：mousewheel
+		</div>
+		<div class="panel-body">
+			<p>IE6首先实现了mousewheel事件。此后，Opera、Chrome和Safari也都实现了这个事件。当用户通过鼠标滚轮与页面交互、在垂直方向上滚动页面时（无论向上还是向下），就会触发mousewheel事件。这个事件可以在任何元素上面触发，最终会冒泡到document（IE8）或window（IE9、Opera、Chrome及Safari）对象。与mousewheel事件对应的event对象包含鼠标事件的所有标准信息外，还包含一个特殊的wheelDelta属性。当用户向上滚动鼠标滚轮时，wheelDelta是120的倍数；当用户向下滚动鼠标滚轮时，wheelDelta是-120的倍数。</p>
+			<p>火狐之外的鼠标滚轮事件参数在e.originalEvent.deltaY中，同样为正负值</p>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			鼠标事件的兼容性Demo
+		</div>
+		<div class="panel-body">
+			<pre>
+var $upTimes=$('#upTimes');
+var $downTimes=$('#downTimes');
+var $upValues=$('#upValues');
+var $downValues=$('#downValues');
+var $clear=$('#clear');
+// 判断浏览器是否为firefox，因为只有firefox使用DOMMousewheel事件
+var ua = navigator.userAgent.toLowerCase();
+var rFirefox = /.*(firefox)\/([\w.]+).*/;
+var match = rFirefox.exec(ua);
+if(match){
+	$('form').on('DOMMouseScroll',function(e){
+		// 对不同浏览器事件进行兼容处理
+		var e = e || window.event;
+		if(e.originalEvent.detail>0){
+			$downTimes.val(parseInt($downTimes.val(),10)+1);
+			$downValues.val(e.originalEvent.detail);
+		}else{
+			$upTimes.val(parseInt($upTimes.val(),10)+1);
+			$upValues.val(e.originalEvent.detail);
+		}
+		return false;
+	})
+}else{
+	$('form').on('mousewheel',function(e){
+		// 对不同浏览器事件进行兼容处理
+		var e = e || window.event;
+		if(e.originalEvent.deltaY>0){
+			$downTimes.val(parseInt($downTimes.val(),10)+1);
+			$downValues.val(e.originalEvent.deltaY);
+		}else{
+			$upTimes.val(parseInt($upTimes.val(),10)+1);
+			$upValues.val(e.originalEvent.deltaY);
+		}
+		return false;
+	})
+}
+// 数据清零
+$clear.on('click',function(){
+	$('form input').val('0');
+})
+			</pre>
+			<form class="form-horizontal" role="form">
+			  <div class="form-group">
+			    <label for="upTimes" class="col-sm-2 control-label">向上滚动的次数</label>
+			    <div class="col-sm-10">
+			      <input type="text" class="form-control" id="upTimes" value="0" readonly>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="upValues" class="col-sm-2 control-label">本次滚动的距离值</label>
+			    <div class="col-sm-10">
+			      <input type="text" class="form-control" id="upValues" value="0" readonly>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="downTimes" class="col-sm-2 control-label">向下滚动的次数</label>
+			    <div class="col-sm-10">
+			      <input type="text" class="form-control" id="downTimes" value="0" readonly>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="downValues" class="col-sm-2 control-label">本次滚动的距离值</label>
+			    <div class="col-sm-10">
+			      <input type="text" class="form-control" id="downValues" value="0" readonly>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <div class="col-sm-offset-2 col-sm-10">
+			      <button type="button" class="btn btn-primary" id="clear">清零</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		var $upTimes=$('#upTimes');
+		var $downTimes=$('#downTimes');
+		var $upValues=$('#upValues');
+		var $downValues=$('#downValues');
+		var $clear=$('#clear');
+		// 判断浏览器是否为firefox，因为只有firefox使用DOMMousewheel事件
+        var ua = navigator.userAgent.toLowerCase();
+        var rFirefox = /.*(firefox)\/([\w.]+).*/;
+        var match = rFirefox.exec(ua);
+        if(match){
+        	$('form').on('DOMMouseScroll',function(e){
+        		// 对不同浏览器事件进行兼容处理
+				var e = e || window.event;
+        		if(e.originalEvent.detail>0){
+					$downTimes.val(parseInt($downTimes.val(),10)+1);
+					$downValues.val(e.originalEvent.detail);
+				}else{
+					$upTimes.val(parseInt($upTimes.val(),10)+1);
+					$upValues.val(e.originalEvent.detail);
+				}
+				return false;
+        	})
+        }else{
+        	$('form').on('mousewheel',function(e){
+        		// 对不同浏览器事件进行兼容处理
+				var e = e || window.event;
+        		if(e.originalEvent.deltaY>0){
+					$downTimes.val(parseInt($downTimes.val(),10)+1);
+					$downValues.val(e.originalEvent.deltaY);
+				}else{
+					$upTimes.val(parseInt($upTimes.val(),10)+1);
+					$upValues.val(e.originalEvent.deltaY);
+				}
+				return false;
+        	})
+        }
+		// 数据清零
+		$clear.on('click',function(){
+			$('form input').val('0');
+		})
+	});
+</script>
+</body>
+</html>

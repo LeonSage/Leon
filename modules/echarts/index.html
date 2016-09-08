@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+	<title>CORS</title>
+	<meta name="author" content="Leon" />
+	<meta name="description" content="The page describes the usage of Cross-Origin Resource Sharing in js." />
+	<link rel="stylesheet" type="text/css" href="../../js/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../../resourses/css/FENav.css">
+	<style type="text/css">
+		#echarts-container{width: 100%;height: 400px;}
+		a,a:hover,a:visited,a:link{text-decoration: none;}
+		button a,button a:visited,button a:hover,button a:link{color:white;}
+		.panel-footer a{color:#709BFF;}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+		<li><a href="#">ECharts</a></li>
+		<li class="active">index</li>
+	</ol>
+	<h1><strong>ECharts</strong></h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">说明:</div>
+		<div class="panel-body">
+			<p>ECharts，一个纯 Javascript 的图表库，可以流畅的运行在 PC 和移动设备上，兼容当前绝大部分浏览器（IE8/9/10/11，Chrome，Firefox，Safari等），底层依赖轻量级的 Canvas 类库 ZRender，提供直观，生动，可交互，可高度个性化定制的数据可视化图表。</p>
+			<p>ECharts 3 中更是加入了更多丰富的交互功能以及更多的可视化效果，并且对移动端做了深度的优化。</p>
+		</div>
+		<div class="panel-footer">该页面参考自<a href="http://echarts.baidu.com/tutorial.html#ECharts%20%E7%89%B9%E6%80%A7%E4%BB%8B%E7%BB%8D">Echarts 官方网站</a>。</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">下载</div>
+		<div class="panel-body">
+			<p>ECharts图表的使用只需要在页面中引入js文件即可使用。</p>
+			<pre>&lt;script src="echarts.min.js">&lt;/script></pre>
+			<button type="button" class="btn btn-primary"><a href="../../resourses/js/echarts.min.js" download="echarts.min.js">下载Min文件</a></button>
+			<button type="button" class="btn btn-primary"><a href="../../resourses/js/echarts.js" download="echarts.js">下载源码文件</a></button>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">Demo</div>
+		<div class="panel-body">
+			<div id="echarts-container"></div>
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			第一个Echarts实现
+		</div>
+		<div class="panel-body">
+		<pre>
+// 基于准备好的dom，初始化echarts实例
+var myChart=echarts.init(document.getElementById('echarts-container'));
+// 指定图表的配置项和数据
+var option = {
+	title:{
+		text: 'echarts 入门示例'
+	},
+	tooltip:{},
+	legend:{
+		data: ['销量']
+	},
+	xAxis: {
+		data: ['衬衫','羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+	},
+	yAxis: {},
+	series: [{
+		name: '销量',
+		type: 'bar',
+		data: [5,20,36,10,10,20]
+	}]
+};
+// 使用刚配置的数据和项来显示图标
+myChart.setOption(option);
+		</pre>
+		</div>
+	</div>
+<script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../resourses/js/echarts.min.js"></script>
+<script>
+	$(function(){
+		// 基于准备好的dom，初始化echarts实例
+		var myChart=echarts.init(document.getElementById('echarts-container'));
+		// 指定图表的配置项和数据
+		var option = {
+			title:{
+				text: 'echarts 入门示例'
+			},
+			tooltip:{},
+			legend:{
+				data: ['销量']
+			},
+			xAxis: {
+				data: ['衬衫','羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+			},
+			yAxis: {},
+			series: [{
+				name: '销量',
+				type: 'bar',
+				data: [5,20,36,10,10,20]
+			}]
+		};
+		// 使用刚配置的数据和项来显示图标
+		myChart.setOption(option);
+	});
+</script>
+</body>
+</html>
