@@ -17,15 +17,15 @@
 <body>
 	<ol class="breadcrumb">
 		<li><a href="#">ECharts</a></li>
-		<li class="active">pie</li>
+		<li class="active">ajax</li>
 	</ol>
-	<h1><strong>饼图</strong></h1>
+	<h1><strong>异步加载</strong></h1>
 	<div class="panel panel-info">
 		<div class="panel-heading">说明:</div>
 		<div class="panel-body">
-			<p>ECharts 提供了丰富的自定义配置选项，并且能够从全局、系列、数据三个层级去设置数据图形的样式。下面我们来看如何使用 ECharts 实现下面这个南丁格尔图：</p>
+			<p>很多时候可能数据需要异步加载后再填入。ECharts 中实现异步数据的更新非常简单，在图表初始化后不管任何时候只要通过 jQuery 等工具异步获取数据后通过 setOption 填入数据和配置项就行。</p>
 		</div>
-		<div class="panel-footer">该页面参考自<a href="http://echarts.baidu.com/tutorial.html#%E4%B8%AA%E6%80%A7%E5%8C%96%E5%9B%BE%E8%A1%A8%E7%9A%84%E6%A0%B7%E5%BC%8F">Echarts 官方网站</a>。</div>
+		<div class="panel-footer">该页面参考自<a href="http://echarts.baidu.com/tutorial.html#%E5%BC%82%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%92%8C%E6%9B%B4%E6%96%B0">Echarts 官方网站</a>。</div>
 	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading">Demo</div>
@@ -34,46 +34,65 @@
 		</div>
 	</div>
 	<div class="panel panel-info">
-		<div class="panel-heading">绘制饼图</div>
+		<div class="panel-heading">get请求</div>
 		<div class="panel-body">
 			<p>上一篇中讲了如何绘制一个简单的柱状图，这次要画的是饼图，饼图主要是通过扇形的弧度表现不同类目的数据在总和中的占比，它的数据格式比柱状图更简单，只有一维的数值，不需要给类目。因为不在直角坐标系上，所以也不需要xAxis，yAxis。</p>
 			<pre>
-myChart.setOption({
-    series : [
-        {
-            name: '访问来源',
-            type: 'pie',
-            radius: '55%',
-            data:[
-                {value:400, name:'搜索引擎'},
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:274, name:'联盟广告'},
-                {value:235, name:'视频广告'}
-            ]
-        }
-    ]
-})
+var myChart = echarts.init(document.getElementById('main'));
+
+$.get('data.json').done(function (data) {
+    myChart.setOption({
+        ... ...
+    });
+});
 			</pre>
-			<p>于是我们得到了：</p>
+			<p>或者先设置完其它的样式，显示一个空的直角坐标轴，然后获取数据后填入数据。</p>
+			<pre>
+var myChart = echarts.init(document.getElementById('main'));
+// 显示标题，图例和空的坐标轴
+myChart.setOption({
+    ......
+});
+
+// 异步加载数据
+$.get('data.json').done(function (data) {
+    // 填入数据
+    myChart.setOption({
+        xAxis: {
+            data: data.categories
+        },
+        series: [{
+            // 根据名字对应到相应的系列
+            name: '销量',
+            data: data.data
+        }]
+    });
+});
+			</pre>
 			<div id="pie-default" class="echarts-container"></div>
-			<p>这里data属性值不像入门教程里那样每一项都是单个数值，而是一个包含 name 和 value 属性的对象，ECharts 中的数据项都是既可以只设成数值，也可以设成一个包含有名称、该数据图形的样式配置、标签配置的对象，具体见 data 文档。</p>
-			<p>ECharts 中的饼图也支持通过设置 roseType 显示成南丁格尔图。</p>
+			<p>ECharts 中在更新数据的时候需要通过name属性对应到相应的系列，上面示例中如果name不存在也可以根据系列的顺序正常更新，但是更多时候推荐更新数据的时候加上系列的name数据。</p>	
 		</div>
 	</div>
 	<div class="panel panel-info">
-		<div class="panel-heading">绘制南丁格尔图</div>
+		<div class="panel-heading">loading 动画</div>
 		<div class="panel-body">
-			<p>ECharts 中的饼图也支持通过设置 roseType 显示成南丁格尔图。</p>
-			<pre>roseType: 'angle'</pre>
-			<p>南丁格尔图会通过半径表示数据的大小：</p>
+			<p>如果数据加载时间较长，一个空的坐标轴放在画布上也会让用户觉得是不是产生 bug 了，因此需要一个 loading 的动画来提示用户数据正在加载。</p>
+			<p>ECharts 默认有提供了一个简单的加载动画。只需要调用 showLoading 方法显示。数据加载完成后再调用 hideLoading 方法隐藏加载动画。</p>
+			<pre>
+myChart.showLoading();
+$.get('data.json').done(function (data) {
+    myChart.hideLoading();
+    myChart.setOption(...);
+});
+			</pre>
 			<div id="pie-nightingale" class="echarts-container"></div>
 		</div>
 	</div>
 	<div class="panel panel-info">
-		<div class="panel-heading">饼图的阴影配置</div>
+		<div class="panel-heading">数据的动态更新</div>
 		<div class="panel-body">
-			<p>ECharts 中有一些通用的样式，诸如阴影、透明度、颜色、边框颜色、边框宽度等，这些样式一般都会在系列的 itemStyle 里设置。例如阴影的样式可以通过下面几个配置项设置：</p>
+			<p>ECharts 由数据驱动，数据的改变驱动图表展现的改变，因此动态数据的实现也变得异常简单。</p>
+			<p>所有数据的更新都通过 setOption实现，你只需要定时获取数据，setOption 填入数据，而不用考虑数据到底产生了那些变化，ECharts 会找到两组数据之间的差异然后通过合适的动画去表现数据的变化。</p>
 			<pre>
 itemStyle: {
     normal: {
