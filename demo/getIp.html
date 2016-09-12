@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta author="Leon">
+	<meta description="分别使用了AJAX和jQuery封装后的$.get()完成对数据的获取并使用,其中也完成对json格式的解析和过滤使用以及序列化和转变为json格式.">
+	<title>AJAX和json操作</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../images/leon.ico">
+	<link rel="stylesheet" type="text/css" href="../js/bootstrap/css/bootstrap.min.css">
+	<style type="text/css">
+		.navbar-brand img{width: 40px;height: auto;margin-top: -10px;}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a href="../index.html" class="navbar-brand"><img src="../images/leon.png" alt="Brand"></a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="../index.html">首页</a></li>
+						<li><a href="../resume.html">简历</a></li>
+						<li><a href="../LeonShop.html">Leon购物</a></li>
+						<li><a href="../learn.html">技能学习</a></li>
+						<li><a href="../NodeJsLearn.html">NodeJs学习</a></li>
+						<li class="dropdown active">
+							<a href="#" class="drop-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">实例展示<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="scrollWindow.html">视频滚动窗口</a></li>
+								<li><a href="form.html">表单功能</a></li>
+								<li><a href="AJAX.html">AJAX</a></li>
+								<li><a href="plugins.html">jQuery插件的编写</a></li>
+								<li class="active"><a href="getIp.html">我当前IP和所在地</a></li>
+							</ul>
+						</li>
+					</ul>
+					<p class="nav navbar-text navbar-nav navbar-right">Leon的生活</p>
+				</div>			
+			</div>
+		</div>
+	</div>
+<script src="http://ip.chinaz.com/getip.aspx"></script>
+<script src="../js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+
+	})
+</script>
+</body>
+</html>

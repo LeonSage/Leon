@@ -100,7 +100,7 @@ $.get('data.json').done(function (data) {
     myChart.setOption(...);
 });
 			</pre>
-			<div id="pie-nightingale" class="echarts-container"></div>
+			<div id="loading" class="echarts-container"></div>
 		</div>
 	</div>
 	<div class="panel panel-info">
@@ -122,92 +122,7 @@ itemStyle: {
     }
 }
 			</pre>
-			<p>南丁格尔图会通过半径表示数据的大小：</p>
-			<div id="pie-shadow" class="echarts-container"></div>
-			<p>itemStyle都会有normal和emphasis两个选项，normal选项是正常展示下的样式，emphasis是鼠标 hover 时候的高亮样式。这个示例里是正常的样式下加阴影，但是可能更多的时候是 hover 的时候通过阴影突出。</p>
-			<pre>
-itemStyle: {
-    emphasis: {
-        shadowBlur: 200,
-        shadowColor: 'rgba(0, 0, 0, 0.5)'
-    }
-}
-			</pre>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">深色背景和浅色标签</div>
-		<div class="panel-body">
-			<p>背景色是全局的，所以直接在 option 下设置 backgroundColor：</p>
-			<pre>backgroundColor: '#2c343c'</pre>
-			<p>文本的样式可以设置全局的 textStyle：</p>
-			<pre>
-textStyle: {
-    color: 'rgba(255, 255, 255, 0.3)'
-}
-// 也可以每个系列分别设置，每个系列的文本设置在 label.normal.textStyle
-label: {
-    normal: {
-        textStyle: {
-            color: 'rgba(255, 255, 255, 0.3)'
-        }
-    }
-}
-// 饼图的话还要将标签的视觉引导线的颜色设为浅色
-labelLine: {
-    normal: {
-        lineStyle: {
-            color: 'rgba(255, 255, 255, 0.3)'
-        }
-    }
-}
-			</pre>
-			<div id="pie-background" class="echarts-container"></div>
-			<p>跟itemStyle一样，label和labelLine的样式也有normal和emphasis两个状态。</p>
-		</div>
-	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading">设置扇区颜色</div>
-		<div class="panel-body">
-			<p>扇形的颜色也是在 itemStyle 中设置：</p>
-			<pre>
-itemStyle: {
-    normal: {
-        // 设置扇形的颜色
-        color: '#c23531',
-        shadowBlur: 200,
-        shadowColor: 'rgba(0, 0, 0, 0.5)'
-    }
-}
-			</pre>
-			<p>跟我们要实现的效果已经挺像了，除了每个扇形的颜色，效果中阴影下面的扇形颜色更深，有种光线被遮住的感觉，从而会出现层次感和空间感。</p>
-			<p>ECharts 中每个扇形颜色的可以通过分别设置 data 下的数据项实现。</p>
-			<pre>
-data: [{
-    value:400,
-    name:'搜索引擎',
-    itemStyle: {
-        normal: {
-            color: 'c23531'
-        }
-    }
-}, ...]
-// 但是这次因为只有明暗度的变化，所以有一种更快捷的方式是通过 visualMap 组件将数值的大小映射到明暗度。
-visualMap: {
-    // 不显示 visualMap 组件，只用于明暗度的映射
-    show: false,
-    // 映射的最小值为 80
-    min: 80,
-    // 映射的最大值为 600
-    max: 600,
-    inRange: {
-        // 明暗度的范围是 0 到 1
-        colorLightness: [0, 1]
-    }
-}
-			</pre>
-			<div id="pie-sectorColor" class="echarts-container"></div>
-			<p>跟itemStyle一样，label和labelLine的样式也有normal和emphasis两个状态。</p>
+			<div id="dynamic" class="echarts-container"></div>
 		</div>
 	</div>
 <script src="../../js/jQuery/jquery-1.11.3.min.js"></script>
@@ -236,7 +151,10 @@ visualMap: {
 	            data:[]
 			}]
 		};
-		$.get('ajaxData.js',function(data){
+		// 使用刚配置的数据和项来显示图标
+		myChart.setOption(option);
+		// ajax异步加载数据
+		/*$.get('ajaxData.js',function(data){
 			myChart.setOption({
 				xAxis: {
 					data: data.category
@@ -246,201 +164,64 @@ visualMap: {
 					data: data.data
 				}]
 			})
-		})
-		// 使用刚配置的数据和项来显示图标
-		myChart.setOption(option);
+		})*/
+		
 		// 南丁格尔图
-		var $pieNightingale=echarts.init(document.getElementById('pie-nightingale'));
-		$pieNightingale.setOption({
+		var $loading=echarts.init(document.getElementById('loading'));
+		$loading.setOption({
 			title:{
-				text: '南丁格尔饼图'
+				text: '点击加载'
 			},
-			
+			tooltip:{},
+			legend:{
+				data: ['销量']
+			},
+			xAxis: {
+				data: []
+			},
+			yAxis: {},
 			series: [{
-				name: '访问来源',
-	            type: 'pie',
-	            radius: '55%',
-				roseType: 'angle',
-	            data:[
-	                {value:400, name:'搜索引擎'},
-	                {value:335, name:'直接访问'},
-	                {value:310, name:'邮件营销'},
-	                {value:274, name:'联盟广告'},
-	                {value:235, name:'视频广告'}
-	            ]
+				name: '销量',
+	            type: 'bar',
+	            data:[]
 			}]
 		});
-		// 绘制带有阴影的饼图
-		var $pieShadow=echarts.init(document.getElementById('pie-shadow'));
-		$pieShadow.setOption({
-			title:{
-				text: '饼图阴影(蓝色normal，红色emphasis)'
-			},
-			series: [{
-				name: '访问来源',
-	            type: 'pie',
-	            radius: '55%',
-				roseType: 'angle',
-	            data:[
-	                {value:400, name:'搜索引擎'},
-	                {value:335, name:'直接访问'},
-	                {value:310, name:'邮件营销'},
-	                {value:274, name:'联盟广告'},
-	                {value:235, name:'视频广告'}
-	            ],
-	            itemStyle: {
-	            	normal: {
-	            		// 阴影的大小
-	            		shadowBlur: 300,
-	            		// 阴影水平方向的平移
-	            		shadowOffsetX: 0,
-	            		shadowOffsetY: 0,
-	            		// 阴影颜色
-	            		shadowColor: '#4F6EB5'
-	            	},
-	            	emphasis: {
-	            		shadowBlur: 100,
-	            		shadowColor: 'red'
-	            	}
-	            }
-			}]
-		});
-		var $pieBackground=echarts.init(document.getElementById('pie-background'));
-		$pieBackground.setOption({
-			title:{
-				text: '饼图的背景色和文本设置',
-				color: '#FFF',
-				font: '20px'
-			},
-			series: [{
-				name: '访问来源',
-				type: 'pie',
-				roseType: 'angle',
-				data: [
-					{value:400, name:'搜索引擎'},
-	                {value:335, name:'直接访问'},
-	                {value:310, name:'邮件营销'},
-	                {value:274, name:'联盟广告'},
-	                {value:235, name:'视频广告'}
-				],
-				itemStyle: {
-
-				}
-			}],
-			backgroundColor: '#2F3B5C',
-			textStyle: {
-				color: '#FFF'
-			},
-			label: {
-				normal: {
-					textStyle: {
-						color: 'rgba(255,255,255,0.3)'
-					}
-				}
-			},
-			labelLine: {
-				normal: {
-					lineStyle: {
-						color: '#40C990'
-					}
-				},
-				emphasis: {
-					lineStyle: {
-						color: '#FFF'
-					}
-				}
-			}
-		});
-		var $pieSectorColor=echarts.init(document.getElementById('pie-sectorColor'));
-		$pieSectorColor.setOption({
-			title:{
-				text: '设置扇区颜色',
-				color: '#FFF',
-				font: '20px'
-			},
-			series: [{
-				name: '访问来源',
-				type: 'pie',
-				roseType: 'angle',
-				data: [
-					{
-						value:400, 
-						name:'搜索引擎',
-						itemStyle: {
-							normal: {
-								color: '#C9356A'
-							}
-						}
+		$loading.showLoading();
+		$('#loading').one('click',function(){
+			$.get('ajaxData.js',function(data){
+				$loading.hideLoading();
+				$loading.setOption({
+					xAxis: {
+						data: data.category
 					},
-	                {
-	                	value:335,
-	                	name:'直接访问',
-	                	itemStyle: {
-	                		normal: {
-	                			color: '#60C92E'
-	                		}
-	                	}
-	                },
-	                {
-	                	value:310, 
-	                	name:'邮件营销',
-	                	itemStyle: {
-	                		normal: {
-	                			color: '#347CC9'
-	                		}
-	                	}
-	                },
-	                {
-	                	value:274, 
-	                	name:'联盟广告',
-	                	itemStyle: {
-	                		normal: {
-	                			color: '#C9AB33'
-	                		}
-	                	}
-	                },
-	                {value:235, name:'视频广告'}
-				],
-				itemStyle: {
-					normal: {
-						color: '#2285C9',
-						shadowBlur: 200,
-						shadowColor: 'blue'
-					}
-				}
-			}],
-			backgroundColor: '#2F3B5C',
-			textStyle: {
-				color: '#FFF'
+					series: [{
+						name: '销量',
+						data: data.data
+					}]
+				})
+			})
+		})
+		// 动态进行数据的填充
+		var $dynamic=echarts.init(document.getElementById('dynamic'));
+		$dynamic.setOption({
+			title:{
+				text: '点击加载'
 			},
-			label: {
-				normal: {
-					textStyle: {
-						color: 'rgba(255,255,255,0.3)'
-					}
-				}
+			tooltip:{},
+			legend:{
+				data: ['销量']
 			},
-			labelLine: {
-				normal: {
-					lineStyle: {
-						color: '#40C990'
-					}
-				},
-				emphasis: {
-					lineStyle: {
-						color: '#FFF'
-					}
-				}
+			xAxis: {
+				data: []
 			},
-			visualMap: {
-				show: false,
-				min: 80,
-				max: 600,
-				inRange: {
-					colorLightness: [0,1]
-				}
-			}
+			yAxis: {},
+			series: [{
+				name: '销量',
+	            type: 'bar',
+	            data:[]
+			}]
 		});
+		
 		var $pieDemo=echarts.init(document.getElementById('demo'));
 		$pieDemo.setOption({
 			series: [{
