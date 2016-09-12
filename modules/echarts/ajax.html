@@ -237,7 +237,15 @@ visualMap: {
 			}]
 		};
 		$.get('ajaxData.js',function(data){
-			console.log(data)
+			myChart.setOption({
+				xAxis: {
+					data: data.category
+				},
+				series: [{
+					name: '销量',
+					data: data.data
+				}]
+			})
 		})
 		// 使用刚配置的数据和项来显示图标
 		myChart.setOption(option);
