@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+  <meta charset="utf-8" />
+  <title>Canvas Motion</title>
+ </head>
+ <body>
+    <canvas id="view" width="600" height="400"></canvas>
+ <div id="controls">
+   <div class="inner">
+     <div id="circleRadiusLabel">Circle Radius</div>
+     <input type="range" id="circleRadius" min="5" max="50" value="10">
+     <div id="orbitRadiusLabel">Orbit Radius</div>
+     <input type="range" id="orbitRadius" min="5" max="100" value="40">
+     <a href="http://www.108js.com/article/article3/30260.html?id=1097">参考处</a>
+   </div>
+ </div>
+<script>
+    var canvas = document.getElementById('view');
+    var ctx = canvas.getContext('2d');
+    // 请求动画帧兼容(site:http://www.zhangxinxu.com/wordpress/2013/09/css3-animation-requestanimationframe-tween-%E5%8A%A8%E7%94%BB%E7%AE%97%E6%B3%95/)
+    (function() {
+    var requestAnimationFrame = 
+        window.requestAnimationFrame || 
+     window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    window.requestAnimationFrame = requestAnimationFrame;
+    })();
+    start();
+    draw();
+    function start() {
+        var xSpacing = 30;
+        var ySpacing = 30;
+        var r = document.getElementById("orbitRadius").value;
+        var orbitStartRad = 0;
+        var rowCount = 0;
+        circles = new Array();
+        for (var y = -ySpacing - (r * 2); y <= canvas.height + ySpacing + (r * 2); y += ySpacing) {
+            orbitStartRad = 0 + (rowCount * .02);
+            for (var x = -xSpacing; x <= canvas.width + xSpacing; x += xSpacing) {
+                if (orbitStartRad <= 2) {
+                    orbitStartRad += .045;
+                }
+                else {
+                    orbitStartRad = 0;
+                }
+                circles.push(new circle(x, y, r, orbitStartRad));
+            }
+            rowCount++;
+        }
+    }
+    function draw() {
+        // 每一次帧重绘时都执行一次函数，是1000/60ms
+        requestAnimationFrame(draw);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < circles.length; i++) {
+            circles[i].draw();
+        }
+    }
+    // circle object
+    function circle(x, y, r, radianCounter) {
+        var orbitX = 0;
+        var orbitY = 0;
+        var orbitAngle = 0;
+        var circleRadius = document.getElementById("circleRadius").value;
+        
+        this.init = function() {
+            this.x = x;
+            this.y = y;
+            this.r = r;
+            this.radianCounter = radianCounter;
+        };
+        
+        this.draw = function() {
+            // Update orbital circle position
+            if (this.radianCounter <= 2) {
+                this.radianCounter += .01;
+            }
+            else {
+                this.radianCounter = 0;
+            }
+            
+            this.r = document.getElementById("orbitRadius").value;
+            orbitAngle = this.radianCounter * Math.PI;
+            orbitX = this.x + this.r * Math.cos(orbitAngle);
+            orbitY = this.y + this.r * Math.sin(orbitAngle);
+            
+            // Update orbital circle color
+            red   = parseInt(Math.sin(.3 * (this.radianCounter * 10.5) + 0) * 127 + 128);
+            green = parseInt(Math.sin(.3 * (this.radianCounter * 10.5) + 2) * 127 + 128);
+            blue  = parseInt(Math.sin(.3 * (this.radianCounter * 10.5) + 4) * 127 + 128);
+            // Draw orbital circle
+            ctx.beginPath();
+            circleRadius = document.getElementById("circleRadius").value;
+            ctx.arc(orbitX, orbitY, circleRadius, Math.PI*2, false);
+            ctx.fillStyle = "rgb(" + red + ", " + green + ", " + blue + ")";
+            ctx.fill();       
+        };
+        this.init();
+    }
+</script>
+</body>
+</html>
