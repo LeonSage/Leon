@@ -10,6 +10,8 @@
 	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
 		.navbar-brand img{width: 40px;height: auto;margin-top: -10px;}
+		textarea {height: 40px; overflow-y: hidden;resize: none;width: 200px;}
+		#editable {border: 1px solid lightblue;width: 200px;padding: 5px 9px;}
 	</style>
 </head>
 <body>
@@ -55,18 +57,42 @@
 			<div class="container">
 				<h1>Hello,world!</h1>
 				<h6>
-					<script type="text/javascript" src="http://ip.chinaz.com/getip.aspx"></script>
+					<!-- <script type="text/javascript" src="http://ip.chinaz.com/getip.aspx"></script> -->
 				</h6>
 				<!-- <button class="btn btn-primary cors">Get 1337</button> -->
 			</div>			
-		</div>		
+		</div>
+		<p id="test" class="edit">aaa</p>
+		<p class="edit">ccc</p>
 	</div>
 <!--引入bootstrap和后面DOM操作所必须的jQuery库-->
-<script src="js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="js/jQuery/jquery-3.1.1.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
 <script>
 	//等待DOM树加载完成
 	$(function(){
+		$('li').map(function(){
+			return $(this).text();
+		}).get().join(',');
+		var value = $('li').map(function(){
+			return $(this).text();
+		}).get().join(',');
+		console.log(value);
+		console.log(Map)
+		$('.edit').prop('contenteditable', true);
+		$('.edit').on('focus', function (event) {
+			var select = getSelection();
+			console.log(select)
+			console.log(select['focusNode'])
+			console.log(select['focusNode'].length);
+			select.anchorOffset = select['focusNode'].length;
+			console.log(select)
+			var range = window.getSelection();
+			range.selectAllChildren(select);
+			console.log(range)
+			range.collapseToEnd();
+			//getSelection().
+		})
 		/*var $cors=$('.cors');
 		$cors.on('click',function(){
 			var xdr=new XDomainRequest();
