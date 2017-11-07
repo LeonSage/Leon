@@ -10,7 +10,8 @@
 	<style id="system" type="text/css">
 		*{margin:0;padding:0;}
 		#resume{font:13.34px helvetica,arial,freesans,clean,sans-serif;color:black;line-height:1.4em;background-color: #F8F8F8;padding: 0.7em;}
-		p {	margin:1em 0;	line-height:1.5em;}
+		p {	margin:1em 0;	line-height:1.5em; font-size: 12px;}
+		li {font-size: 12px;}
 		input[type=text],input[type=password],input[type=image],textarea{font:99% helvetica,arial,freesans,sans-serif;}
 		select,option{padding:0 .25em;}
 		optgroup{margin-top:.5em;}
@@ -32,12 +33,12 @@
 		@media screen and (min-width: 768px) {    #resume {        width: 748px;        margin:10px auto;    }}
 	</style>
 	<style id="custom" type="text/css">
-		#photo{width: 130px;height: auto;position: relative;float: right;margin-top: -130px;}
+		#photo{width: 130px;height: auto;position: relative;float: right;margin-top: -170px;}
 		.navbar-header img{width: 40px;height: auto;margin-top: -10px;}
 	</style>
 </head>
 <body>
-	<div class="container">
+	<!-- <div class="container">
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -71,62 +72,63 @@
 				</div>				
 			</div>
 		</nav>
-	</div>
+	</div> -->
+	<small>
 	<div id="resume">
 		<h2>前端开发工程师</h2>
 		<blockquote>
-		<p>赵帅强 男<br>西安电子科技大学 - 软件学院 - 软件工程<br>
-		TEL - - <a href="#">18729054885</a><br>
-		邮箱 - - <a href="#">moyanxidian@foxmail.com</a><br>
-		github主页 - - <a href="http://leonsage.github.io/Leon">http://leonsage.github.io/Leon</a><br>
-		
-		汇巨网络官网 - - <a href="http://www.huiju18.com">http://www.huiju18.com</a><br>
-		博客园地址 - - <a href="http://www.cnblogs.com/fleshy/">http://www.cnblogs.com/fleshy</a><br>
-		插件库 - - <a href="https://github.com/LeonSage/Leon/tree/gh-pages/js/plugins">https://github.com/LeonSage/Leon/tree/gh-pages/js/plugins</a>
-		<img id="photo" src="images/portrait.jpg">
+		<p>赵帅强 男<br>西安电子科技大学 - 软件学院 - 软件工程（2012-2016）<br>
+		现职位 - - 百度系统部CDN - 高级前端工程师<br>
+		联系方式 - - <span>18611244156</span><br>
+		邮箱 - - <span >zhaoshuaiqiang@baidu.com</span><br>
+		segmentfault主页 - - <a>https://segmentfault.com/u/zhaoshuaiqiang</a><br>
+		百度内部项目地址 - - <a>http://cdn.baidu.com/oss/</a><br>
+		github主页 - - <a>http://leonsage.github.io/Leon</a><br>
+		博客园地址 - - <a>http://www.cnblogs.com/fleshy</a><br>
+		<img id="photo" src="images/portrait_transfer.png">
 		</p>
 		</blockquote>
 		<hr>
 		<h3>简况</h3>
-		<p>有过一年时间的前端开发和三个月的实习经验,其中接触过不同的平台/技术/浏览器,熟悉页面架构和布局,了解跨域问题,浏览器兼容性和性能优化,熟悉web语义化和SEO(搜索引擎优化),了解W3C标准并能符合要求开发标准优化的代码,可以开发自己的小型框架和插件.了解NodeJs后台语言,了解阻塞与非阻塞,回调,事件,模块化编程.了解移动端开发.
+		<p>三年前端开发经验，两年工作经验，工作能力范围为全栈方向。前端和后端均有涉猎，热爱前沿技术，勇于尝试新东西，认真负责，好奇心强。百度在职期间独当一面，独立完成多个大型项目，得到团队的一致认可。经常翻阅技术文档，并喜欢写自己的技术博客，曾登上segmentfault热度排行榜。大学期间拥有半年实习经历，参加科协算法部、辩论社等社团，乐于社交、沟通和分享，启动过创业项目，获得过三等奖学金，荣获优秀毕业生。
 		</p>
 		<hr>
 		<h3>技能</h3>
 		<ol>
-		<li>HTML5
-		: 了解标签的语义化,不同浏览器兼容的hack方法,本地存储方式,Canvas矢量绘图功能.</li>
-		<li>CSS3
-		: 了解圆角属性,投影效果,rgba()颜色,变形,转换,动画和选择器实现以及不同浏览器的兼容性问题.</li>
-		<li>Javascript
-		: 了解DOM树的增删查改,BOM的能力检测和代理检测,了解其类型,面向对象,原型链,事件,JSON和AJAX操作,可以封装函数库进行二次开发.</li>
-		<li>jQuery
-		: 了解其实现原理,了解其CSS选择器,DOM操作,动画,事件,表单和链式操作,可以编写jQuery插件.</li>
-		<li>AJAX
-		: 可以使用XMLHttpRequest进行原生js操作,也可以使用jQuery封装好的函数进行异步刷新.</li>
-		<li>bootstrap
-		: 响应式布局框架,熟悉其glyphicon图标进行视觉化开发,内置样式进行栅格式布局,封装jQuery插件进行事件响应,使用框架移动端开发.</li>
-		<li>NodeJs
-		: 服务端js,了解其函数式编程,阻塞与非阻塞,回调机制,事件驱动,内部模块与外部模块的调用,可以开发简单的服务器应用.</li>
+		<li>掌握HTML和CSS，熟悉其页面布局，了解HTML5和CSS3新特性，了解标签的语义化，Canvas矢量绘图，动画等功能.</li>
+		<li>掌握原生Javascript，es6语法，熟悉typescript语言，了解DOM、BOM对象，事件、原型链、作用域、类、JSON、AJAX等概念。</li>
+		<li>熟悉less/jQuery/bootstrap/echarts/highcharts/intro/jquery-ui/datetimepicker/backbone/vue/vuex/vue-router等库或框架，了解模板语言，研习并总结过部分源码，能够进行自己的库开发。</li>
+		<li>熟悉PHP和NodeJs后端语言，了解yii2/thinkPHP和express框架，了解MVC和MVVM框架，能够满足项目的后端开发。</li>
+		<li>了解gulp/webpack/babel等系统化集成工具，熟悉git和svn分布式协同开发。</li>
+		<li>掌握Axure制作原型图，能够进行需求分析生成MRD文档，可以负责大型项目的独立全程开发。</li>
 		</ol>
 		<hr>
-		<h3>实习&经验</h3>
-		<h4>汇巨网络科技有限公司 : </h4><em> 前端开发工程师 </em><strong> 2015.05-2015.08</strong>
-		<p>公司期间完成了官网和后台管理系统的前端工作.使用HTML5标签使得页面布局语义化,使用了js库的封装也让模块之间的耦合度降低.对代码的注释也使得页面的可修改性,可维护性有了提升.在开发过程中,具有一定的软件工程意识，对数据结构和算法设计有着一定程度的理解.
 
-		</p>
-		<p>开发的后台管理系统中,完成与后台人员的数据交互,负责界面的表现形式,DOM的功能控制,表单的前端校验,页面的局部刷新,框架之间链接的跳转功能.极大提高了交互的人性化,界面的简洁,降低了用户的上手难度,优化了表单填写的错误验证.在与后台交互的过程中,具有良好的沟通能力和团队合作精神、优秀的分析问题和解决问题的能力.
-
-		</p>
-		<h4>Github的维护 : </h4><em> 个人项目 </em><strong> 2015.05-至今</strong>
-		<p>在平常业余时间会上传一些作品到git上分享.使用了bootstrap响应式布局完成界面的搭建,使用jQuery来完成其中的功能模块.其中有在学习过程中比较模块化的知识,也有其中遇到的各种各样的问题以及解决方案,还有一些作品(比如:购物网站,视频墙等).在维护git代码的过程中了解到也学习到很多不懂的东西,对web前端开发有浓厚的兴趣，有优秀的学习能力和强烈的进取心.
-
-		</p>
-		<h4>博客园的维护 : </h4>: <em> 个人项目 </em><strong> 2014.10-2014.12</strong>
-		<p>刚开始学习前端开发时自己维护的个人博客,日常更新自己新学习到的技术,如右键菜单,网页控件拖动,键盘事件控制.是在学习期会遇到的问题和使用到的技术,内容涵盖了HTML,CSS,JS,AJAX,Cookie等常用的技术.现已不再更新和维护.
-
-		</p>
+		<h3>工作经历</h3>
+		<h4>百度 <small> CDN平台后台管理系统 </small><small> 2016.07 - 2017.11</small></h4>
+		<p><strong>团队描述：</strong>百度CDN是进行网络内容加速的项目，负责百度内部所有业务并承接外部客户，包含130个节点，承载10T带宽流量，服务200+业务线。团队规模100+人，平台部3人。</p>
+		<p><strong>主要职责：</strong>完成内部支撑业务的后端管理系统，负责主要模块的开发和维护，包括性能指标建设、监控管理部署、流量调度等方向的前端开发，以及管理系统的前后端的所有运维工作。在一年半的工作期间，建设1000+性能指标、完成10+个新上页面、维护40+页面，并持续迭代优化100+次。在系统中的多个主要项目中负责从需求搜集到原型评审、开发、测试、上线等全部工作，上马许多新的功能和特性，引入最新前沿技术。</p>
+		<br>
+		<h4>汇巨网络科技有限公司 <small> 官网和后端管理系统  2015.05 - 2015.08</small></h4>
+		<p><strong>团队描述：</strong>汇巨是一家做垂直电商服装细分领域的公司，主打女性市场的品牌定制，线上线下一体化购物，引入10+家知名服装公司。团队规模10人，平台部1人。</p>
+		<p><strong>主要职责：</strong>在公司实习期间，完成了公司官网和后端管理系统，负责所有的前端部分，与后端进行接口联调，完成用户登录、商品入库、数据统计、商品管理等功能，保证了项目的及时推进，在推广和引入商户的阶段保证了项目的稳定运行。</p>
 		<hr>
+
+		<h3>项目</h3>
+		<h4>Jomocha<small> 2016.09 - 2017.11</small></h4>
+		<p><strong>使用技术：</strong>Html/Css/Javascript/jQuery/vue/bootstrap/highcharts/jquery-ui/zTree</p>
+		<p><strong>主要职责：</strong>负责Jomocha（运营状况）的主要功能开发和维护功能，开发上线了自定义预案、top n、图表参考线等功能，并负责该页面的数据更新和维护。该页面为组内运维的主要工具之一，日均pv在千次以上，从基础信息库和日志数据库拉取数据，分维度、tag、指标组等共支持1000+性能指标。</p>
+		<br>
+		<h4>监控报警<small> 2016.10 -  2017.11</small></h4>
+		<p><strong>使用技术：</strong>Html/Css/Javascript/jQuery/bootstrap/intro/backbone/vue/vuex/PHP</p>
+		<p><strong>主要职责：</strong>负责CDN监控报警系统的前端主要开发工作，包含报警配置、监控配置、报警用户管理、报警处理平台等一系列页面，开发了前端、后端的70%以上代码，引入vue/vuex/intro等库，加快开发速度，优化用户体验。历时1年时间不断迭代完善，性能得到了80%以上的提升，功能极度丰富，降低了一半以上的相关CDN运维工作。</p>
+		<br>
+		<h4>流量调度<small> 2017.02 - 2017.11</small></h4>
+		<p><strong>使用技术：</strong>Html/Css/Javascript/jQuery/backbone/bootstrap/jquery-ui/PHP</p>
+		<p><strong>主要职责：</strong>负责流量调度页面的迭代开发工作，共包含国内/国际化/dcdn/pk四个异构环境，先后完成了按VIP切流量、容灾工具、并行切流量、按百分比切流量的迭代版本，开发了前端、后端90%以上的代码，引入es6语法。包括流量调度、实时调度信息、切换保存、下发生效和回滚等模块，每一个版本的升级都使CDN能够更稳健和优秀的服务客户，极大的提高了运维的效率。</p>
+		<br>
 	</div>
+	</small>
 <script src="js/jQuery/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
 </body></html>

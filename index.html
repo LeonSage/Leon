@@ -15,7 +15,7 @@
 	</style>
 </head>
 <body>
-	<div class="container">
+	<div id="page" class="container">
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -68,9 +68,26 @@
 <!--引入bootstrap和后面DOM操作所必须的jQuery库-->
 <script src="js/jQuery/jquery-3.1.1.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="resourses/libs/vue.js"></script>
 <script>
+	let page = null;
 	//等待DOM树加载完成
 	$(function(){
+		page = new Vue({
+			el: '#page',
+			data: {},
+			mounted() {
+				// 动态加载指定模块的内容
+				this.loadScript(location.search.slice(3));
+			},
+			methods: {
+				loadScript(url) {
+					let script = document.createElement('script');
+					script.setAttribute('src', `./modules/${url}`);
+					document.body.appendChild(script);
+				},
+			}
+		})
 		$('li').map(function(){
 			return $(this).text();
 		}).get().join(',');
